@@ -37,7 +37,8 @@ package  {
 		public static var USE_SLOT1:Vector.<String> = Vector.<String>(["SPACE"]);
 		public static var USE_SLOT2:Vector.<String> = Vector.<String>(["Z"]);
 		public static var USE_SLOT3:Vector.<String> = Vector.<String>(["X"]);
-		public static var USE_SLOT4:Vector.<String> = Vector.<String>(["V"]);
+
+		public static var USE_SLOT4:Vector.<String> = Vector.<String>(["C"]);
 		
 		public static function isUrl(urls:Array, stage:Stage):Boolean {
 			var url:String = stage.loaderInfo.loaderURL;
@@ -284,6 +285,14 @@ package  {
 		public static var RIGHT_MOUSE_PRESSED:Boolean = false;
 		public static function get_is_right_mouse_or_equiv_pressed():Boolean {
 			return RIGHT_MOUSE_PRESSED || FlxG.keys.SPACE;
+		}
+		
+		public static function wmouse_x():Number {
+			return FlxG.mouse.getWorldPosition(FlxG.camera).x + FlxG.camera.x / FlxG.camera.zoom;
+		}
+		
+		public static function wmouse_y():Number {
+			return FlxG.mouse.getWorldPosition(FlxG.camera).y + FlxG.camera.y / FlxG.camera.zoom;
 		}
 		
 	}

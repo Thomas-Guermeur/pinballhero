@@ -45,11 +45,25 @@ package  {
 			var level:Object = Resource.LEVEL2_DATA_OBJECT;
 			parseLevel(level);
 			
-			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
+			_background_elements.add(new FlxSprite(-500, -300, Resource.TEST_BACKGROUND));
 			
 			for (var i:Number = 0; i < 5; i++) {
 				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
 			}
+			
+			set_zoom(1);
+			//set_zoom(0.5); //*0.5
+		}
+		
+		private var _current_zoom:Number = 1;
+		public function set_zoom(zoom_scale:Number):void {
+			var neu_camera:FlxCamera = new FlxCamera(0, 0, 1000/zoom_scale, 500/zoom_scale);
+			neu_camera.zoom = zoom_scale;
+			neu_camera.antialiasing = true;
+			neu_camera.x = ((1000 * zoom_scale) - 1000) / 2 / zoom_scale;
+			neu_camera.y = ((500 * zoom_scale) - 500) / 2 / zoom_scale;
+			FlxG.resetCameras(neu_camera);
+			FlxG.camera.focusOn(new FlxPoint(_current_town.get_center().x, _current_town.get_center().y));
 		}
 		
 		public function parseLevel(level:Object):void {
@@ -153,8 +167,10 @@ package  {
 				}
 			}
 			
-			_aimretic.set_position(_current_town.get_center().x, _current_town.get_center().y-150);
-			_aimretic.angle = Util.RAD_TO_DEG * Math.atan2(FlxG.mouse.y - _current_town.get_center().y, FlxG.mouse.x - _current_town.get_center().x) + 90;
+			_aimretic.set_position(_current_town.get_center().x, _current_town.get_center().y - 150);
+			
+			_aimretic.angle = Util.RAD_TO_DEG * Math.atan2(Util.wmouse_y() - _current_town.get_center().y, Util.wmouse_x() - _current_town.get_center().x) + 90;
+			
 			if (FlxG.mouse.justPressed() && _player_balls_in_queue.countLiving() > 0) {
 				var neu_ball:PlayerBall = (cons(PlayerBall, _player_balls) as PlayerBall).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
 				var dir:Vector3D = Util.normalized(FlxG.mouse.x - _current_town.get_center().x,FlxG.mouse.y - _current_town.get_center().y);
@@ -169,6 +185,20 @@ package  {
 					}
 				}
 			}
+			
+			if (Util.is_key(Util.MOVE_UP, true)) {
+				_current_zoom -= 0.1;
+				set_zoom(_current_zoom);
+			} else if (Util.is_key(Util.MOVE_DOWN, true)) {
+				_current_zoom += 0.1;
+				set_zoom(_current_zoom);
+			}
+			
+			//FlxG.camera.follow(_current_town, FlxCamera.STYLE_TOPDOWN_TIGHT);
+			//var coffset:Number = (1 - FlxG.camera.zoom);
+			
+			//trace(coffset);
+			//_current_town.set_centered_position(Util.wmouse_x(), Util.wmouse_y());
 			
 			if (Util.is_key(Util.USE_SLOT1,true)) {
 				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));

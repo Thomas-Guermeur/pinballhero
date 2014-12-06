@@ -110,7 +110,8 @@ package geom {
 			);
 		}
 		
-		override public function drawDebug(Camera:FlxCamera=null):void {
+		override public function drawDebug(Camera:FlxCamera = null):void {
+			return;
 			var gfx:Graphics = FlxG.flashGfx;
 			gfx.clear();
 			

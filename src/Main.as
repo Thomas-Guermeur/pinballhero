@@ -15,10 +15,12 @@ package
 	 */
 	public class Main extends FlxGame 
 	{
+		public static var inst:Main;
 		
 		public function Main():void 
 		{
 			super(1000, 500, GameEngineState);
+			inst = this;
 		}
 		
 	}

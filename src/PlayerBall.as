@@ -24,6 +24,7 @@ package
 			_pause_time = 0;
 			_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 5, _attack_anim_ct_max + 5);
 			this.set_timestamp();
+			play("walk");
 			return this;
 		}
 		
@@ -78,12 +79,12 @@ package
 					
 					for (var j:Number = 0; j < 10; j++) {
 						(GameEngineState.particle_cons(RotateFadeParticle,g._particles) as RotateFadeParticle)
-						.init(_actual_position.x + Util.float_random(-50,-10), _actual_position.y + Util.float_random(-10,10), Resource.SPARKLE)
+						.init(_actual_position.x + Util.float_random(-70,-10), _actual_position.y + Util.float_random(-10,10), Resource.SPARKLE)
 						.p_set_scale(Util.float_random(0.2, 0.3))
 						.p_set_delay(Util.float_random(0, 10))
 						.p_set_vr(Util.float_random( -10, 10))
 						.p_set_alpha(0.8, 0).p_set_velocity(0, Util.float_random(-3, -1))
-						.p_set_ctspeed(0.05);
+						.p_set_ctspeed(0.035);
 					}
 				}
 			}
@@ -146,8 +147,8 @@ package
 			}
 		}
 		
-		private function update_celebrate_anim():Boolean {
-			this.angle = Util.drp(this.angle, Util.RAD_TO_DEG * Math.atan2(velocity.y, velocity.x) + 90, 20);			
+		private function update_celebrate_anim():Boolean {		
+			this.angle = 0;
 			if (_attack_anim_ct <= 0) {
 				_attack_anim_ct = Util.float_random(_attack_anim_ct_max*0.8 - 5, _attack_anim_ct_max*0.8 + 5);
 				_attack_random_dir = Util.normalized(Util.float_random( -1, 1), Util.float_random( -1, 1));
