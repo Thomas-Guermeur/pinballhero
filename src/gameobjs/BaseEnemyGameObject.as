@@ -17,16 +17,7 @@ package gameobjs
 		public var _hitpoints:Number = 5;
 		public var _max_hitpoints:Number = 5;
 		
-		public static function cons(g:FlxGroup):BaseEnemyGameObject {
-			var rtv:BaseEnemyGameObject = g.getFirstAvailable(BaseEnemyGameObject) as BaseEnemyGameObject;
-			if (rtv == null) {
-				rtv = new BaseEnemyGameObject();
-				g.add(rtv);
-			}
-			return rtv;
-		}
-		
-		public function init():BaseEnemyGameObject {
+		public override function init():GameObject {
 			_hitpoints = _max_hitpoints;
 			_battling_heros.length = 0;
 			return this;
@@ -85,7 +76,7 @@ package gameobjs
 				var attack_this_frame:Boolean = attack_animation_update();
 				
 				if (attack_this_frame) {
-					for (var i:Number = _battling_heros.length-1; i >= 0; i--) {
+					for (i = _battling_heros.length-1; i >= 0; i--) {
 						_battling_heros[i]._hitpoints--;
 						var hfp:Vector3D = new Vector3D(_battling_heros[i].get_center().x - this.get_center().x, _battling_heros[i].get_center().y - this.get_center().y);
 						hfp.scaleBy(0.75);

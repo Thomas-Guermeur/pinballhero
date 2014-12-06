@@ -2,11 +2,11 @@ package  {
 	import flash.display.Sprite;
 	import flash.ui.*;
 	import flash.geom.Vector3D;
+	import gameobjs.TownLandmark;
 	
 	import org.flixel.*;
 	
-	import gameobjs.BaseEnemyGameObject;
-	import gameobjs.TownGameObject;
+	import gameobjs.*;
 	import geom.ThickPath;
 
 	/**
@@ -21,11 +21,11 @@ package  {
 		public var _game_objects:FlxGroup = new FlxGroup();
 		public var _healthbars:FlxGroup = new FlxGroup();
 		public var _particles:FlxGroup = new FlxGroup();
-		public var _current_town:TownGameObject;
+		public var _current_town:TownLandmark;
 		
 		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
 		public var _walls:Array = new Array();
-		public var _mountain:ThickPath;
+		public var _landmarks:Array = new Array();
 		
 		public override function create():void {
 			super.update();
@@ -38,21 +38,42 @@ package  {
 			this.add(_aimretic);
 			
 			var level:Object = Resource.LEVEL1_DATA_OBJECT;
-			
-			_walls.push(new ThickPath(new Array(
-				new FlxPoint(0, 0),
-				new FlxPoint(1000, 0)
-			), 50));
-			_walls.push(new ThickPath(new Array(
-				new FlxPoint(0, 500),
-				new FlxPoint(1000, 500)
-			), 50));
+			parseLevel(level);
 			
 			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
-			_current_town = (TownGameObject.cons(_game_objects).init().set_centered_position(650, 250) as TownGameObject);
+			_current_town = (cons(TownLandmark, _game_objects).init().set_centered_position(650, 250) as TownLandmark);
 			_game_objects.add(_current_town);
 			
-			_game_objects.add(BaseEnemyGameObject.cons(_game_objects).init().set_centered_position(300, 250));
+			_game_objects.add(cons(BaseEnemyGameObject, _game_objects).init().set_centered_position(300, 250));
+		}
+		
+		public function parseLevel(level:Object):void {
+			for each (var p:Object in level.islands) {
+				_walls.push(new ThickPath(new Array(
+					new FlxPoint(p.x1, p.y1),
+					new FlxPoint(p.x2, p.y2)
+				), 50));
+			}
+			
+			var mark:Landmark;
+			for each (var obj:Object in level.objects) {
+				switch (obj.type) {
+				case "sign":
+					mark = cons(SignLandmark, _game_objects) as Landmark;
+					mark.setVector(obj.x, obj.y, obj.x2, obj.y2);
+					break;
+				case "inn":
+					mark = cons(InnLandmark, _game_objects) as Landmark;
+					mark.setVector(obj.x, obj.y);
+					break;
+				case "pub":
+					mark = cons(PubLandmark, _game_objects) as Landmark;
+					mark.setVector(obj.x, obj.y);
+					break;
+				}
+				
+				_landmarks.push(mark);
+			}
 		}
 		
 		public override function update():void {
@@ -87,12 +108,34 @@ package  {
 			_aimretic.set_position(_current_town.get_center().x, _current_town.get_center().y-150);
 			_aimretic.angle = Util.RAD_TO_DEG * Math.atan2(FlxG.mouse.y - _current_town.get_center().y, FlxG.mouse.x - _current_town.get_center().x) + 90;
 			if (FlxG.mouse.justPressed()) {
-				var neu_ball:PlayerBall = PlayerBall.cons(_player_balls).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
+				var neu_ball:PlayerBall = cons(PlayerBall, _player_balls).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
 				var dir:Vector3D = Util.normalized(FlxG.mouse.x - _current_town.get_center().x,FlxG.mouse.y - _current_town.get_center().y);
 				dir.scaleBy(5);
 				neu_ball.velocity.x = dir.x;
 				neu_ball.velocity.y = dir.y;
 			}
+		}
+		
+		/**
+		 * Pool together objects of the given class for reuse
+		 */
+		public static function cons(gameClass:Class, g:FlxGroup):GameObject {
+			var rtv:GameObject = g.getFirstAvailable(gameClass) as GameObject;
+			if (rtv == null) {
+				
+				rtv = new gameClass();
+				g.add(rtv);
+			}
+			return rtv;
+		}
+		public static function particle_cons(gameClass:Class, g:FlxGroup):BaseParticle {
+			var rtv:BaseParticle = g.getFirstAvailable(gameClass) as BaseParticle;
+			if (rtv == null) {
+				
+				rtv = new gameClass();
+				g.add(rtv);
+			}
+			return rtv;
 		}
 		
 	}

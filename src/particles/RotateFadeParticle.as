@@ -2,15 +2,6 @@ package particles {
 	import org.flixel.*;
 	
 	public class RotateFadeParticle extends BaseParticle {
-			
-		public static function cons(g:FlxGroup):RotateFadeParticle {
-			var rtv:RotateFadeParticle = g.getFirstAvailable(RotateFadeParticle) as RotateFadeParticle;
-			if (rtv == null) {
-				rtv = new RotateFadeParticle();
-				g.add(rtv);
-			}
-			return rtv;
-		}
 		
 		public function RotateFadeParticle() {
 			super();
@@ -20,8 +11,13 @@ package particles {
 		public var _vy:Number = 0;
 		public var _vr:Number = 0;
 		public var _ct:Number = 0;
-		
-		var _has_played_sfx:Boolean = false;
+
+		private var _has_played_sfx:Boolean = false;
+		private var _initial_alpha:Number = 1;
+		private var _final_alpha:Number = 0;
+		private var _delay:Number = 0;
+		private var _ctspeed:Number = 0.1;
+
 		var _loaded_resc:Class = null;
 		public function init(x:Number, y:Number, graphic:Class = null):RotateFadeParticle {
 			if (graphic == null) {
@@ -71,21 +67,17 @@ package particles {
 			return this;
 		}
 		
-		var _initial_alpha:Number = 1;
-		var _final_alpha:Number = 0;
 		public function p_set_alpha(initial:Number, finals:Number):RotateFadeParticle {
 			_initial_alpha = initial;
 			_final_alpha = finals;
 			return this;
 		}
 		
-		var _delay:Number = 0;
 		public function p_set_delay(ct:Number):RotateFadeParticle {
 			_delay = ct;
 			return this;
 		}
 		
-		var _ctspeed:Number = 0.1;
 		public function p_set_ctspeed(ctspd:Number):RotateFadeParticle {
 			_ctspeed = ctspd;
 			return this;
