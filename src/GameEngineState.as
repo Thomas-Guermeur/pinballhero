@@ -42,7 +42,7 @@ package  {
 			
 			FlxG.visualDebug = true;
 			
-			var level:Object = Resource.LEVEL1_DATA_OBJECT;
+			var level:Object = Resource.LEVEL2_DATA_OBJECT;
 			parseLevel(level);
 			
 			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
@@ -57,7 +57,7 @@ package  {
 				var tp:ThickPath = new ThickPath(new Array(
 					new FlxPoint(p.x1, p.y1),
 					new FlxPoint(p.x2, p.y2)
-				), 50);
+				), 30);
 				
 				_walls.push(tp);
 				// wrap mountains in FlxSprite
