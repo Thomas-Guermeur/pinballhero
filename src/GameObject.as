@@ -16,7 +16,9 @@ package
 			this.set_position(x - off.x, y - off.y);
 			return this;
 		}
-		public function is_hit_game_object(other:GameObject):Boolean { return false; }
+		public function is_hit_game_object(other:GameObject):Boolean {
+			return Util.point_dist(this.get_center().x, this.get_center().y, other.get_center().x, other.get_center().y) < (this.width + other.width) / 2;
+		}
 		
 		public function should_remove(g:GameEngineState):Boolean { return false; }
 		public function do_remove(g:GameEngineState):void { }

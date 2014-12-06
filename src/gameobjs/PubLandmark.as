@@ -22,8 +22,12 @@ package gameobjs {
 			
 			visitor.velocity.y = speed * Math.sin(rad1);
 			visitor.velocity.x = speed * Math.cos(rad1);
+			visitor.x = x;
+			visitor.y = y;
 			
 			var buddy:GameObject = GameEngineState.cons(PlayerBall, g._player_balls);
+			buddy.x = visitor.x;
+			buddy.y = visitor.y;
 			buddy.velocity.y = speed * Math.sin(rad2);
 			buddy.velocity.x = speed * Math.cos(rad2);
 		}
