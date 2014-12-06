@@ -10,6 +10,19 @@ package gameobjs {
 	public class TownGameObject extends GameObject
 	{
 		
+		public static function cons(g:FlxGroup):TownGameObject {
+			var rtv:TownGameObject = g.getFirstAvailable(TownGameObject) as TownGameObject;
+			if (rtv == null) {
+				rtv = new TownGameObject();
+				g.add(rtv);
+			}
+			return rtv;
+		}
+		
+		public function init():TownGameObject {
+			return this;
+		}
+		
 		public function TownGameObject() {
 			this.loadGraphic(Resource.TOWN);
 		}

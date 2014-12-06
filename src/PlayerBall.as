@@ -5,18 +5,43 @@ package
 	import flash.ui.*;
 	import gameobjs.*;
 	import org.flixel.plugin.photonstorm.FlxBar;
+	import particles.RotateFadeParticle;
 	/**
 	 * ...
 	 * @author spotco
 	 */
 	public class PlayerBall extends GameObject
 	{
-		
-		public var _engaged_in_battle:Boolean = false;
 		public var _battling_enemies:Vector.<BaseEnemyGameObject> = new Vector.<BaseEnemyGameObject>();
 		
 		public var _hitpoints:Number = 15;
 		public var _max_hitpoints:Number = 15;
+		
+		public static function cons(g:FlxGroup):PlayerBall {
+			var rtv:PlayerBall = g.getFirstAvailable(PlayerBall) as PlayerBall;
+			if (rtv == null) {
+				rtv = new PlayerBall();
+				g.add(rtv);
+			}
+			return rtv;
+		}
+		
+		public function init():PlayerBall {
+			_hitpoints = _max_hitpoints;
+			_battling_enemies.length = 0;
+			this.reset(0, 0);
+			return this;
+		}
+		
+		public override function should_remove(g:GameEngineState):Boolean {
+			return this._hitpoints <= 0;
+		}
+		
+		public override function do_remove(g:GameEngineState):void {
+			if (_healthbar != null) g._healthbars.remove(_healthbar);
+			_healthbar = null;
+			this.kill();
+		}
 		
 		public function PlayerBall() {
 			this.loadGraphic(Resource.PLAYER);
@@ -35,12 +60,19 @@ package
 		public override function game_update(g:GameEngineState):void {
 			this.update_health_bar(g);
 			
-			if (_engaged_in_battle) {
+			for (var i:Number = _battling_enemies.length - 1; i >= 0; i--) {
+				if (!_battling_enemies[i].alive) _battling_enemies.splice(i, 1);
+			}
+			
+			if (_battling_enemies.length > 0) {
 				var attack_this_frame:Boolean = attack_animation_update();
-				
 				if (attack_this_frame) {
-					for (var i:Number = _battling_enemies.length-1; i >= 0; i--) {
+					for (i = _battling_enemies.length-1; i >= 0; i--) {
 						_battling_enemies[i]._hitpoints--;
+						var hfp:Vector3D = new Vector3D(_battling_enemies[i].get_center().x - this.get_center().x, _battling_enemies[i].get_center().y - this.get_center().y);
+						hfp.scaleBy(0.5);
+						RotateFadeParticle.cons(g._particles).init(this.get_center().x + hfp.x + Util.float_random( -3, 3), this.get_center().y + hfp.y + Util.float_random( -3, 3)).p_set_scale(Util.float_random(0.5,0.8));
+						break;
 					}
 				}
 				

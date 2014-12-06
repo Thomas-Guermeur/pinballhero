@@ -17,6 +17,9 @@ package
 			return this;
 		}
 		public function is_hit_game_object(other:GameObject):Boolean { return false; }
+		
+		public function should_remove(g:GameEngineState):Boolean { return false; }
+		public function do_remove(g:GameEngineState):void { }
 	}
 
 }
