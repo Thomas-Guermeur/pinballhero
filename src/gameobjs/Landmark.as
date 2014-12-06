@@ -11,7 +11,7 @@ package gameobjs
 		public override function game_update(g:GameEngineState):void {
 			for (var i:int = 0; i < g._player_balls.members.length; i++) {
 				var itr_playerball:PlayerBall = g._player_balls.members[i];
-				if (!itr_playerball) {
+				if (!itr_playerball || !itr_playerball.alive) {
 					continue;
 				}
 				
@@ -25,7 +25,7 @@ package gameobjs
 				);
 				var radius:Number = (this.width + itr_playerball.width) / 2;
 				
-				if (itr_playerball.alive && curr > radius && next < radius) {
+				if (curr > radius && next < radius) {
 					handleVisitor(itr_playerball, g);
 				}
 			}

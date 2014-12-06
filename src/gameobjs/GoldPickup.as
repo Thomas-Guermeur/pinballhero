@@ -30,13 +30,14 @@ package gameobjs {
 			_magneted_hero = null;
 			_picked_up = false;
 			_ignore_ct = 10;
+			this.set_scale(0.5);
 			return this;
 		}
 		
 		
 		var _picked_up:Boolean = false;
 		public override function game_update(g:GameEngineState):void {
-			
+			if (_magneted_hero != null && !_magneted_hero.alive) _magneted_hero = null;
 			if (_ignore_ct <= 0) {
 				for (var i_playerball:Number = g._player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 					var itr_playerball:PlayerBall = g._player_balls.members[i_playerball];

@@ -100,6 +100,8 @@ package gameobjs
 						}
 					}
 				}
+			} else {
+				_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 4, _attack_anim_ct_max + 4);
 			}
 		}
 		
@@ -121,7 +123,7 @@ package gameobjs
 			} else {
 				_attack_anim_ct--;
 				var theta:Number = (1 - (_attack_anim_ct / _attack_anim_ct_max))*Math.PI;
-				super.set_centered_position(_actual_position.x + Math.sin(theta) * _attack_random_dir.x * 15, _actual_position.y + Math.sin(theta) * _attack_random_dir.y * 15);
+				super.set_centered_position(_actual_position.x + Math.sin(theta) * _attack_random_dir.x * 7, _actual_position.y + Math.sin(theta) * _attack_random_dir.y * 7);
 				return false;
 			}
 		}
