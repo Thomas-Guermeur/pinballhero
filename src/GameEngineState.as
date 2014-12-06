@@ -96,6 +96,12 @@ package  {
 				case "patrollingenemy":
 					mark = (cons(PatrollingEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
 					break;
+				case "aoeenemy":
+					mark = cons(BaseEnemyGameObject, _game_objects);
+					var bgo:BaseEnemyGameObject = mark as BaseEnemyGameObject;
+					bgo.init().set_centered_position(obj.x, obj.y);
+					bgo.setAOE(5);
+					break;
 				case "death":
 					mark = cons(DeathLandmark, _game_objects);
 					(mark as Landmark).setVector(obj.x, obj.y);

@@ -14,7 +14,7 @@ package gameobjs {
 		}
 		
 		public override function handleVisitor(visitor:PlayerBall, g:GameEngineState):void {
-			visitor.hurt(visitor._max_hitpoints - visitor._hitpoints);
+			visitor._hitpoints = visitor._max_hitpoints;
 		}
 	}
 

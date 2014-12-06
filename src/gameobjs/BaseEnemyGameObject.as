@@ -17,14 +17,22 @@ package gameobjs
 		public var _hitpoints:Number = 5;
 		public var _max_hitpoints:Number = 5;
 		
+		// the number of people the enemy will damage at once
+		public var _aoe:int = 1;
+		
 		public function init():GameObject {
 			_hitpoints = _max_hitpoints;
 			_battling_heros.length = 0;
+			_aoe = 1;
 			return this;
 		}
 		
 		public function BaseEnemyGameObject() {
 			this.loadGraphic(Resource.ENEMY);
+		}
+		
+		public function setAOE(count:Number):void {
+			_aoe = count;
 		}
 		
 		public override function get_center():FlxPoint {
@@ -76,6 +84,7 @@ package gameobjs
 				var attack_this_frame:Boolean = attack_animation_update();
 				
 				if (attack_this_frame) {
+					var count:int = 0;
 					for (i = _battling_heros.length-1; i >= 0; i--) {
 						_battling_heros[i]._hitpoints--;
 						var hfp:Vector3D = new Vector3D(_battling_heros[i].get_center().x - this.get_center().x, _battling_heros[i].get_center().y - this.get_center().y);
@@ -84,7 +93,11 @@ package gameobjs
 						(GameEngineState.particle_cons(RotateFadeParticle,g._particles) as RotateFadeParticle)
 						.init(this.get_center().x + hfp.x + Util.float_random( -3, 3), this.get_center().y + hfp.y + Util.float_random( -3, 3))
 						.p_set_scale(Util.float_random(0.8, 1));
-						break;
+						
+						count++;
+						if (count >= _aoe) {
+							break;
+						}
 					}
 				}
 			}
@@ -101,7 +114,7 @@ package gameobjs
 		private var _attack_random_dir:Vector3D = new Vector3D();
 		private function attack_animation_update():Boolean {
 			if (_attack_anim_ct <= 0) {
-				_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 5, _attack_anim_ct_max + 5);
+				_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 4, _attack_anim_ct_max + 4);
 				_attack_random_dir = Util.normalized(Util.float_random( -1, 1), Util.float_random( -1, 1));
 				FlxG.shake(0.005, 0.1);
 				return true;
