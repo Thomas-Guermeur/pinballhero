@@ -36,14 +36,10 @@ package  {
 			this.add(_healthbars);
 			this.add(_aimretic);
 			
-			var level:Object = Resource.LEVEL1_DATA_OBJECT;
+			var level:Object = Resource.LEVEL2_DATA_OBJECT;
 			parseLevel(level);
 			
 			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
-			_current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(650, 250) as TownLandmark);
-			_game_objects.add(_current_town);
-			
-			_game_objects.add((cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(300, 250));
 		}
 		
 		public function parseLevel(level:Object):void {
@@ -54,24 +50,37 @@ package  {
 				), 50));
 			}
 			
-			var mark:Landmark;
+			var mark:GameObject;
 			for each (var obj:Object in level.objects) {
 				switch (obj.type) {
 				case "sign":
-					mark = cons(SignLandmark, _game_objects) as Landmark;
-					mark.setVector(obj.x, obj.y, obj.x2, obj.y2);
+					mark = cons(SignLandmark, _game_objects);
+					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
+					break;
+				case "rotatingsign":
+					mark = cons(RotatingSignLandmark, _game_objects) as Landmark;
+					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
 					break;
 				case "inn":
 					mark = cons(InnLandmark, _game_objects) as Landmark;
-					mark.setVector(obj.x, obj.y);
+					(mark as Landmark).setVector(obj.x, obj.y);
 					break;
 				case "pub":
 					mark = cons(PubLandmark, _game_objects) as Landmark;
-					mark.setVector(obj.x, obj.y);
+					(mark as Landmark).setVector(obj.x, obj.y);
 					break;
 				case "tree":
 					mark = cons(TreeLandmark, _game_objects) as Landmark;
-					mark.setVector(obj.x, obj.y);
+					(mark as Landmark).setVector(obj.x, obj.y);
+					break;
+				case "town":
+					mark = _current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(obj.x, obj.y) as TownLandmark);
+					break;
+				case "enemy":
+					mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
+					break;
+				case "patrollingenemy":
+					mark = (cons(PatrollingEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
 					break;
 				}
 				
