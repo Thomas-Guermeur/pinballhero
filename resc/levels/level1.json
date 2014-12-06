@@ -5,7 +5,7 @@
         {"x": 250, "label": "2", "y": 400, "type": "pub"},
         {"x": 250, "label": "2", "y": 400, "type": "mtn"},
         {"x": 800, "label": "2", "y": 300, "type": "tree"},
-        {"x": 868, "label": "22", "y": 250, "type": "town"},
+        {"x": 668, "label": "22", "y": 250, "type": "town"},
         {"x": 76, "label": "19", "y": 324, "type": "goal"}
     ],
     "connect_pts": {"x2": 408, "x1": 295, "y2": 241, "y1": 413},

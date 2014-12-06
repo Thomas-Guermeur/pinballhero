@@ -13,13 +13,13 @@ package geom {
 		}
 		
 		public function bounceCollision(particle:FlxObject):void {
+			var cx:Number = particle.x + particle.width / 2;
+			var cy:Number = particle.y + particle.height / 2;
 			var nextParticle:FlxPoint = new FlxPoint(
-				particle.x + particle.velocity.x,
-				particle.y + particle.velocity.y
+				cx + particle.velocity.x,
+				cy + particle.velocity.y
 			);
-			var playerPath:Line = new Line(
-				new FlxPoint(particle.x, particle.y),
-				nextParticle);
+			var playerPath:Line = new Line(new FlxPoint(cx, cy), nextParticle);
 			var playerSlope:Number = playerPath.getSlope();
 			
 			// keep track of all possible collision (and the corresponding line
@@ -47,7 +47,7 @@ package geom {
 					collisions.push(collide);
 					collideLines.push(wallLine);
 				}
-				collide = Line.getIntersection(sideLine1, playerPath)
+				/*collide = Line.getIntersection(sideLine1, playerPath)
 				if (collide) {
 					collisions.push(collide);
 					collideLines.push(wallLine);
@@ -56,7 +56,7 @@ package geom {
 				if (collide) {
 					collisions.push(collide);
 					collideLines.push(wallLine);
-				}
+				}*/
 			}
 			// find closest collision to player
 			var closest:Number = Number.POSITIVE_INFINITY;
@@ -64,8 +64,8 @@ package geom {
 			for (var c:String in collisions) {
 				var point:FlxPoint = collisions[c];
 				
-				var dx:Number = point.x - particle.x;
-				var dy:Number = point.y - particle.y;
+				var dx:Number = point.x - cx;
+				var dy:Number = point.y - cy;
 				var dist:Number = dx * dx + dy * dy;
 				
 				var diry:int = dy < 0 ? -1 : 1;
