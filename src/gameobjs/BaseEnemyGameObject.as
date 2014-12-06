@@ -11,11 +11,25 @@ package gameobjs
 	 */
 	public class BaseEnemyGameObject extends GameObject {
 		
-		public var _engaged_in_battle:Boolean = false;
 		public var _battling_heros:Vector.<PlayerBall> = new Vector.<PlayerBall>();
 		
 		public var _hitpoints:Number = 50;
 		public var _max_hitpoints:Number = 50;
+		
+		public static function cons(g:FlxGroup):BaseEnemyGameObject {
+			var rtv:BaseEnemyGameObject = g.getFirstAvailable(BaseEnemyGameObject) as BaseEnemyGameObject;
+			if (rtv == null) {
+				rtv = new BaseEnemyGameObject();
+				g.add(rtv);
+			}
+			return rtv;
+		}
+		
+		public function init():BaseEnemyGameObject {
+			_hitpoints = _max_hitpoints;
+			_battling_heros.length = 0;
+			return this;
+		}
 		
 		public function BaseEnemyGameObject() {
 			this.loadGraphic(Resource.ENEMY);
@@ -27,6 +41,16 @@ package gameobjs
 		
 		public override function is_hit_game_object(other:GameObject):Boolean {
 			return Util.point_dist(this.get_center().x, this.get_center().y, other.get_center().x, other.get_center().y) < 30;
+		}
+		
+		public override function should_remove(g:GameEngineState):Boolean {
+			return this._hitpoints <= 0;
+		}
+		
+		public override function do_remove(g:GameEngineState):void {
+			if (_healthbar != null) g._healthbars.remove(_healthbar);
+			_healthbar = null;
+			this.kill();
 		}
 		
 		private var _healthbar:FlxBar;
@@ -43,18 +67,20 @@ package gameobjs
 		public override function game_update(g:GameEngineState):void {
 			this.update_health_bar(g);
 			
+			for (var i:Number = _battling_heros.length - 1; i >= 0; i--) {
+				if (!_battling_heros[i].alive) _battling_heros.splice(i, 1);
+			}
+			
 			for each (var itr_playerball:PlayerBall in g._player_balls.members) {
 				if (itr_playerball.alive && this.is_hit_game_object(itr_playerball)) {
-					if (!itr_playerball._engaged_in_battle) {
-						itr_playerball._engaged_in_battle = true;
-						this._engaged_in_battle = true;
+					if (!itr_playerball._battling_enemies.indexOf(this) != -1) {
 						_battling_heros.push(itr_playerball);
 						itr_playerball._battling_enemies.push(this);
 					}
 				}
 			}
 			
-			if (this._engaged_in_battle) {
+			if (_battling_heros.length > 0) {
 				var attack_this_frame:Boolean = attack_animation_update();
 				
 				if (attack_this_frame) {
