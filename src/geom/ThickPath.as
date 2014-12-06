@@ -73,7 +73,7 @@ package geom {
 				var vely:int = particle.velocity.y < 0 ? -1 : 1;
 				var velx:int = particle.velocity.x < 0 ? -1 : 1;
 				
-				if (dist < closest && Math.sqrt(dist) < particle.width && dirx == velx && diry == vely) {
+				if (dist < closest && Math.sqrt(dist) <= particle.width) {
 					closest = dist;
 					collisionLine = collideLines[c];
 				}

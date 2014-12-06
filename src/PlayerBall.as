@@ -21,6 +21,7 @@ package
 			_hitpoints = _max_hitpoints;
 			_battling_enemies.length = 0;
 			this.reset(0, 0);
+			play("walk");
 			return this;
 		}
 		
