@@ -6,8 +6,7 @@ package  {
 	
 	import org.flixel.*;
 	
-	import gameobjs.BaseEnemyGameObject;
-	import gameobjs.TownLandmark;
+	import gameobjs.*;
 	import geom.ThickPath;
 
 	/**
@@ -26,7 +25,7 @@ package  {
 		
 		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
 		public var _walls:Array = new Array();
-		public var _mountain:ThickPath;
+		public var _landmarks:Array = new Array();
 		
 		public override function create():void {
 			super.update();
@@ -39,7 +38,16 @@ package  {
 			this.add(_aimretic);
 			
 			var level:Object = Resource.LEVEL1_DATA_OBJECT;
+			parseLevel(level);
 			
+			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
+			_current_town = (cons(TownLandmark, _game_objects).init().set_centered_position(650, 250) as TownLandmark);
+			_game_objects.add(_current_town);
+			
+			_game_objects.add(cons(BaseEnemyGameObject, _game_objects).init().set_centered_position(300, 250));
+		}
+		
+		public function parseLevel(level:Object):void {
 			for each (var p:Object in level.islands) {
 				_walls.push(new ThickPath(new Array(
 					new FlxPoint(p.x1, p.y1),
@@ -47,11 +55,25 @@ package  {
 				), 50));
 			}
 			
-			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
-			_current_town = (cons(TownLandmark, _game_objects).init().set_centered_position(650, 250) as TownLandmark);
-			_game_objects.add(_current_town);
-			
-			_game_objects.add(cons(BaseEnemyGameObject, _game_objects).init().set_centered_position(300, 250));
+			var mark:Landmark;
+			for each (var obj:Object in level.objects) {
+				switch (obj.type) {
+				case "sign":
+					mark = cons(SignLandmark, _game_objects) as Landmark;
+					mark.setVector(obj.x, obj.y, obj.x2, obj.y2);
+					break;
+				case "inn":
+					mark = cons(InnLandmark, _game_objects) as Landmark;
+					mark.setVector(obj.x, obj.y);
+					break;
+				case "pub":
+					mark = cons(PubLandmark, _game_objects) as Landmark;
+					mark.setVector(obj.x, obj.y);
+					break;
+				}
+				
+				_landmarks.push(mark);
+			}
 		}
 		
 		public override function update():void {

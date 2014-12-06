@@ -75,7 +75,7 @@ package gameobjs
 				var attack_this_frame:Boolean = attack_animation_update();
 				
 				if (attack_this_frame) {
-					for (var i:Number = _battling_heros.length-1; i >= 0; i--) {
+					for (i = _battling_heros.length-1; i >= 0; i--) {
 						_battling_heros[i]._hitpoints--;
 						break;
 					}

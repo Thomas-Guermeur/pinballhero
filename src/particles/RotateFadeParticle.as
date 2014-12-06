@@ -13,7 +13,12 @@ package particles {
 		public var _vr:Number = 0;
 		public var _ct:Number = 0;
 		
-		var _has_played_sfx:Boolean = false;
+		private var _has_played_sfx:Boolean = false;
+		private var _initial_alpha:Number = 1;
+		private var _final_alpha:Number = 0;
+		private var _delay:Number = 0;
+		private var _ctspeed:Number = 0.1;
+		
 		public override function init(x:Number, y:Number):BaseParticle {
 			this.reset(x, y);
 			_ct = 0;
@@ -45,21 +50,17 @@ package particles {
 			return this;
 		}
 		
-		var _initial_alpha:Number = 1;
-		var _final_alpha:Number = 0;
 		public function p_set_alpha(initial:Number, finals:Number):RotateFadeParticle {
 			_initial_alpha = initial;
 			_final_alpha = finals;
 			return this;
 		}
 		
-		var _delay:Number = 0;
 		public function p_set_delay(ct:Number):RotateFadeParticle {
 			_delay = ct;
 			return this;
 		}
 		
-		var _ctspeed:Number = 0.1;
 		public function p_set_ctspeed(ctspd:Number):RotateFadeParticle {
 			_ctspeed = ctspd;
 			return this;
