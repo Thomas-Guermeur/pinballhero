@@ -24,7 +24,8 @@ package
 		[Embed(source = "../resc/mapobj/town.png")] public static var SIGN:Class;
 		[Embed(source = "../resc/mapobj/town.png")] public static var TREE:Class;
 		[Embed(source = "../resc/mapobj/town.png")] public static var DEATH:Class
-		
+
+		[Embed(source = "../resc/effects/question.png")] public static var QUESTION:Class;
 		[Embed(source = "../resc/effects/explosion.png")] public static var EXPLOSION:Class;
 		[Embed(source = "../resc/effects/heroghost.png")] public static var HEROGHOST:Class;
 		[Embed(source = "../resc/effects/star.png")] public static var SPARKLE:Class;

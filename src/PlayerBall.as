@@ -12,6 +12,9 @@ package
 	 */
 	public class PlayerBall extends GameObject
 	{
+		public static const CELEBRATORY_TIME:int = 60;
+		public static const SIGN_TIME:int = 40;
+		
 		public var _battling_enemies:Vector.<BaseEnemyGameObject> = new Vector.<BaseEnemyGameObject>();
 		
 		public var _hitpoints:Number = 15;
@@ -21,6 +24,7 @@ package
 			_hitpoints = _max_hitpoints;
 			_battling_enemies.length = 0;
 			_pause_time = 0;
+			_sign_time = 0;
 			_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 5, _attack_anim_ct_max + 5);
 			
 			this.reset(0, 0);
@@ -61,7 +65,23 @@ package
 			_healthbar.trackParent(9, 3);
 		}
 		
-		public var _pause_time:Number = 0;
+		public function hitSign(g:GameEngineState):void {
+			if (_sign_time > 0) {
+				return;
+			}
+			_sign_time = SIGN_TIME;
+			
+			(GameEngineState.particle_cons(RotateFadeParticle, g._particles) as RotateFadeParticle)
+				.init(_actual_position.x, _actual_position.y - 10, Resource.QUESTION)
+				.p_set_delay(Util.float_random(0, 10))
+				.p_set_vr(Util.float_random( -2, 2))
+				.p_set_alpha(0.8, 0)
+				.p_set_velocity(0, Util.float_random(-1.2, -1))
+				.p_set_ctspeed(0.01);
+		}
+		
+		public var _pause_time:int = 0;
+		public var _sign_time:int = 0;
 		private var _health_decr_ct:Number = 0;
 		public override function game_update(g:GameEngineState):void {
 			this.update_health_bar(g);
@@ -74,25 +94,29 @@ package
 			for (var i:Number = _battling_enemies.length - 1; i >= 0; i--) {
 				if (!_battling_enemies[i].alive) {
 					_battling_enemies.splice(i, 1);
-					_pause_time = 60;
+					_pause_time = CELEBRATORY_TIME;
 					play("walk");
 					
 					for (var j:Number = 0; j < 10; j++) {
-						(GameEngineState.particle_cons(RotateFadeParticle,g._particles) as RotateFadeParticle)
-						.init(_actual_position.x + Util.float_random(-50,-10), _actual_position.y + Util.float_random(-10,10), Resource.SPARKLE)
-						.p_set_scale(Util.float_random(0.2, 0.3))
-						.p_set_delay(Util.float_random(0, 10))
-						.p_set_vr(Util.float_random( -10, 10))
-						.p_set_alpha(0.8, 0).p_set_velocity(0, Util.float_random(-3, -1))
-						.p_set_ctspeed(0.05);
+						(GameEngineState.particle_cons(RotateFadeParticle, g._particles) as RotateFadeParticle)
+							.init(_actual_position.x + Util.float_random(-50,-10), _actual_position.y + Util.float_random(-10,10), Resource.SPARKLE)
+							.p_set_scale(Util.float_random(0.2, 0.3))
+							.p_set_delay(Util.float_random(0, 10))
+							.p_set_vr(Util.float_random( -10, 10))
+							.p_set_alpha(0.8, 0).p_set_velocity(0, Util.float_random(-3, -1))
+							.p_set_ctspeed(0.05);
 					}
 				}
 			}
-			if (_pause_time > 0) {
+			if (_sign_time > 0) {
+				_sign_time--;
+			}
+			else if (_pause_time > 0) {
 				_pause_time--;
 				this.update_celebrate_anim();
 				
-			} else if (_battling_enemies.length > 0) {
+			}
+			else if (_battling_enemies.length > 0) {
 				var attack_this_frame:Boolean = attack_animation_update();
 				play("attack");
 				if (attack_this_frame) {
@@ -111,7 +135,8 @@ package
 					}
 				}
 				
-			} else {
+			}
+			else {
 				this.angle = Util.RAD_TO_DEG * Math.atan2(velocity.y, velocity.x) + 90;
 				var center:FlxPoint = this.get_center();
 				center.x += velocity.x;
@@ -176,7 +201,7 @@ package
 					_is_nth_group_sort.push(group.members[i]);
 				}
 			}
-			_is_nth_group_sort.sort(function(a:PlayerBall, b:PlayerBall) {
+			_is_nth_group_sort.sort(function(a:PlayerBall, b:PlayerBall):Number {
 				return a._timestamp - b._timestamp;
 			});
 			for (i = 0; i < _is_nth_group_sort.length; i++) {

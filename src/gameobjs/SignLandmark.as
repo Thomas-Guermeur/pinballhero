@@ -19,6 +19,7 @@ package gameobjs {
 			var speed:Number = getVisitorSpeed(visitor);
 			visitor.velocity.x = speed * Math.cos(radians);
 			visitor.velocity.y = speed * Math.sin(radians);
+			visitor.hitSign(g);
 		}
 		
 		public override function setVector(x1:Number, y1:Number, x2:Number=0, y2:Number=0):void {
