@@ -1,9 +1,13 @@
 package  {
+	import flash.display.Sprite;
+	import flash.ui.*;
 	import flash.geom.Vector3D;
+	
+	import org.flixel.*;
+	
 	import gameobjs.BaseEnemyGameObject;
 	import gameobjs.TownGameObject;
-	import org.flixel.*;
-	import flash.ui.*;	
+	import geom.ThickPath;
 
 	/**
 	 * ...
@@ -19,6 +23,8 @@ package  {
 		public var _current_town:TownGameObject;
 		
 		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
+		public var _walls:Array = new Array();
+		public var _mountain:ThickPath;
 		
 		public override function create():void {
 			super.update();
@@ -28,6 +34,12 @@ package  {
 			this.add(_player_balls);
 			this.add(_healthbars);
 			this.add(_aimretic);
+			
+			_mountain = new ThickPath(new Array(
+				new FlxPoint(0, 0),
+				new FlxPoint(100, 400)
+			), 50);
+			_walls.push(_mountain);
 			
 			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
 			_current_town = (new TownGameObject().set_centered_position(650, 250) as TownGameObject);
@@ -40,13 +52,18 @@ package  {
 			super.update();
 			for each (var itr_playerball:PlayerBall in _player_balls.members) {
 				if (itr_playerball.alive) {
-					itr_playerball.game_update(this);	
-				}	
+					itr_playerball.game_update(this);
+				}
+				
+				for each (var wall:ThickPath in _walls) {
+					wall.bounceCollision(itr_playerball);
+				}
 			}
+			
 			for each (var itr_gameobj:GameObject in _game_objects.members) {
 				if (itr_gameobj.alive) {
-					itr_gameobj.game_update(this);	
-				}	
+					itr_gameobj.game_update(this);
+				}
 			}
 			
 			_aimretic.set_position(_current_town.get_center().x, _current_town.get_center().y-150);
