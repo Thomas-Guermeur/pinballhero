@@ -31,11 +31,16 @@ package  {
 			this.add(_game_objects);
 			this.add(_aimretic);
 			
-			_mountain = new ThickPath(new Array(
+			var level:Object = Resource.LEVEL1_DATA_OBJECT;
+			
+			_walls.push(new ThickPath(new Array(
 				new FlxPoint(0, 0),
-				new FlxPoint(100, 400)
-			), 50);
-			_walls.push(_mountain);
+				new FlxPoint(1000, 0)
+			), 50));
+			_walls.push(new ThickPath(new Array(
+				new FlxPoint(0, 500),
+				new FlxPoint(1000, 500)
+			), 50));
 			
 			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
 			_current_town = (new TownGameObject().set_centered_position(650, 250) as TownGameObject);
