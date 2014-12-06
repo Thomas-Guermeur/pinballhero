@@ -40,7 +40,7 @@ package  {
 			this.add(_mountains);
 			this.add(_healthbars);
 			
-			FlxG.visualDebug = true;
+			FlxG.visualDebug = false;
 			
 			var level:Object = Resource.LEVEL2_DATA_OBJECT;
 			parseLevel(level);

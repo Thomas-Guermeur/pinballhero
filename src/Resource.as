@@ -30,8 +30,15 @@ package
 		[Embed(source = "../resc/effects/heroghost.png")] public static var HEROGHOST:Class;
 		[Embed(source = "../resc/effects/star.png")] public static var SPARKLE:Class;
 		
+		[Embed(source = "../resc/background/mountain_small.png")] public static var MOUNTAIN_SMALL:Class;
+		[Embed(source = "../resc/background/mountain.png")] public static var MOUNTAIN_MED:Class;
+		[Embed(source = "../resc/background/mountain_large.png")] public static var MOUNTAIN_BIG:Class;
+		
 		[Embed(source = "../resc/mapobj/gold.png")] public static var GOLD:Class;
 		
+		/*[Embed( source = "../resc/sound/punch.mp3" )] public static var SFX_PUNCH:Class;
+		[Embed( source = "../resc/sound/pop.mp3" )] public static var SFX_POP:Class;
+		[Embed( source = "../resc/sound/slap.mp3" )] public static var SFX_SLAP:Class;*/
 		
 		
 		[Embed( source = "../resc/levels/level1.json", mimeType="application/octet-stream")] private static var LEVEL1_DATA:Class;
