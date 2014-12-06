@@ -85,6 +85,9 @@ package  {
 					for each (var wall:ThickPath in _walls) {
 						wall.bounceCollision(itr_playerball);
 					}
+					for each (var landmark:Landmark in _landmarks) {
+						landmark.handleVisitor(itr_playerball, this);
+					}
 					if (itr_playerball.should_remove(this)) itr_playerball.do_remove(this);
 				}
 			}
