@@ -42,7 +42,7 @@ package geom {
 					collisions.push(collide);
 					collideLines.push(wallLine);
 				}
-				collide = Line.getIntersection(extLine, playerPath)
+				/*collide = Line.getIntersection(extLine, playerPath)
 				if (collide) {
 					collisions.push(collide);
 					collideLines.push(wallLine);
@@ -56,7 +56,7 @@ package geom {
 				if (collide) {
 					collisions.push(collide);
 					collideLines.push(wallLine);
-				}
+				}*/
 			}
 			
 			// find closest collision to player
@@ -69,38 +69,25 @@ package geom {
 				var dy:Number = point.y - particle.y;
 				var dist:Number = dx * dx + dy * dy;
 				
-				if (dist < closest) {
+				var diry:int = dy < 0 ? -1 : 1;
+				var dirx:int = dx < 0 ? -1 : 1;
+				var vely:int = particle.velocity.y < 0 ? -1 : 1;
+				var velx:int = particle.velocity.x < 0 ? -1 : 1;
+				
+				if (dist < closest && Math.sqrt(dist) < particle.width && dirx == velx && diry == vely) {
 					closest = dist;
 					collisionLine = collideLines[c];
 				}
 			}
 			
-			// bounce player
-			var rad:Number = -(playerPath.getRadians() - collisionLine.getRadians()) + Math.PI;
-			particle.velocity.x = Math.cos(rad);
-			particle.velocity.y = Math.sin(rad);
+			if (collisionLine) {
+				// bounce player
+				var rad:Number = -(playerPath.getRadians() - collisionLine.getRadians()) + collisionLine.getRadians();
+				particle.velocity.x = Math.cos(rad);
+				particle.velocity.y = Math.sin(rad);
+			}
 			
 			// TODO: maybe return something fancy to render game feel
-		}
-		
-		override public function drawDebug(Camera:FlxCamera=null):void {
-			var gfx:Graphics = FlxG.flashGfx;
-			gfx.clear();
-			
-			for (var i:Number = 0; i < nodes.length - 1; i++) {
-				var curr:FlxPoint = nodes[i];
-				var next:FlxPoint = nodes[i + 1];
-				
-				var ext:Line = getExtendedSurface(curr, next);
-				
-				gfx.beginFill(0, .5);
-				gfx.moveTo(curr.x, curr.y);
-				gfx.lineTo(next.x, next.y);
-				gfx.lineTo(ext.end.x, ext.end.y);
-				gfx.lineTo(ext.start.x, ext.start.y);
-				gfx.lineTo(curr.x, curr.y);
-				gfx.endFill();
-			}
 		}
 		
 		/*
@@ -115,6 +102,27 @@ package geom {
 				new FlxPoint(curr.x + wallDiffX, curr.y + wallDiffY),
 				new FlxPoint(next.x + wallDiffX, next.y + wallDiffY)
 			);
+		}
+		
+		override public function drawDebug(Camera:FlxCamera=null):void {
+			var gfx:Graphics = FlxG.flashGfx;
+			gfx.clear();
+			
+			for (var i:Number = 0; i < nodes.length - 1; i++) {
+				var curr:FlxPoint = nodes[i];
+				var next:FlxPoint = nodes[i + 1];
+				
+				var ext:Line = getExtendedSurface(curr, next);
+				
+				gfx.beginFill(0xffffff, .7);
+				gfx.lineStyle(2, 0, 1);
+				gfx.moveTo(curr.x, curr.y);
+				gfx.lineTo(next.x, next.y);
+				gfx.lineTo(ext.end.x, ext.end.y);
+				gfx.lineTo(ext.start.x, ext.start.y);
+				gfx.lineTo(curr.x, curr.y);
+				gfx.endFill();
+			}
 		}
 	}
 }

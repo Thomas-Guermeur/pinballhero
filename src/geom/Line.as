@@ -57,8 +57,26 @@ package geom {
 
 			var pointX:Number = (y3 - y1 + m1 * x1 - m2 * x3) / (m1 - m2);
 			var pointY:Number = y1 + m1 * (pointX - x1);
-
-			return new FlxPoint(pointX, pointY);
+			
+			var result:FlxPoint = new FlxPoint(pointX, pointY);
+			if (line1.inBoundingBox(result) && line2.inBoundingBox(result)) {
+				return result;
+			}
+			else {
+				return null;
+			}
+		}
+		
+		public function inBoundingBox(point:FlxPoint):Boolean {
+			var minX:Number = Math.min(start.x, end.x);
+			var minY:Number = Math.min(start.y, end.y);
+			var maxX:Number = Math.max(start.x, end.x);
+			var maxY:Number = Math.max(start.y, end.y);
+			
+			return (
+				minX < point.x && point.x < maxX &&
+				minY < point.y && point.y < maxY
+			);
 		}
 	}
 }

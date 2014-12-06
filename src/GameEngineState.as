@@ -1,14 +1,11 @@
 package  {
+	import flash.display.Sprite;
 	import flash.ui.*;
 	import flash.geom.Vector3D;
-<<<<<<< HEAD
 	
-=======
-	import gameobjs.BaseEnemyGameObject;
-	import gameobjs.TownGameObject;
->>>>>>> 6a2966c78cd06fee503cb1a365ba92f1c2285ffd
 	import org.flixel.*;
 	
+	import gameobjs.BaseEnemyGameObject;
 	import gameobjs.TownGameObject;
 	import geom.ThickPath;
 
@@ -26,6 +23,7 @@ package  {
 		
 		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
 		public var _walls:Array = new Array();
+		public var _mountain:ThickPath;
 		
 		public override function create():void {
 			this.add(_background_elements);
@@ -33,10 +31,11 @@ package  {
 			this.add(_game_objects);
 			this.add(_aimretic);
 			
-			_walls.push(new ThickPath(new Array(
+			_mountain = new ThickPath(new Array(
 				new FlxPoint(0, 0),
-				new FlxPoint(100, 200)
-			), 50));
+				new FlxPoint(100, 400)
+			), 50);
+			_walls.push(_mountain);
 			
 			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
 			_current_town = (new TownGameObject().set_centered_position(650, 250) as TownGameObject);
@@ -49,12 +48,17 @@ package  {
 			
 			for each (var itr_playerball:PlayerBall in _player_balls.members) {
 				if (itr_playerball.alive) {
-					itr_playerball.game_update(this);	
-				}	
+					itr_playerball.game_update(this);
+				}
+				
+				for each (var wall:ThickPath in _walls) {
+					wall.bounceCollision(itr_playerball);
+				}
 			}
+			
 			for each (var itr_gameobj:GameObject in _game_objects.members) {
 				if (itr_gameobj.alive) {
-					itr_gameobj.game_update(this);	
+					itr_gameobj.game_update(this);
 				}
 			}
 			
