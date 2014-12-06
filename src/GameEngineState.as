@@ -2,11 +2,12 @@ package  {
 	import flash.display.Sprite;
 	import flash.ui.*;
 	import flash.geom.Vector3D;
+	import gameobjs.TownLandmark;
 	
 	import org.flixel.*;
 	
 	import gameobjs.BaseEnemyGameObject;
-	import gameobjs.TownGameObject;
+	import gameobjs.TownLandmark;
 	import geom.ThickPath;
 
 	/**
@@ -21,7 +22,7 @@ package  {
 		public var _game_objects:FlxGroup = new FlxGroup();
 		public var _healthbars:FlxGroup = new FlxGroup();
 		public var _particles:FlxGroup = new FlxGroup();
-		public var _current_town:TownGameObject;
+		public var _current_town:TownLandmark;
 		
 		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
 		public var _walls:Array = new Array();
@@ -47,7 +48,7 @@ package  {
 			}
 			
 			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
-			_current_town = (TownGameObject.cons(_game_objects).init().set_centered_position(650, 250) as TownGameObject);
+			_current_town = (TownLandmark.cons(_game_objects).init().set_centered_position(650, 250) as TownLandmark);
 			_game_objects.add(_current_town);
 			
 			_game_objects.add(BaseEnemyGameObject.cons(_game_objects).init().set_centered_position(300, 250));
