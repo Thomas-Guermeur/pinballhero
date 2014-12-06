@@ -16,16 +16,7 @@ package gameobjs
 		public var _hitpoints:Number = 50;
 		public var _max_hitpoints:Number = 50;
 		
-		public static function cons(g:FlxGroup):BaseEnemyGameObject {
-			var rtv:BaseEnemyGameObject = g.getFirstAvailable(BaseEnemyGameObject) as BaseEnemyGameObject;
-			if (rtv == null) {
-				rtv = new BaseEnemyGameObject();
-				g.add(rtv);
-			}
-			return rtv;
-		}
-		
-		public function init():BaseEnemyGameObject {
+		public override function init():GameObject {
 			_hitpoints = _max_hitpoints;
 			_battling_heros.length = 0;
 			return this;

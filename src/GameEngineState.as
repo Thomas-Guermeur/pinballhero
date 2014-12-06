@@ -48,10 +48,10 @@ package  {
 			}
 			
 			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
-			_current_town = (TownLandmark.cons(_game_objects).init().set_centered_position(650, 250) as TownLandmark);
+			_current_town = (cons(TownLandmark, _game_objects).init().set_centered_position(650, 250) as TownLandmark);
 			_game_objects.add(_current_town);
 			
-			_game_objects.add(BaseEnemyGameObject.cons(_game_objects).init().set_centered_position(300, 250));
+			_game_objects.add(cons(BaseEnemyGameObject, _game_objects).init().set_centered_position(300, 250));
 		}
 		
 		public override function update():void {
@@ -86,12 +86,34 @@ package  {
 			_aimretic.set_position(_current_town.get_center().x, _current_town.get_center().y-150);
 			_aimretic.angle = Util.RAD_TO_DEG * Math.atan2(FlxG.mouse.y - _current_town.get_center().y, FlxG.mouse.x - _current_town.get_center().x) + 90;
 			if (FlxG.mouse.justPressed()) {
-				var neu_ball:PlayerBall = PlayerBall.cons(_player_balls).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
+				var neu_ball:PlayerBall = cons(PlayerBall, _player_balls).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
 				var dir:Vector3D = Util.normalized(FlxG.mouse.x - _current_town.get_center().x,FlxG.mouse.y - _current_town.get_center().y);
 				dir.scaleBy(5);
 				neu_ball.velocity.x = dir.x;
 				neu_ball.velocity.y = dir.y;
 			}
+		}
+		
+		/**
+		 * Pool together objects of the given class for reuse
+		 */
+		public static function cons(gameClass:Class, g:FlxGroup):GameObject {
+			var rtv:GameObject = g.getFirstAvailable(gameClass) as GameObject;
+			if (rtv == null) {
+				
+				rtv = new gameClass();
+				g.add(rtv);
+			}
+			return rtv;
+		}
+		public static function particle_cons(gameClass:Class, g:FlxGroup):BaseParticle {
+			var rtv:BaseParticle = g.getFirstAvailable(gameClass) as BaseParticle;
+			if (rtv == null) {
+				
+				rtv = new gameClass();
+				g.add(rtv);
+			}
+			return rtv;
 		}
 		
 	}

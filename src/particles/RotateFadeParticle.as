@@ -2,15 +2,6 @@ package particles {
 	import org.flixel.*;
 	
 	public class RotateFadeParticle extends BaseParticle {
-			
-		public static function cons(g:FlxGroup):RotateFadeParticle {
-			var rtv:RotateFadeParticle = g.getFirstAvailable(RotateFadeParticle) as RotateFadeParticle;
-			if (rtv == null) {
-				rtv = new RotateFadeParticle();
-				g.add(rtv);
-			}
-			return rtv;
-		}
 		
 		public function RotateFadeParticle() {
 			super();
@@ -23,7 +14,7 @@ package particles {
 		public var _ct:Number = 0;
 		
 		var _has_played_sfx:Boolean = false;
-		public function init(x:Number, y:Number):RotateFadeParticle {
+		public override function init(x:Number, y:Number):BaseParticle {
 			this.reset(x, y);
 			_ct = 0;
 			this.alpha = 1;

@@ -17,16 +17,7 @@ package
 		public var _hitpoints:Number = 15;
 		public var _max_hitpoints:Number = 15;
 		
-		public static function cons(g:FlxGroup):PlayerBall {
-			var rtv:PlayerBall = g.getFirstAvailable(PlayerBall) as PlayerBall;
-			if (rtv == null) {
-				rtv = new PlayerBall();
-				g.add(rtv);
-			}
-			return rtv;
-		}
-		
-		public function init():PlayerBall {
+		public override function init():GameObject {
 			_hitpoints = _max_hitpoints;
 			_battling_enemies.length = 0;
 			this.reset(0, 0);
@@ -69,9 +60,15 @@ package
 				if (attack_this_frame) {
 					for (i = _battling_enemies.length-1; i >= 0; i--) {
 						_battling_enemies[i]._hitpoints--;
-						var hfp:Vector3D = new Vector3D(_battling_enemies[i].get_center().x - this.get_center().x, _battling_enemies[i].get_center().y - this.get_center().y);
+						var hfp:Vector3D = new Vector3D(
+							_battling_enemies[i].get_center().x - this.get_center().x,
+							_battling_enemies[i].get_center().y - this.get_center().y
+						);
 						hfp.scaleBy(0.5);
-						RotateFadeParticle.cons(g._particles).init(this.get_center().x + hfp.x + Util.float_random( -3, 3), this.get_center().y + hfp.y + Util.float_random( -3, 3)).p_set_scale(Util.float_random(0.5,0.8));
+						(GameEngineState.particle_cons(RotateFadeParticle, g._particles).init(
+							this.get_center().x + hfp.x + Util.float_random( -3, 3),
+							this.get_center().y + hfp.y + Util.float_random( -3, 3)
+						) as RotateFadeParticle).p_set_scale(Util.float_random(0.5,0.8));
 						break;
 					}
 				}
