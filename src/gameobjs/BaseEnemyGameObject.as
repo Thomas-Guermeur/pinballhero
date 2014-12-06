@@ -80,7 +80,8 @@ package gameobjs
 						_battling_heros[i]._hitpoints--;
 						var hfp:Vector3D = new Vector3D(_battling_heros[i].get_center().x - this.get_center().x, _battling_heros[i].get_center().y - this.get_center().y);
 						hfp.scaleBy(0.75);
-						RotateFadeParticle.cons(g._particles)
+						
+						(GameEngineState.particle_cons(RotateFadeParticle,g._particles) as RotateFadeParticle)
 						.init(this.get_center().x + hfp.x + Util.float_random( -3, 3), this.get_center().y + hfp.y + Util.float_random( -3, 3))
 						.p_set_scale(Util.float_random(0.8, 1));
 						break;

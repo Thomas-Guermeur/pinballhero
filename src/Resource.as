@@ -15,6 +15,8 @@ package
 		[Embed(source = "../resc/character/player.png")] public static var PLAYER:Class;
 		[Embed(source = "../resc/mapobj/town.png")] public static var TOWN:Class;
 
+		[Embed(source = "../resc/ui/aimretic.png")] public static var AIMRETIC:Class;
+		
 		[Embed(source = "../resc/mapobj/town.png")] public static var PUB:Class;
 		[Embed(source = "../resc/mapobj/town.png")] public static var INN:Class;
 		

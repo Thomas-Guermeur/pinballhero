@@ -33,7 +33,7 @@ package
 			_healthbar = null;
 			this.kill();
 			
-			RotateFadeParticle.cons(g._particles)
+			(GameEngineState.particle_cons(RotateFadeParticle,g._particles) as RotateFadeParticle)
 			.init(this.get_center().x - 14, this.get_center().y - 22, Resource.HEROGHOST)
 			.p_set_ctspeed(0.025)
 			.p_set_alpha(1, 0)
@@ -64,7 +64,7 @@ package
 					_pause_time = 60;
 					
 					for (var j:Number = 0; j < 10; j++) {
-						RotateFadeParticle.cons(g._particles)
+						(GameEngineState.particle_cons(RotateFadeParticle,g._particles) as RotateFadeParticle)
 						.init(_actual_position.x + Util.float_random(-50,-10), _actual_position.y + Util.float_random(-10,10), Resource.SPARKLE)
 						.p_set_scale(Util.float_random(0.2, 0.3))
 						.p_set_delay(Util.float_random(0, 10))
@@ -88,7 +88,7 @@ package
 							_battling_enemies[i].get_center().y - this.get_center().y
 						);
 						hfp.scaleBy(0.5);
-						(GameEngineState.particle_cons(RotateFadeParticle, g._particles).init(
+						((GameEngineState.particle_cons(RotateFadeParticle, g._particles) as RotateFadeParticle).init(
 							this.get_center().x + hfp.x + Util.float_random( -3, 3),
 							this.get_center().y + hfp.y + Util.float_random( -3, 3)
 						) as RotateFadeParticle).p_set_scale(Util.float_random(0.5,0.8));

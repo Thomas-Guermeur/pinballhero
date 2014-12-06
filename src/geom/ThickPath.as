@@ -86,6 +86,11 @@ package geom {
 				var d:Number = Util.point_dist(0, 0, particle.velocity.x, particle.velocity.y);
 				particle.velocity.x = d * Math.cos(rad);
 				particle.velocity.y = d * Math.sin(rad);
+				
+				FlxG.shake(0.005, 0.1);
+				if (particle is PlayerBall) {
+					(particle as PlayerBall)._hitpoints--;
+				}
 			}
 			
 			// TODO: maybe return something fancy to render game feel
