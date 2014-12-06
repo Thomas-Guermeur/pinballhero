@@ -45,17 +45,17 @@ package geom {
 				collide = Line.getIntersection(extLine, playerPath)
 				if (collide) {
 					collisions.push(collide);
-					collideLines.push(wallLine);
+					collideLines.push(extLine);
 				}
 				collide = Line.getIntersection(sideLine1, playerPath)
 				if (collide) {
 					collisions.push(collide);
-					collideLines.push(wallLine);
+					collideLines.push(sideLine1);
 				}
 				collide = Line.getIntersection(sideLine2, playerPath)
 				if (collide) {
 					collisions.push(collide);
-					collideLines.push(wallLine);
+					collideLines.push(sideLine2);
 				}
 			}
 			// find closest collision to player

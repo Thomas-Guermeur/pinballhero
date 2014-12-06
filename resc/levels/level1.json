@@ -13,7 +13,8 @@
     "start_y": 0,
     "islands": [
 		{"ndir": "left", "can_fall": true, "x1": 0, "hei": 50, "y1": 0, "ground": "open", "x2": 1000, "y2": 0, "type": "line"},
-		{"ndir": "left", "can_fall": true, "x1": 1000, "hei": 50, "y1": 500, "ground": "open", "x2": 0, "y2": 500, "type": "line"}
+		{"ndir": "left", "can_fall": true, "x1": 1000, "hei": 50, "y1": 500, "ground": "open", "x2": 0, "y2": 500, "type": "line"},
+		{"ndir": "left", "can_fall": true, "x1": 670, "hei": 50, "y1": 400, "ground": "open", "x2": 671, "y2": 500, "type": "line"}
 	],
     "assert_links": 0
 }
