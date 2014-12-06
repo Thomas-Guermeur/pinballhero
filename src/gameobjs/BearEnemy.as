@@ -10,9 +10,9 @@ package gameobjs
 	 * ...
 	 * @author spotco
 	 */
-	public class BaseEnemyGameObject extends BaseEnemyGameObject {
-		public function Bear() {
-			this.loadGraphic(Resource.PLAYER, true, false, 88, 61);
+	public class BearEnemy extends BaseEnemyGameObject {
+		public function BearEnemy() {
+			this.loadGraphic(Resource.BEAR, true, false, 88, 61);
 			this.addAnimation("idle", [0, 1, 2, 3, 4, 5], 8);
 		}
 		
