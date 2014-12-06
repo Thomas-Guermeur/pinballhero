@@ -43,6 +43,7 @@ package geom {
 					collideLines.push(wallLine);
 				}
 				collide = Line.getIntersection(extLine, playerPath)
+				trace(collide);
 				if (collide) {
 					collisions.push(collide);
 					collideLines.push(wallLine);
@@ -58,7 +59,6 @@ package geom {
 					collideLines.push(wallLine);
 				}
 			}
-			
 			// find closest collision to player
 			var closest:Number = Number.POSITIVE_INFINITY;
 			var collisionLine:Line;
@@ -100,7 +100,7 @@ package geom {
 		 * Return the extended surface of the wall (after applying thickness
 		 */
 		private function getExtendedSurface(curr:FlxPoint, next:FlxPoint):Line {
-			var wallRadians:Number = new Line(curr, next).getRadians() - Math.PI / 2;
+			var wallRadians:Number = new Line(curr, next).getRadians() + Math.PI / 2;
 			var wallDiffX:Number = thickness * Math.cos(wallRadians);
 			var wallDiffY:Number = thickness * Math.sin(wallRadians);
 			
