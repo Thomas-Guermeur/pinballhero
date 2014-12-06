@@ -5,6 +5,7 @@ package gameobjs
 	import flash.ui.*;
 	import gameobjs.*;
 	import org.flixel.plugin.photonstorm.FlxBar;
+	import particles.*;
 	/**
 	 * ...
 	 * @author spotco
@@ -13,8 +14,8 @@ package gameobjs
 		
 		public var _battling_heros:Vector.<PlayerBall> = new Vector.<PlayerBall>();
 		
-		public var _hitpoints:Number = 50;
-		public var _max_hitpoints:Number = 50;
+		public var _hitpoints:Number = 5;
+		public var _max_hitpoints:Number = 5;
 		
 		public static function cons(g:FlxGroup):BaseEnemyGameObject {
 			var rtv:BaseEnemyGameObject = g.getFirstAvailable(BaseEnemyGameObject) as BaseEnemyGameObject;
@@ -73,7 +74,7 @@ package gameobjs
 			
 			for each (var itr_playerball:PlayerBall in g._player_balls.members) {
 				if (itr_playerball.alive && this.is_hit_game_object(itr_playerball)) {
-					if (!itr_playerball._battling_enemies.indexOf(this) != -1) {
+					if (itr_playerball._battling_enemies.indexOf(this) == -1) {
 						_battling_heros.push(itr_playerball);
 						itr_playerball._battling_enemies.push(this);
 					}
@@ -86,6 +87,11 @@ package gameobjs
 				if (attack_this_frame) {
 					for (var i:Number = _battling_heros.length-1; i >= 0; i--) {
 						_battling_heros[i]._hitpoints--;
+						var hfp:Vector3D = new Vector3D(_battling_heros[i].get_center().x - this.get_center().x, _battling_heros[i].get_center().y - this.get_center().y);
+						hfp.scaleBy(0.75);
+						RotateFadeParticle.cons(g._particles)
+						.init(this.get_center().x + hfp.x + Util.float_random( -3, 3), this.get_center().y + hfp.y + Util.float_random( -3, 3))
+						.p_set_scale(Util.float_random(0.8, 1));
 						break;
 					}
 				}

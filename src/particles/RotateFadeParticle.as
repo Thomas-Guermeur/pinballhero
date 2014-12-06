@@ -14,7 +14,6 @@ package particles {
 		
 		public function RotateFadeParticle() {
 			super();
-			this.loadGraphic(Resource.EXPLOSION); 
 		}
 		
 		public var _vx:Number = 0;
@@ -23,14 +22,32 @@ package particles {
 		public var _ct:Number = 0;
 		
 		var _has_played_sfx:Boolean = false;
-		public function init(x:Number, y:Number):RotateFadeParticle {
+		var _loaded_resc:Class = null;
+		public function init(x:Number, y:Number, graphic:Class = null):RotateFadeParticle {
+			if (graphic == null) {
+				graphic = Resource.EXPLOSION;
+			}
+			if (_loaded_resc != graphic) {
+				this.framePixels.fillRect(this.framePixels.rect, 0);
+				this.loadGraphic(graphic);
+			}
 			this.reset(x, y);
 			_ct = 0;
 			this.alpha = 1;
 			this.scale.x = 1;
 			this.scale.y = 1;
 			_has_played_sfx = false;
-			
+			this._vx = 0;
+			this._vy = 0;
+			this._initial_alpha = 1;
+			this._final_alpha = 0;
+			this._vr = 0;
+			this.color = 0xFFFFFF;
+			return this;
+		}
+		
+		public function p_set_color(color:uint):RotateFadeParticle {
+			this.color = color;
 			return this;
 		}
 		
