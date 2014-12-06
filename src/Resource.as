@@ -17,7 +17,7 @@ package
 		[Embed(source = "../resc/ui/aimretic.png")] public static var AIMRETIC:Class;
 		
 		[Embed( source = "../resc/levels/level1.json", mimeType="application/octet-stream")] private static var LEVEL1_DATA:Class;
-		public static var LEVEL1_DATA_OBJECT:String = JSON.decode((new LEVEL1_DATA as ByteArray).toString());
+		public static var LEVEL1_DATA_OBJECT:Object = JSON.decode((new LEVEL1_DATA as ByteArray).toString());
 	}
 
 }

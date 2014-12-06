@@ -37,14 +37,12 @@ package  {
 			
 			var level:Object = Resource.LEVEL1_DATA_OBJECT;
 			
-			_walls.push(new ThickPath(new Array(
-				new FlxPoint(0, 0),
-				new FlxPoint(1000, 0)
-			), 50));
-			_walls.push(new ThickPath(new Array(
-				new FlxPoint(0, 500),
-				new FlxPoint(1000, 500)
-			), 50));
+			for each (var p:Object in level.islands) {
+				_walls.push(new ThickPath(new Array(
+					new FlxPoint(p.x1, p.y1),
+					new FlxPoint(p.x2, p.y2)
+				), 50));
+			}
 			
 			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
 			_current_town = (new TownGameObject().set_centered_position(650, 250) as TownGameObject);
