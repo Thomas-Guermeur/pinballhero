@@ -32,9 +32,9 @@ package gameobjs {
 			visitor.velocity.y = speed * Math.sin(radians);
 		}
 		
-		public override function setVector(x1:Number, y1:Number, x2:Number=0, y2:Number=0):void {
+		public override function setVector(x1:Number, y1:Number, x2:Number = 0, y2:Number = 0):void {
 			super.setVector(x1, y1, x2, y2);
-			radians = Math.atan2(y2 - y1, x2 - x1);
+			radians = Math.random() * Math.PI * 2 - Math.PI;
 		}
 	}
 
