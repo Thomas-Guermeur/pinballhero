@@ -1,7 +1,12 @@
 package  {
 	import flash.ui.*;
 	import flash.geom.Vector3D;
+<<<<<<< HEAD
 	
+=======
+	import gameobjs.BaseEnemyGameObject;
+	import gameobjs.TownGameObject;
+>>>>>>> 6a2966c78cd06fee503cb1a365ba92f1c2285ffd
 	import org.flixel.*;
 	
 	import gameobjs.TownGameObject;
@@ -34,21 +39,22 @@ package  {
 			), 50));
 			
 			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
-			
-			_current_town = (new TownGameObject().set_position(650, 250) as TownGameObject);
+			_current_town = (new TownGameObject().set_centered_position(650, 250) as TownGameObject);
 			_game_objects.add(_current_town);
+			
+			_game_objects.add(new BaseEnemyGameObject().set_centered_position(300, 250));
 		}
 		
 		public override function update():void {
 			
 			for each (var itr_playerball:PlayerBall in _player_balls.members) {
 				if (itr_playerball.alive) {
-					itr_playerball.game_update();	
+					itr_playerball.game_update(this);	
 				}	
 			}
 			for each (var itr_gameobj:GameObject in _game_objects.members) {
 				if (itr_gameobj.alive) {
-					itr_gameobj.game_update();	
+					itr_gameobj.game_update(this);	
 				}
 			}
 			
