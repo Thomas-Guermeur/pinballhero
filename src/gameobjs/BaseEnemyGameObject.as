@@ -17,7 +17,7 @@ package gameobjs
 		public var _hitpoints:Number = 5;
 		public var _max_hitpoints:Number = 5;
 		
-		public override function init():GameObject {
+		public function init():GameObject {
 			_hitpoints = _max_hitpoints;
 			_battling_heros.length = 0;
 			return this;
@@ -43,6 +43,10 @@ package gameobjs
 			if (_healthbar != null) g._healthbars.remove(_healthbar);
 			_healthbar = null;
 			this.kill();
+			
+			for (var i:Number = 0; i < 10; i++) {
+				(GameEngineState.cons(GoldPickup, g._game_objects) as GoldPickup).init(this.get_center().x + Util.float_random(-10,10), this.get_center().y + Util.float_random(-10,10));
+			}
 		}
 		
 		private var _healthbar:FlxBar;

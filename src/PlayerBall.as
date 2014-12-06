@@ -17,7 +17,7 @@ package
 		public var _hitpoints:Number = 15;
 		public var _max_hitpoints:Number = 15;
 		
-		public override function init():GameObject {
+		public function init():GameObject {
 			_hitpoints = _max_hitpoints;
 			_battling_enemies.length = 0;
 			this.reset(0, 0);

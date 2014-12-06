@@ -13,6 +13,8 @@ package gameobjs {
 			this.loadGraphic(Resource.TOWN);
 		}
 		
+		public function init():TownLandmark { return this; }
+		
 	}
 
 }
