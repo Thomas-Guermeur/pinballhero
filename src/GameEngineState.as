@@ -96,6 +96,10 @@ package  {
 				case "patrollingenemy":
 					mark = (cons(PatrollingEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
 					break;
+				case "death":
+					mark = cons(DeathLandmark, _game_objects);
+					(mark as Landmark).setVector(obj.x, obj.y);
+					break;
 				case "goal":
 					mark = cons(CastleLandmark, _game_objects);
 					(mark as Landmark).setVector(obj.x, obj.y);

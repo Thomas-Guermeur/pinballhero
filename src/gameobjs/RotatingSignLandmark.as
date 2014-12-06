@@ -18,7 +18,7 @@ package gameobjs {
 		public override function game_update(g:GameEngineState):void {
 			super.game_update(g);
 			
-			radians += .001;
+			radians += .005;
 			if (radians > Math.PI) {
 				radians -= 2 * Math.PI;
 			}
