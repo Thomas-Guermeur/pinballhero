@@ -18,7 +18,7 @@ package particles {
 		private var _delay:Number = 0;
 		private var _ctspeed:Number = 0.1;
 
-		var _loaded_resc:Class = null;
+		private var _loaded_resc:Class = null;
 		public function init(x:Number, y:Number, graphic:Class = null):RotateFadeParticle {
 			if (graphic == null) {
 				graphic = Resource.EXPLOSION;
@@ -39,6 +39,7 @@ package particles {
 			this._final_alpha = 0;
 			this._vr = 0;
 			this.color = 0xFFFFFF;
+			this.angle = 0;
 			return this;
 		}
 		

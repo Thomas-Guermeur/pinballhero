@@ -128,8 +128,10 @@ package  {
 				var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
 				if (itr_playerball.alive) {
 					itr_playerball.game_update(this);
-					for each (var wall:ThickPath in _walls) {
-						wall.bounceCollision(itr_playerball);
+					if (itr_playerball._battling_enemies.length == 0 && itr_playerball._pause_time <= 0) {
+						for each (var wall:ThickPath in _walls) {
+							wall.bounceCollision(itr_playerball);
+						}
 					}
 					if (itr_playerball.should_remove(this)) itr_playerball.do_remove(this);
 				}
@@ -156,7 +158,7 @@ package  {
 			if (FlxG.mouse.justPressed() && _player_balls_in_queue.countLiving() > 0) {
 				var neu_ball:PlayerBall = (cons(PlayerBall, _player_balls) as PlayerBall).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
 				var dir:Vector3D = Util.normalized(FlxG.mouse.x - _current_town.get_center().x,FlxG.mouse.y - _current_town.get_center().y);
-				dir.scaleBy(5);
+				dir.scaleBy(3.5);
 				neu_ball.velocity.x = dir.x;
 				neu_ball.velocity.y = dir.y;
 				
@@ -170,6 +172,32 @@ package  {
 			
 			if (Util.is_key(Util.USE_SLOT1,true)) {
 				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
+			}
+			
+			var tilt_left:Boolean = Util.is_key(Util.USE_SLOT2, true);
+			var tilt_right:Boolean = Util.is_key(Util.USE_SLOT3, true);
+			if (tilt_left || tilt_right) {
+				for (i_playerball = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
+					itr_playerball = _player_balls.members[i_playerball];
+					if (itr_playerball.alive) {
+						var vvec:Vector3D = new Vector3D(itr_playerball.velocity.x, itr_playerball.velocity.y, 0);
+						var vvec_sc:Number = vvec.length;
+						var neu_dir:Vector3D;
+						vvec.normalize();
+						if (tilt_left) {
+							neu_dir = Util.Z_VEC.crossProduct(vvec);
+						} else {
+							neu_dir = vvec.crossProduct(Util.Z_VEC);
+						}
+						neu_dir.normalize();
+						neu_dir.scaleBy(vvec_sc);
+						itr_playerball.velocity.x = neu_dir.x
+						itr_playerball.velocity.y = neu_dir.y;
+						
+						itr_playerball._hitpoints -= 3;
+					}
+				}
+				FlxG.shake(0.01, 0.2);
 			}
 		}
 		

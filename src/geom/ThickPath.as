@@ -81,6 +81,7 @@ package geom {
 			
 			if (collisionLine) {
 				// bounce player
+				
 				var rad:Number = -playerPath.getRadians() + 2 * collisionLine.getRadians();
 				var d:Number = Util.point_dist(0, 0, particle.velocity.x, particle.velocity.y);
 				particle.velocity.x = d * Math.cos(rad);

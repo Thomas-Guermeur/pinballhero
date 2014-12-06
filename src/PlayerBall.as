@@ -20,8 +20,12 @@ package
 		public function init():GameObject {
 			_hitpoints = _max_hitpoints;
 			_battling_enemies.length = 0;
+			_pause_time = 0;
+			_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 5, _attack_anim_ct_max + 5);
+			
 			this.reset(0, 0);
-			play("walk");
+			this.play("walk");
+			this.set_timestamp();
 			return this;
 		}
 		
@@ -58,7 +62,7 @@ package
 			_healthbar.trackParent(9, 3);
 		}
 		
-		private var _pause_time:Number = 0;
+		public var _pause_time:Number = 0;
 		private var _health_decr_ct:Number = 0;
 		public override function game_update(g:GameEngineState):void {
 			this.update_health_bar(g);
@@ -139,12 +143,12 @@ package
 			} else {
 				_attack_anim_ct--;
 				var theta:Number = (1 - (_attack_anim_ct / _attack_anim_ct_max))*Math.PI;
-				super.set_centered_position(_actual_position.x + Math.sin(theta) * _attack_random_dir.x * 15, _actual_position.y + Math.sin(theta) * _attack_random_dir.y * 15);
+				super.set_centered_position(_actual_position.x + Math.sin(theta) * _attack_random_dir.x * 10, _actual_position.y + Math.sin(theta) * _attack_random_dir.y * 10);
 				return false;
 			}
 		}
 		
-		private function update_celebrate_anim() {
+		private function update_celebrate_anim():Boolean {
 			this.angle = Util.drp(this.angle, Util.RAD_TO_DEG * Math.atan2(velocity.y, velocity.x) + 90, 20);			
 			if (_attack_anim_ct <= 0) {
 				_attack_anim_ct = Util.float_random(_attack_anim_ct_max*0.8 - 5, _attack_anim_ct_max*0.8 + 5);
@@ -158,17 +162,31 @@ package
 			}
 		}
 		
+		private static var TIMESTAMP_CT:Number = 0;
+		private var _timestamp:Number = 0;
+		private function set_timestamp():PlayerBall {
+			_timestamp = TIMESTAMP_CT++;
+			return this;
+		}
+		
+		private static var _is_nth_group_sort:Vector.<PlayerBall> = new Vector.<PlayerBall>();
 		public function is_nth_is_group(group:FlxGroup):Number {
-			var ct:Number = 0;
+			_is_nth_group_sort.length = 0;
 			for (var i:Number = 0; i < group.length; i++) {
 				if (group.members[i].alive) {
-					if (group.members[i] == this) {
-						return ct;
-					} else {
-						ct++;
-					}
+					_is_nth_group_sort.push(group.members[i]);
 				}
 			}
+			_is_nth_group_sort.sort(function(a:PlayerBall, b:PlayerBall) {
+				return a._timestamp - b._timestamp;
+			});
+			for (i = 0; i < _is_nth_group_sort.length; i++) {
+					if (_is_nth_group_sort[i] == this) {
+						_is_nth_group_sort.length = 0;
+						return i;
+					}
+			}
+			_is_nth_group_sort.length = 0;
 			return -1;
 		}
 		
