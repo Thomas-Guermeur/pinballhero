@@ -55,8 +55,14 @@ package
 		}
 		
 		private var _pause_time:Number = 0;
+		private var _health_decr_ct:Number = 0;
 		public override function game_update(g:GameEngineState):void {
 			this.update_health_bar(g);
+			_health_decr_ct++;
+			if (_health_decr_ct > 150) {
+				_hitpoints--;
+				_health_decr_ct = 0;
+			}
 			
 			for (var i:Number = _battling_enemies.length - 1; i >= 0; i--) {
 				if (!_battling_enemies[i].alive) {
@@ -144,6 +150,20 @@ package
 				super.set_centered_position(_actual_position.x, _actual_position.y + Math.sin(theta) * 15);
 				return false;
 			}
+		}
+		
+		public function is_nth_is_group(group:FlxGroup):Number {
+			var ct:Number = 0;
+			for (var i:Number = 0; i < group.length; i++) {
+				if (group.members[i].alive) {
+					if (group.members[i] == this) {
+						return ct;
+					} else {
+						ct++;
+					}
+				}
+			}
+			return -1;
 		}
 		
 	}
