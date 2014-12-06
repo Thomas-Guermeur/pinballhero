@@ -24,6 +24,7 @@ package  {
 		public var _particles:FlxGroup = new FlxGroup();
 		public var _mountains:FlxGroup = new FlxGroup();
 		public var _current_town:TownLandmark;
+		public var _hud:FlxGroup = new FlxGroup();
 		
 		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
 		public var _walls:Array = new Array();
@@ -50,14 +51,12 @@ package  {
 			for (var i:Number = 0; i < 5; i++) {
 				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
 			}
-			
 			set_zoom(1);
-			//set_zoom(0.5); //*0.5
 		}
 		
 		private var _current_zoom:Number = 1;
 		public function set_zoom(zoom_scale:Number):void {
-			var neu_camera:FlxCamera = new FlxCamera(0, 0, 1000/zoom_scale, 500/zoom_scale);
+			var neu_camera:FlxCamera = new FlxCamera(0, 0, 1000 / zoom_scale, 500 / zoom_scale);			
 			neu_camera.zoom = zoom_scale;
 			neu_camera.antialiasing = true;
 			neu_camera.x = ((1000 * zoom_scale) - 1000) / 2 / zoom_scale;
@@ -193,12 +192,6 @@ package  {
 				_current_zoom += 0.1;
 				set_zoom(_current_zoom);
 			}
-			
-			//FlxG.camera.follow(_current_town, FlxCamera.STYLE_TOPDOWN_TIGHT);
-			//var coffset:Number = (1 - FlxG.camera.zoom);
-			
-			//trace(coffset);
-			//_current_town.set_centered_position(Util.wmouse_x(), Util.wmouse_y());
 			
 			if (Util.is_key(Util.USE_SLOT1,true)) {
 				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
