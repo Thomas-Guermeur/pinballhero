@@ -47,9 +47,8 @@ package
 		
 		public function PlayerBall() {
 			this.loadGraphic(Resource.PLAYER, true, false, 45, 52);
-			this.addAnimation("attack", [0,1], 5);
+			this.addAnimation("attack", [0, 1], 5);
 			this.addAnimation("walk", [2, 3], 5);
-			play("walk");
 		}
 		
 		private var _healthbar:FlxBar;

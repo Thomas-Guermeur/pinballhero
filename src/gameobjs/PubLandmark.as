@@ -10,7 +10,11 @@ package gameobjs {
 	public class PubLandmark extends Landmark {
 		
 		public function PubLandmark() {
-			this.loadGraphic(Resource.PUB);
+			this.loadGraphic(Resource.PUB, true, false, 86, 77);
+			this.addAnimation("on", [0], 8);
+			this.addAnimation("off", [1], 8);
+			
+			this.play("on");
 		}
 		
 		public override function handleVisitor(visitor:PlayerBall, g:GameEngineState):void {
