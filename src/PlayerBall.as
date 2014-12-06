@@ -41,7 +41,6 @@ package
 				if (attack_this_frame) {
 					for (var i:Number = _battling_enemies.length-1; i >= 0; i--) {
 						_battling_enemies[i]._hitpoints--;
-						break;
 					}
 				}
 				
