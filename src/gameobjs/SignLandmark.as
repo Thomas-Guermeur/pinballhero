@@ -12,7 +12,7 @@ package gameobjs {
 		public var radians:Number;
 		
 		public function SignLandmark() {
-			this.loadGraphic(Resource.TOWN);
+			this.loadGraphic(Resource.SIGN);
 		}
 		
 		public override function handleVisitor(visitor:PlayerBall, g:GameEngineState):void {

@@ -69,6 +69,10 @@ package  {
 					mark = cons(PubLandmark, _game_objects) as Landmark;
 					mark.setVector(obj.x, obj.y);
 					break;
+				case "tree":
+					mark = cons(TreeLandmark, _game_objects) as Landmark;
+					mark.setVector(obj.x, obj.y);
+					break;
 				}
 				
 				_game_objects.add(mark);
