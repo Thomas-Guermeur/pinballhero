@@ -26,7 +26,6 @@ package  {
 		
 		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
 		public var _walls:Array = new Array();
-		public var _landmarks:Array = new Array();
 		
 		public override function create():void {
 			super.update();
@@ -80,7 +79,7 @@ package  {
 					break;
 				}
 				
-				_landmarks.push(mark);
+				_game_objects.add(mark);
 			}
 		}
 		

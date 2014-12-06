@@ -31,10 +31,6 @@ package gameobjs
 			return new FlxPoint(this.x + 22.5, this.y + 22.5);
 		}
 		
-		public override function is_hit_game_object(other:GameObject):Boolean {
-			return Util.point_dist(this.get_center().x, this.get_center().y, other.get_center().x, other.get_center().y) < 30;
-		}
-		
 		public override function should_remove(g:GameEngineState):Boolean {
 			return this._hitpoints <= 0;
 		}

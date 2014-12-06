@@ -17,15 +17,19 @@ package gameobjs {
 			var speed:Number = getVisitorSpeed(visitor);
 			var radians:Number = Math.atan2(visitor.velocity.y, visitor.velocity.x);
 			
-			var rad1:Number = Math.PI / 4 - radians;
-			var rad2:Number = -Math.PI / 4 - radians;
+			var rad1:Number = Math.PI / 4 + radians;
+			var rad2:Number = -Math.PI / 4 + radians;
 			
 			visitor.velocity.y = speed * Math.sin(rad1);
 			visitor.velocity.x = speed * Math.cos(rad1);
+			visitor.x = x;
+			visitor.y = y;
 			
 			var buddy:GameObject = GameEngineState.cons(PlayerBall, g._player_balls);
-			buddy.velocity.y = speed * Math.sin(rad2);
+			buddy.x = visitor.x;
+			buddy.y = visitor.y;
 			buddy.velocity.x = speed * Math.cos(rad2);
+			buddy.velocity.y = speed * Math.sin(rad2);
 		}
 	}
 
