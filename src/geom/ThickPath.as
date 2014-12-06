@@ -47,7 +47,7 @@ package geom {
 					collisions.push(collide);
 					collideLines.push(wallLine);
 				}
-				/*collide = Line.getIntersection(sideLine1, playerPath)
+				collide = Line.getIntersection(sideLine1, playerPath)
 				if (collide) {
 					collisions.push(collide);
 					collideLines.push(wallLine);
@@ -56,7 +56,7 @@ package geom {
 				if (collide) {
 					collisions.push(collide);
 					collideLines.push(wallLine);
-				}*/
+				}
 			}
 			// find closest collision to player
 			var closest:Number = Number.POSITIVE_INFINITY;
