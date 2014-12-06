@@ -11,9 +11,10 @@ package
 	public class Resource {
 		
 		[Embed(source = "../resc/background/testbackground.png")] public static var TEST_BACKGROUND:Class;
-		[Embed(source = "../resc/character/enemy.png")] public static var ENEMY:Class;
+		[Embed(source = "../resc/character/fox_small.png")] public static var ENEMY:Class;
 		[Embed(source = "../resc/character/player.png")] public static var PLAYER:Class;
 		[Embed(source = "../resc/mapobj/town.png")] public static var TOWN:Class;
+		[Embed(source = "../resc/mapobj/castle.png")] public static var CASTLE:Class;
 
 		[Embed(source = "../resc/ui/aimretic.png")] public static var AIMRETIC:Class;
 		

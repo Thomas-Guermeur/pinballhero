@@ -129,6 +129,10 @@ package geom {
 				gfx.lineTo(curr.x, curr.y);
 				gfx.endFill();
 			}
+			
+			
+			//draw graphics shape to camera buffer
+			Camera.buffer.draw(FlxG.flashGfxSprite);
 		}
 	}
 }

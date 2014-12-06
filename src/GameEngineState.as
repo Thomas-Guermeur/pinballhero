@@ -22,6 +22,7 @@ package  {
 		public var _game_objects:FlxGroup = new FlxGroup();
 		public var _healthbars:FlxGroup = new FlxGroup();
 		public var _particles:FlxGroup = new FlxGroup();
+		public var _mountains:FlxGroup = new FlxGroup();
 		public var _current_town:TownLandmark;
 		
 		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
@@ -36,8 +37,10 @@ package  {
 			this.add(_player_balls_in_queue);
 			this.add(_player_balls);
 			this.add(_particles);
+			this.add(_mountains);
 			this.add(_healthbars);
 			
+			FlxG.visualDebug = true;
 			
 			var level:Object = Resource.LEVEL2_DATA_OBJECT;
 			parseLevel(level);
@@ -51,10 +54,14 @@ package  {
 		
 		public function parseLevel(level:Object):void {
 			for each (var p:Object in level.islands) {
-				_walls.push(new ThickPath(new Array(
+				var tp:ThickPath = new ThickPath(new Array(
 					new FlxPoint(p.x1, p.y1),
 					new FlxPoint(p.x2, p.y2)
-				), 50));
+				), 50);
+				
+				_walls.push(tp);
+				// wrap mountains in FlxSprite
+				_mountains.add(new MountainRange(tp));
 			}
 			
 			var mark:GameObject;
@@ -65,19 +72,19 @@ package  {
 					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
 					break;
 				case "rotatingsign":
-					mark = cons(RotatingSignLandmark, _game_objects) as Landmark;
+					mark = cons(RotatingSignLandmark, _game_objects);
 					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
 					break;
 				case "inn":
-					mark = cons(InnLandmark, _game_objects) as Landmark;
+					mark = cons(InnLandmark, _game_objects);
 					(mark as Landmark).setVector(obj.x, obj.y);
 					break;
 				case "pub":
-					mark = cons(PubLandmark, _game_objects) as Landmark;
+					mark = cons(PubLandmark, _game_objects);
 					(mark as Landmark).setVector(obj.x, obj.y);
 					break;
 				case "tree":
-					mark = cons(TreeLandmark, _game_objects) as Landmark;
+					mark = cons(TreeLandmark, _game_objects);
 					(mark as Landmark).setVector(obj.x, obj.y);
 					break;
 				case "town":
@@ -88,6 +95,10 @@ package  {
 					break;
 				case "patrollingenemy":
 					mark = (cons(PatrollingEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
+					break;
+				case "goal":
+					mark = cons(CastleLandmark, _game_objects);
+					(mark as Landmark).setVector(obj.x, obj.y);
 					break;
 				}
 				
