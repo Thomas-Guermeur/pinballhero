@@ -41,7 +41,10 @@ package
 		}
 		
 		public function PlayerBall() {
-			this.loadGraphic(Resource.PLAYER);
+			this.loadGraphic(Resource.PLAYER, true, false, 45, 52);
+			this.addAnimation("attack", [0,1], 5);
+			this.addAnimation("walk", [2, 3], 5);
+			play("walk");
 		}
 		
 		private var _healthbar:FlxBar;
@@ -68,6 +71,7 @@ package
 				if (!_battling_enemies[i].alive) {
 					_battling_enemies.splice(i, 1);
 					_pause_time = 60;
+					play("walk");
 					
 					for (var j:Number = 0; j < 10; j++) {
 						(GameEngineState.particle_cons(RotateFadeParticle,g._particles) as RotateFadeParticle)
@@ -86,6 +90,7 @@ package
 				
 			} else if (_battling_enemies.length > 0) {
 				var attack_this_frame:Boolean = attack_animation_update();
+				play("attack");
 				if (attack_this_frame) {
 					for (i = _battling_enemies.length-1; i >= 0; i--) {
 						_battling_enemies[i]._hitpoints--;
