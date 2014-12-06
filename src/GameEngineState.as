@@ -1,20 +1,57 @@
 package  {
 	import flash.geom.Vector3D;
+	import gameobjs.TownGameObject;
 	import org.flixel.*;
-	import player_projectiles.*;
-	import enemy.*;
-	import particles.*;
-	import pickups.*;
 	import flash.ui.*;	
 
 	/**
 	 * ...
 	 * @author spotco
 	 */
-	public class GameEngineState {
+	public class GameEngineState extends FlxState {
 		
-		public override function GameEngineState() {
+		public var _background_elements:FlxGroup = new FlxGroup();
+		
+		public var _player_balls:FlxGroup = new FlxGroup();
+		public var _game_objects:FlxGroup = new FlxGroup();
+		public var _current_town:TownGameObject;
+		
+		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
+		
+		public override function create():void {
+			this.add(_background_elements);
+			this.add(_player_balls);
+			this.add(_game_objects);
+			this.add(_aimretic);
 			
+			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
+			
+			_current_town = (new TownGameObject().set_position(650, 250) as TownGameObject);
+			_game_objects.add(_current_town);
+		}
+		
+		public override function update():void {
+			for each (var itr_playerball:PlayerBall in _player_balls.members) {
+				if (itr_playerball.alive) {
+					itr_playerball.game_update();	
+				}	
+			}
+			for each (var itr_gameobj:GameObject in _game_objects.members) {
+				if (itr_gameobj.alive) {
+					itr_gameobj.game_update();	
+				}	
+			}
+			
+			_aimretic.set_position(_current_town.get_center().x, _current_town.get_center().y-150);
+			_aimretic.angle = Util.RAD_TO_DEG * Math.atan2(FlxG.mouse.y - _current_town.get_center().y, FlxG.mouse.x - _current_town.get_center().x) + 90;
+			if (FlxG.mouse.justPressed()) {
+				var neu_ball:PlayerBall = new PlayerBall().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
+				var dir:Vector3D = Util.normalized(FlxG.mouse.x - _current_town.get_center().x,FlxG.mouse.y - _current_town.get_center().y);
+				dir.scaleBy(5);
+				neu_ball.velocity.x = dir.x;
+				neu_ball.velocity.y = dir.y;
+				_player_balls.add(neu_ball);
+			}
 		}
 		
 	}

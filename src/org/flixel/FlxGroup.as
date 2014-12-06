@@ -1,6 +1,5 @@
 package org.flixel
 {
-	import misc.FlxGroupSprite;
 	/**
 	 * This is an organizational class that can update and render a bunch of <code>FlxBasic</code>s.
 	 * NOTE: Although <code>FlxGroup</code> extends <code>FlxBasic</code>, it will not automatically
