@@ -63,7 +63,6 @@ package geom {
 				return result;
 			}
 			else {
-				trace(result.x, result.y);
 				return null;
 			}
 		}

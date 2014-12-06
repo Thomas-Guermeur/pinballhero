@@ -43,7 +43,6 @@ package geom {
 					collideLines.push(wallLine);
 				}
 				collide = Line.getIntersection(extLine, playerPath)
-				trace(collide);
 				if (collide) {
 					collisions.push(collide);
 					collideLines.push(wallLine);
