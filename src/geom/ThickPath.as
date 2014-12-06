@@ -1,5 +1,6 @@
 package geom {
 	
+	import gameobjs.Mountain;
 	import org.flixel.*;
 
 	import flash.display.Graphics;
@@ -73,7 +74,7 @@ package geom {
 				var vely:int = particle.velocity.y < 0 ? -1 : 1;
 				var velx:int = particle.velocity.x < 0 ? -1 : 1;
 				
-				if (dist < closest && Math.sqrt(dist) < particle.width && dirx == velx && diry == vely) {
+				if (dist < closest && Math.sqrt(dist) <= particle.width) {
 					closest = dist;
 					collisionLine = collideLines[c];
 				}
@@ -110,8 +111,44 @@ package geom {
 			);
 		}
 		
-		override public function drawDebug(Camera:FlxCamera = null):void {
-			return;
+
+		public function createSprites(g:FlxGroup):void {
+			for (var i:Number = 0; i < nodes.length - 1; i++) {
+				var curr:FlxPoint = nodes[i];
+				var next:FlxPoint = nodes[i + 1];
+				
+				var ext:Line = getExtendedSurface(curr, next);
+				curr = new FlxPoint((curr.x + ext.start.x) / 2, (curr.y + ext.start.y) / 2);
+				next = new FlxPoint((next.x + ext.end.x) / 2, (next.y + ext.end.y) / 2);
+				
+				if (next.y < curr.y) {
+					var temp:FlxPoint = curr;
+					curr = next;
+					next = temp;
+				}
+				
+				var rad:Number = Math.atan2(next.y - curr.y, next.x - curr.x);
+				
+				var LENGTH:int = 30;
+				var dx:Number = LENGTH * Math.cos(rad);
+				var dy:Number = LENGTH * Math.sin(rad);
+				
+				var cx:Number = curr.x;
+				var cy:Number = curr.y;
+				
+				var lengthLeft:Number = Util.point_dist(curr.x, curr.y, next.x, next.y) - LENGTH / 2;
+				while (lengthLeft > 0) {
+					g.add(new Mountain(cx, cy));
+					
+					cx += dx;
+					cy += dy;
+					
+					lengthLeft -= LENGTH;
+				}
+			}
+		}
+		
+		override public function drawDebug(Camera:FlxCamera=null):void {
 			var gfx:Graphics = FlxG.flashGfx;
 			gfx.clear();
 			

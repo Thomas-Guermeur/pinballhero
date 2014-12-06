@@ -28,8 +28,7 @@ package geom {
 			
 			var x3:Number = vert.start.x;
 			var m1:Number = horiz.getSlope();
-
-			return new FlxPoint(x3, m1 * x3 - x1 + y1);
+			return new FlxPoint(x3, m1 * (x3 - x1) + y1);
 		}
 		
 		public static function getIntersection(line1:Line, line2:Line):FlxPoint {
@@ -68,10 +67,10 @@ package geom {
 		}
 		
 		public function inBoundingBox(point:FlxPoint):Boolean {
-			var minX:Number = Math.min(start.x, end.x);
-			var minY:Number = Math.min(start.y, end.y);
-			var maxX:Number = Math.max(start.x, end.x);
-			var maxY:Number = Math.max(start.y, end.y);
+			var minX:Number = Math.min(start.x, end.x) - 1;
+			var minY:Number = Math.min(start.y, end.y) - 1;
+			var maxX:Number = Math.max(start.x, end.x) + 1;
+			var maxY:Number = Math.max(start.y, end.y) + 1;
 			
 			return (
 				minX <= point.x && point.x <= maxX &&

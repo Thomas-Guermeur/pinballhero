@@ -33,15 +33,16 @@ package  {
 			super.update();
 			
 			this.add(_background_elements);
+			this.add(_mountains);
 			this.add(_aimretic);
 			this.add(_game_objects);
 			this.add(_player_balls_in_queue);
 			this.add(_player_balls);
 			this.add(_particles);
-			this.add(_mountains);
+			
 			this.add(_healthbars);
 			
-			FlxG.visualDebug = true;
+			FlxG.visualDebug = false;
 			
 			var level:Object = Resource.LEVEL2_DATA_OBJECT;
 			parseLevel(level);
@@ -107,7 +108,7 @@ package  {
 					mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
 					break;
 				case "bear":
-					mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
+					mark = (cons(BearEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
 					break;
 				case "patrollingenemy":
 					mark = (cons(PatrollingEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
@@ -227,9 +228,6 @@ package  {
 		public function update_heroes_in_queue():void {
 			for each(var itr:PlayerBall in _player_balls_in_queue.members) {
 				var ct:Number = itr.is_nth_is_group(_player_balls_in_queue);
-				if (ct == 0) {
-					itr.angle = Util.RAD_TO_DEG * Math.atan2(FlxG.mouse.y - _current_town.get_center().y,FlxG.mouse.x - _current_town.get_center().x) + 90;
-				}
 				itr.set_centered_position(
 					Util.drp(itr.get_center().x,_current_town.get_center().x + ct * 50,15),
 					Util.drp(itr.get_center().y,_current_town.get_center().y, 15)
