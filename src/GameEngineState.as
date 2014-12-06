@@ -15,14 +15,18 @@ package  {
 		
 		public var _player_balls:FlxGroup = new FlxGroup();
 		public var _game_objects:FlxGroup = new FlxGroup();
+		public var _healthbars:FlxGroup = new FlxGroup();
 		public var _current_town:TownGameObject;
 		
 		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
 		
 		public override function create():void {
+			super.update();
+			
 			this.add(_background_elements);
-			this.add(_player_balls);
 			this.add(_game_objects);
+			this.add(_player_balls);
+			this.add(_healthbars);
 			this.add(_aimretic);
 			
 			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
@@ -33,6 +37,7 @@ package  {
 		}
 		
 		public override function update():void {
+			super.update();
 			for each (var itr_playerball:PlayerBall in _player_balls.members) {
 				if (itr_playerball.alive) {
 					itr_playerball.game_update(this);	
