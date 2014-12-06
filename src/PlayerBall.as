@@ -146,7 +146,7 @@ package
 			}
 		}
 		
-		private function update_celebrate_anim():void {
+		private function update_celebrate_anim():Boolean {
 			this.angle = Util.drp(this.angle, Util.RAD_TO_DEG * Math.atan2(velocity.y, velocity.x) + 90, 20);			
 			if (_attack_anim_ct <= 0) {
 				_attack_anim_ct = Util.float_random(_attack_anim_ct_max*0.8 - 5, _attack_anim_ct_max*0.8 + 5);
