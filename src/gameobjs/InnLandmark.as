@@ -10,7 +10,7 @@ package gameobjs {
 	public class InnLandmark extends Landmark {
 		
 		public function InnLandmark() {
-			this.loadGraphic(Resource.TOWN);
+			this.loadGraphic(Resource.INN);
 		}
 		
 		public override function handleVisitor(visitor:PlayerBall, g:GameEngineState):void {

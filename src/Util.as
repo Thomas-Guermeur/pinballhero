@@ -34,7 +34,7 @@ package  {
 		public static var MOVE_UP:Vector.<String> = Vector.<String>(["W", "UP"]);
 		public static var MOVE_DOWN:Vector.<String> = Vector.<String>(["S", "DOWN"]);
 		
-		public static var USE_SLOT1:Vector.<String> = Vector.<String>(["Z"]);
+		public static var USE_SLOT1:Vector.<String> = Vector.<String>(["SPACE"]);
 		public static var USE_SLOT2:Vector.<String> = Vector.<String>(["X"]);
 		public static var USE_SLOT3:Vector.<String> = Vector.<String>(["C"]);
 		public static var USE_SLOT4:Vector.<String> = Vector.<String>(["V"]);

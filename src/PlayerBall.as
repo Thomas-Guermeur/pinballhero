@@ -55,8 +55,14 @@ package
 		}
 		
 		private var _pause_time:Number = 0;
+		private var _health_decr_ct:Number = 0;
 		public override function game_update(g:GameEngineState):void {
 			this.update_health_bar(g);
+			_health_decr_ct++;
+			if (_health_decr_ct > 150) {
+				_hitpoints--;
+				_health_decr_ct = 0;
+			}
 			
 			for (var i:Number = _battling_enemies.length - 1; i >= 0; i--) {
 				if (!_battling_enemies[i].alive) {

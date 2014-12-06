@@ -48,10 +48,9 @@ package  {
 			
 			_game_objects.add((cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(300, 250));
 			
-			(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
-			(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
-			(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
-			(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
+			for (var i:Number = 0; i < 5; i++) {
+				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
+			}
 		}
 		
 		public function parseLevel(level:Object):void {
@@ -117,14 +116,23 @@ package  {
 			
 			_aimretic.set_position(_current_town.get_center().x, _current_town.get_center().y-150);
 			_aimretic.angle = Util.RAD_TO_DEG * Math.atan2(FlxG.mouse.y - _current_town.get_center().y, FlxG.mouse.x - _current_town.get_center().x) + 90;
-			if (FlxG.mouse.justPressed() && _player_balls_in_queue.length > 0) {
+			if (FlxG.mouse.justPressed() && _player_balls_in_queue.countLiving() > 0) {
 				var neu_ball:PlayerBall = (cons(PlayerBall, _player_balls) as PlayerBall).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
 				var dir:Vector3D = Util.normalized(FlxG.mouse.x - _current_town.get_center().x,FlxG.mouse.y - _current_town.get_center().y);
 				dir.scaleBy(5);
 				neu_ball.velocity.x = dir.x;
 				neu_ball.velocity.y = dir.y;
 				
-				_player_balls_in_queue.getFirstAlive().kill();
+				for (var i:Number = 0; i < _player_balls_in_queue.length; i++) {
+					if (_player_balls_in_queue.members[i].alive) {
+						_player_balls_in_queue.members[i].kill();
+						break;
+					}
+				}
+			}
+			
+			if (Util.is_key(Util.USE_SLOT1,true)) {
+				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
 			}
 		}
 		
