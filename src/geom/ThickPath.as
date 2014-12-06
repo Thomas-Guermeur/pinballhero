@@ -42,7 +42,7 @@ package geom {
 					collisions.push(collide);
 					collideLines.push(wallLine);
 				}
-				/*collide = Line.getIntersection(extLine, playerPath)
+				collide = Line.getIntersection(extLine, playerPath)
 				if (collide) {
 					collisions.push(collide);
 					collideLines.push(wallLine);
@@ -56,7 +56,7 @@ package geom {
 				if (collide) {
 					collisions.push(collide);
 					collideLines.push(wallLine);
-				}*/
+				}
 			}
 			
 			// find closest collision to player
@@ -82,9 +82,10 @@ package geom {
 			
 			if (collisionLine) {
 				// bounce player
-				var rad:Number = -(playerPath.getRadians() - collisionLine.getRadians()) + collisionLine.getRadians();
-				particle.velocity.x = Math.cos(rad);
-				particle.velocity.y = Math.sin(rad);
+				var rad:Number = -playerPath.getRadians() + 2 * collisionLine.getRadians();
+				var dist:Number = Util.point_dist(0, 0, particle.velocity.x, particle.velocity.y);
+				particle.velocity.x = dist * Math.cos(rad);
+				particle.velocity.y = dist * Math.sin(rad);
 			}
 			
 			// TODO: maybe return something fancy to render game feel

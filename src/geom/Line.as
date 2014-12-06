@@ -74,8 +74,8 @@ package geom {
 			var maxY:Number = Math.max(start.y, end.y);
 			
 			return (
-				minX < point.x && point.x < maxX &&
-				minY < point.y && point.y < maxY
+				minX <= point.x && point.x <= maxX &&
+				minY <= point.y && point.y <= maxY
 			);
 		}
 	}

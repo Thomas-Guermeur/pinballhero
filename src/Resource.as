@@ -1,5 +1,9 @@
 package  
 {
+	import flash.utils.ByteArray;
+	
+	import com.adobe.serialization.json.*;
+	
 	/**
 	 * ...
 	 * @author spotco
@@ -12,6 +16,9 @@ package
 		[Embed(source = "../resc/mapobj/town.png")] public static var TOWN:Class;
 		[Embed(source = "../resc/effects/explosion.png")] public static var EXPLOSION:Class;
 		[Embed(source = "../resc/ui/aimretic.png")] public static var AIMRETIC:Class;
+		
+		[Embed( source = "../resc/levels/level1.json", mimeType="application/octet-stream")] private static var LEVEL1_DATA:Class;
+		public static var LEVEL1_DATA_OBJECT:String = JSON.decode((new LEVEL1_DATA as ByteArray).toString());
 	}
 
 }
