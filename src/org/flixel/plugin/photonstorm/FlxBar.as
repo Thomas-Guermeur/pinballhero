@@ -595,6 +595,7 @@ package org.flixel.plugin.photonstorm
 			{
 				if (parent[parentVariable] != value)
 				{
+					
 					updateValueFromParent();
 					updateBar();
 				}

@@ -1,11 +1,21 @@
 package gameobjs 
 {
-	import org.flixel.FlxPoint;
+	import flash.geom.Vector3D;
+	import org.flixel.*;
+	import flash.ui.*;
+	import gameobjs.*;
+	import org.flixel.plugin.photonstorm.FlxBar;
 	/**
 	 * ...
 	 * @author spotco
 	 */
 	public class BaseEnemyGameObject extends GameObject {
+		
+		public var _engaged_in_battle:Boolean = false;
+		public var _battling_heros:Vector.<PlayerBall> = new Vector.<PlayerBall>();
+		
+		public var _hitpoints:Number = 50;
+		public var _max_hitpoints:Number = 50;
 		
 		public function BaseEnemyGameObject() {
 			this.loadGraphic(Resource.ENEMY);
@@ -19,13 +29,63 @@ package gameobjs
 			return Util.point_dist(this.get_center().x, this.get_center().y, other.get_center().x, other.get_center().y) < 30;
 		}
 		
+		private var _healthbar:FlxBar;
+		private function update_health_bar(g:GameEngineState):void {
+			if (this._hitpoints >= _max_hitpoints) return; 
+			if (_healthbar == null) {
+				
+				_healthbar = new FlxBar(0, 0, FlxBar.FILL_LEFT_TO_RIGHT, 60, 4, this, "_hitpoints", 0, _max_hitpoints);
+				g._healthbars.add(_healthbar);
+			}
+			_healthbar.trackParent(-5, -7);
+		}
+		
 		public override function game_update(g:GameEngineState):void {
+			this.update_health_bar(g);
+			
 			for each (var itr_playerball:PlayerBall in g._player_balls.members) {
 				if (itr_playerball.alive && this.is_hit_game_object(itr_playerball)) {
 					if (!itr_playerball._engaged_in_battle) {
 						itr_playerball._engaged_in_battle = true;
+						this._engaged_in_battle = true;
+						_battling_heros.push(itr_playerball);
+						itr_playerball._battling_enemies.push(this);
 					}
 				}
+			}
+			
+			if (this._engaged_in_battle) {
+				var attack_this_frame:Boolean = attack_animation_update();
+				
+				if (attack_this_frame) {
+					for (var i:Number = _battling_heros.length-1; i >= 0; i--) {
+						_battling_heros[i]._hitpoints--;
+						break;
+					}
+				}
+			}
+		}
+		
+		private var _actual_position:FlxPoint = new FlxPoint();
+		public override function set_centered_position(x:Number, y:Number):GameObject {
+			_actual_position.x = x; _actual_position.y = y;
+			return super.set_centered_position(x, y);
+		}
+		
+		private var _attack_anim_ct:Number = 0;
+		private var _attack_anim_ct_max:Number = 20;
+		private var _attack_random_dir:Vector3D = new Vector3D();
+		private function attack_animation_update():Boolean {
+			if (_attack_anim_ct <= 0) {
+				_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 5, _attack_anim_ct_max + 5);
+				_attack_random_dir = Util.normalized(Util.float_random( -1, 1), Util.float_random( -1, 1));
+				FlxG.shake(0.005, 0.1);
+				return true;
+			} else {
+				_attack_anim_ct--;
+				var theta:Number = (1 - (_attack_anim_ct / _attack_anim_ct_max))*Math.PI;
+				super.set_centered_position(_actual_position.x + Math.sin(theta) * _attack_random_dir.x * 15, _actual_position.y + Math.sin(theta) * _attack_random_dir.y * 15);
+				return false;
 			}
 		}
 		
