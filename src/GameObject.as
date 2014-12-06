@@ -16,6 +16,7 @@ package
 			this.set_position(x - off.x, y - off.y);
 			return this;
 		}
+		public function is_hit_game_object(other:GameObject):Boolean { return false; }
 	}
 
 }
