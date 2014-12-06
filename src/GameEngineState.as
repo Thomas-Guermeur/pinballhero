@@ -1,8 +1,11 @@
 package  {
+	import flash.ui.*;
 	import flash.geom.Vector3D;
-	import gameobjs.TownGameObject;
+	
 	import org.flixel.*;
-	import flash.ui.*;	
+	
+	import gameobjs.TownGameObject;
+	import geom.ThickPath;
 
 	/**
 	 * ...
@@ -17,12 +20,18 @@ package  {
 		public var _current_town:TownGameObject;
 		
 		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
+		public var _walls:Array = new Array();
 		
 		public override function create():void {
 			this.add(_background_elements);
 			this.add(_player_balls);
 			this.add(_game_objects);
 			this.add(_aimretic);
+			
+			_walls.push(new ThickPath(new Array(
+				new FlxPoint(0, 0),
+				new FlxPoint(100, 200)
+			), 50));
 			
 			_background_elements.add(new FlxSprite(0, 0, Resource.TEST_BACKGROUND));
 			
@@ -31,6 +40,7 @@ package  {
 		}
 		
 		public override function update():void {
+			
 			for each (var itr_playerball:PlayerBall in _player_balls.members) {
 				if (itr_playerball.alive) {
 					itr_playerball.game_update();	
@@ -39,7 +49,7 @@ package  {
 			for each (var itr_gameobj:GameObject in _game_objects.members) {
 				if (itr_gameobj.alive) {
 					itr_gameobj.game_update();	
-				}	
+				}
 			}
 			
 			_aimretic.set_position(_current_town.get_center().x, _current_town.get_center().y-150);
