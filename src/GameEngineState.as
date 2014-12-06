@@ -18,6 +18,7 @@ package  {
 		public var _background_elements:FlxGroup = new FlxGroup();
 		
 		public var _player_balls:FlxGroup = new FlxGroup();
+		public var _player_balls_in_queue:FlxGroup = new FlxGroup();
 		public var _game_objects:FlxGroup = new FlxGroup();
 		public var _healthbars:FlxGroup = new FlxGroup();
 		public var _particles:FlxGroup = new FlxGroup();
@@ -31,11 +32,13 @@ package  {
 			super.update();
 			
 			this.add(_background_elements);
+			this.add(_aimretic);
 			this.add(_game_objects);
+			this.add(_player_balls_in_queue);
 			this.add(_player_balls);
 			this.add(_particles);
 			this.add(_healthbars);
-			this.add(_aimretic);
+			
 			
 			var level:Object = Resource.LEVEL1_DATA_OBJECT;
 			parseLevel(level);
@@ -45,6 +48,11 @@ package  {
 			_game_objects.add(_current_town);
 			
 			_game_objects.add((cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(300, 250));
+			
+			(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
+			(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
+			(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
+			(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
 		}
 		
 		public function parseLevel(level:Object):void {
@@ -78,6 +86,9 @@ package  {
 		
 		public override function update():void {
 			super.update();
+			
+			update_heroes_in_queue();
+			
 			for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 				var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
 				if (itr_playerball.alive) {
@@ -107,12 +118,27 @@ package  {
 			
 			_aimretic.set_position(_current_town.get_center().x, _current_town.get_center().y-150);
 			_aimretic.angle = Util.RAD_TO_DEG * Math.atan2(FlxG.mouse.y - _current_town.get_center().y, FlxG.mouse.x - _current_town.get_center().x) + 90;
-			if (FlxG.mouse.justPressed()) {
+			if (FlxG.mouse.justPressed() && _player_balls_in_queue.length > 0) {
 				var neu_ball:PlayerBall = (cons(PlayerBall, _player_balls) as PlayerBall).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
 				var dir:Vector3D = Util.normalized(FlxG.mouse.x - _current_town.get_center().x,FlxG.mouse.y - _current_town.get_center().y);
 				dir.scaleBy(5);
 				neu_ball.velocity.x = dir.x;
 				neu_ball.velocity.y = dir.y;
+				
+				_player_balls_in_queue.getFirstAlive().kill();
+			}
+		}
+		
+		public function update_heroes_in_queue():void {
+			for each(var itr:PlayerBall in _player_balls_in_queue.members) {
+				var ct:Number = itr.is_nth_is_group(_player_balls_in_queue);
+				if (ct == 0) {
+					itr.angle = Util.RAD_TO_DEG * Math.atan2(FlxG.mouse.y - _current_town.get_center().y,FlxG.mouse.x - _current_town.get_center().x) + 90;
+				}
+				itr.set_centered_position(
+					Util.drp(itr.get_center().x,_current_town.get_center().x + ct * 50,15),
+					Util.drp(itr.get_center().y,_current_town.get_center().y, 15)
+				);
 			}
 		}
 		

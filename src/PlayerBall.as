@@ -146,6 +146,20 @@ package
 			}
 		}
 		
+		public function is_nth_is_group(group:FlxGroup):Number {
+			var ct:Number = 0;
+			for (var i:Number = 0; i < group.length; i++) {
+				if (group.members[i].alive) {
+					if (group.members[i] == this) {
+						return ct;
+					} else {
+						ct++;
+					}
+				}
+			}
+			return -1;
+		}
+		
 	}
 
 }
