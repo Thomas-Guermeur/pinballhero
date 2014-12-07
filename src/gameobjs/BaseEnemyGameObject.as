@@ -48,6 +48,8 @@ package gameobjs
 			_healthbar = null;
 			this.kill();
 			
+			g._chatmanager.push_message("Monster has been slain!");
+			
 			for (var i:Number = 0; i < 10; i++) {
 				(GameEngineState.cons(GoldPickup, g._game_objects) as GoldPickup).init(this.get_center().x + Util.float_random(-10,10), this.get_center().y + Util.float_random(-10,10));
 			}

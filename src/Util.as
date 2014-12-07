@@ -215,7 +215,8 @@ package  {
 		
 		public static function cons_text(x:Number, y:Number, text:String, color:uint = 0xFFFFFF, font_size:int = 20, width:Number = 1000):FlxText {
 			var _score:FlxText = new FlxText(x,y , width, text);
-			_score.setFormat("game", font_size);
+			//_score.setFormat("game", font_size);
+			_score.size = font_size;
 			_score.color = color;
 			return _score;
 		}

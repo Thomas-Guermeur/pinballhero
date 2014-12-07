@@ -25,6 +25,7 @@ package  {
 		public var _current_town:TownLandmark;
 		public var _hud:GameEngineHUD;
 		public var _next_hero_popup:NextHeroPopup;
+		public var _chatmanager:ChatManager;
 		
 		public var _aimretic_l:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
 		public var _aimretic_r:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
@@ -42,7 +43,7 @@ package  {
 			this.add(_player_balls_in_queue);
 			this.add(_player_balls);
 			this.add(_particles);
-			
+
 			
 			this.add(_healthbars);
 			
@@ -51,6 +52,10 @@ package  {
 			
 			set_zoom(1);
 			_player_balls.cameras = _mountains.cameras = _aimretic_l.cameras = _aimretic_r.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
+			
+			_chatmanager = new ChatManager(this);
+			_chatmanager.push_message("And so our story begins...");
+			this.add(_chatmanager);
 			
 			var level:Object = Resource.LEVEL1_DATA_OBJECT;
 			parseLevel(level);
@@ -183,6 +188,7 @@ package  {
 			update_heroes_in_queue();
 			update_camera();
 			update_aimretic();
+			_chatmanager.game_update(this);
 			
 			for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 				var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
@@ -228,12 +234,14 @@ package  {
 						break;
 					}
 				}
+				_chatmanager.push_message("A hero sets out on his quest!");
 			}
 			
 			if (_gold_until_next_ball <= 0) {
 				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
 				_max_gold_until_next_ball += 5;
 				_gold_until_next_ball = _max_gold_until_next_ball;
+				_chatmanager.push_message("A new hero has joined the battle!");
 			}
 			
 			update_tilt();

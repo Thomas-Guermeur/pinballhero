@@ -52,6 +52,8 @@ package
 			.p_set_ctspeed(0.025)
 			.p_set_alpha(1, 0)
 			.p_set_velocity(0, Util.float_random( -0.1, -0.6));
+			
+			g._chatmanager.push_message("A hero has fallen!");
 		}
 		
 		public function PlayerBall() {
@@ -181,7 +183,6 @@ package
 					_attack_random_dir = Util.normalized(Util.float_random( -1, 1), Util.float_random( -1, 1));
 					_attack_random_dir.scaleBy(10);
 				}
-				//this.angle = Util.RAD_TO_DEG * Math.atan2(_attack_random_dir.y,_attack_random_dir.x) + 90;
 				return true;
 			} else {
 				_attack_anim_ct--;

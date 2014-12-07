@@ -24,6 +24,7 @@ package
 		[Embed(source = "../resc/ui/hud_tiltbar.png")] public static var HUD_TILTBAR:Class;
 		[Embed(source = "../resc/ui/hud_tiltbar_empty.png")] public static var HUD_TILTBAR_EMPTY:Class;
 		[Embed(source = "../resc/ui/nexthero_popup.png")] public static var NEXTHERO_POPUP:Class;
+		[Embed(source = "../resc/ui/chat_cover.png")] public static var CHAT_COVER:Class;
 		
 		[Embed(source = "../resc/mapobj/Guild.png")] public static var PUB:Class;
 		[Embed(source = "../resc/mapobj/inn.png")] public static var INN:Class;
