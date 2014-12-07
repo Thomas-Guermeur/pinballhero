@@ -226,7 +226,7 @@ package  {
 			_normalized.y = y;
 			_normalized.z = 0;
 			_normalized.normalize();
-			return _normalized;
+			return _normalized.clone();
 		}
 		
 		static var _copy:Vector3D = new Vector3D();

@@ -119,7 +119,7 @@ package gameobjs
 			if (_attack_anim_ct <= 0) {
 				_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 4, _attack_anim_ct_max + 4);
 				_attack_random_dir = Util.normalized(Util.float_random( -1, 1), Util.float_random( -1, 1));
-				FlxG.shake(0.002, 0.1);
+				FlxG.shake(0.001, 0.1);
 				return true;
 			} else {
 				_attack_anim_ct--;

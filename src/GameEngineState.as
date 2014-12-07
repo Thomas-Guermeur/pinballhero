@@ -34,8 +34,8 @@ package  {
 			super.update();
 			
 			this.add(_background_elements);
-			this.add(_mountains);
 			this.add(_aimretic);
+			this.add(_mountains);
 			this.add(_game_objects);
 			this.add(_player_balls_in_queue);
 			this.add(_player_balls);
@@ -66,6 +66,7 @@ package  {
 			this.add(_next_hero_popup);
 			
 			set_zoom(1);
+			FlxG.camera.focusOn(new FlxPoint(_current_town.get_center().x, _current_town.get_center().y));
 			_max_gold_until_next_ball = 15;
 			_gold_until_next_ball = _max_gold_until_next_ball;
 		}
@@ -95,78 +96,19 @@ package  {
 				_hudcamera.bgColor = 0x00000000;
 				FlxG.addCamera(_hudcamera);
 			}
-			if (_current_town != null) {
-				FlxG.camera.focusOn(new FlxPoint(_current_town.get_center().x, _current_town.get_center().y));
-			}
 		}
 		
-		public function parseLevel(level:Object):void {
-			for each (var p:Object in level.islands) {
-				var tp:ThickPath = new ThickPath(new Array(
-					new FlxPoint(p.x1, p.y1),
-					new FlxPoint(p.x2, p.y2)
-				), 30);
-				
-				_walls.push(tp);
-				// wrap mountains in FlxSprite
-				var tmp:MountainRange = new MountainRange();
-				tmp.cameras = _mountains.cameras;
-				tmp.init(tp);
-				_mountains.add(tmp);
-			}
+		private function update_camera():void {
+			var magn:Number = Util.point_dist(Util.smouse_x(), Util.smouse_y(), 1000 / 2, 500 / 2);
+			var dir:Vector3D = Util.normalized(Util.smouse_x() - 1000 / 2, Util.smouse_y() - 500 / 2);
+			magn = (magn / 600) * 300;
+			dir.scaleBy(magn);
 			
-			var mark:GameObject;
-			for each (var obj:Object in level.objects) {
-				switch (obj.type) {
-				case "sign":
-					mark = cons(SignLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
-					break;
-				case "rotatingsign":
-					mark = cons(RotatingSignLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
-					break;
-				case "inn":
-					mark = cons(InnLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y);
-					break;
-				case "pub":
-					mark = cons(PubLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y);
-					break;
-				case "tree":
-					mark = cons(TreeLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y);
-					break;
-				case "town":
-					mark = _current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(obj.x,obj.y) as TownLandmark);
-					break;
-				case "enemy":
-					mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
-					break;
-				case "bear":
-					mark = (cons(BearEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
-					break;
-				case "patrollingenemy":
-					mark = (cons(PatrollingEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
-					break;
-				case "aoeenemy":
-					mark = cons(BaseEnemyGameObject, _game_objects);
-					var bgo:BaseEnemyGameObject = mark as BaseEnemyGameObject;
-					bgo.init().set_centered_position(obj.x, obj.y);
-					bgo.setAOE(5);
-					break;
-				case "death":
-					mark = cons(DeathLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y);
-					break;
-				case "goal":
-					mark = cons(CastleLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y);
-					break;
-				}
-				_game_objects.add(mark);
-			}
+			FlxG.camera.focusOn(
+				Util.flxpt(
+					_current_town.get_center().x + dir.x, 
+					_current_town.get_center().y + dir.y
+			));
 		}
 		
 		public override function update():void {
@@ -175,6 +117,7 @@ package  {
 			_hud.game_update(this);
 			_next_hero_popup.game_update(this);
 			update_heroes_in_queue();
+			update_camera();
 			
 			for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 				var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
@@ -291,6 +234,75 @@ package  {
 		
 		public function pickup_gold():void {
 			_gold_until_next_ball--;
+		}
+		
+		public function parseLevel(level:Object):void {
+			for each (var p:Object in level.islands) {
+				var tp:ThickPath = new ThickPath(new Array(
+					new FlxPoint(p.x1, p.y1),
+					new FlxPoint(p.x2, p.y2)
+				), 30);
+				
+				_walls.push(tp);
+				// wrap mountains in FlxSprite
+				var tmp:MountainRange = new MountainRange();
+				tmp.cameras = _mountains.cameras;
+				tmp.init(tp);
+				_mountains.add(tmp);
+			}
+			
+			var mark:GameObject;
+			for each (var obj:Object in level.objects) {
+				switch (obj.type) {
+				case "sign":
+					mark = cons(SignLandmark, _game_objects);
+					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
+					break;
+				case "rotatingsign":
+					mark = cons(RotatingSignLandmark, _game_objects);
+					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
+					break;
+				case "inn":
+					mark = cons(InnLandmark, _game_objects);
+					(mark as Landmark).setVector(obj.x, obj.y);
+					break;
+				case "pub":
+					mark = cons(PubLandmark, _game_objects);
+					(mark as Landmark).setVector(obj.x, obj.y);
+					break;
+				case "tree":
+					mark = cons(TreeLandmark, _game_objects);
+					(mark as Landmark).setVector(obj.x, obj.y);
+					break;
+				case "town":
+					mark = _current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(obj.x,obj.y) as TownLandmark);
+					break;
+				case "enemy":
+					mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
+					break;
+				case "bear":
+					mark = (cons(BearEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
+					break;
+				case "patrollingenemy":
+					mark = (cons(PatrollingEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
+					break;
+				case "aoeenemy":
+					mark = cons(BaseEnemyGameObject, _game_objects);
+					var bgo:BaseEnemyGameObject = mark as BaseEnemyGameObject;
+					bgo.init().set_centered_position(obj.x, obj.y);
+					bgo.setAOE(5);
+					break;
+				case "death":
+					mark = cons(DeathLandmark, _game_objects);
+					(mark as Landmark).setVector(obj.x, obj.y);
+					break;
+				case "goal":
+					mark = cons(CastleLandmark, _game_objects);
+					(mark as Landmark).setVector(obj.x, obj.y);
+					break;
+				}
+				_game_objects.add(mark);
+			}
 		}
 		
 		/**

@@ -88,7 +88,7 @@ package geom {
 				particle.velocity.x = d * Math.cos(rad);
 				particle.velocity.y = d * Math.sin(rad);
 				
-				FlxG.shake(0.005, 0.1);
+				FlxG.shake(0.002, 0.1);
 				if (particle is PlayerBall) {
 					(particle as PlayerBall)._hitpoints--;
 				}
