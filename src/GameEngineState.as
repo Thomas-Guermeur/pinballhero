@@ -285,7 +285,14 @@ package  {
 		public function update_heroes_in_queue():void {
 			for each(var itr:PlayerBall in _player_balls_in_queue.members) {
 				var ct:Number = itr.is_nth_is_group(_player_balls_in_queue);
-				var tar_scale:Number = 0.2 + 0.8 * (1/(ct+1));
+				var tar_scale:Number = 0.2 + 0.8 * (1 / (ct + 1));
+				if (Util.point_dist(
+					itr.get_center().x, 
+					itr.get_center().y, 
+					_current_town.get_center().x + Math.sin(theta) * dist, 
+					_current_town.get_center().y + Math.cos(theta)*dist) > 10) {
+					tar_scale = 1;
+				}
 				itr.set_scale(Util.drp(itr.scale.x, tar_scale, 10));
 				
 				if (ct == 0) {
@@ -296,6 +303,7 @@ package  {
 				} else {
 					var theta:Number = Math.PI*0.2 * ct;
 					var dist:Number = Math.sqrt(ct) * 15 + 12;
+					
 					itr.set_centered_position(
 						Util.drp(itr.get_center().x,_current_town.get_center().x + Math.sin(theta)*dist, 15),
 						Util.drp(itr.get_center().y,_current_town.get_center().y + Math.cos(theta)*dist, 15)
