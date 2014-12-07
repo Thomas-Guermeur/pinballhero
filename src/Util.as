@@ -198,7 +198,7 @@ package  {
 		public static function drp_pos(a:FlxPoint, b:FlxPoint, div:Number):FlxPoint {
 			_lerp.x = drp(a.x, b.x, div);
 			_lerp.y = drp(a.y, b.y, div);
-			return _lerp;
+			return Util.copypt(_lerp);
 		}
 		
 		public static function drp(a:Number, b:Number, div:Number):Number {
@@ -248,6 +248,10 @@ package  {
 			_flxpt2.x = x;
 			_flxpt2.y = y;
 			return _flxpt2;
+		}
+		
+		public static function copypt(pt:FlxPoint):FlxPoint {
+			return new FlxPoint(pt.x, pt.y);
 		}
 		
 		public static function pt_to_flxrotation(facing_x:Number, facing_y:Number):Number {

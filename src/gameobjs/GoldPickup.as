@@ -65,7 +65,7 @@ package gameobjs {
 			if (_magneted_hero != null) {
 				var player:FlxPoint = _magneted_hero.get_center();
 				var v:Vector3D = Util.normalized(player.x - this.x, player.y - this.y);
-				v.scaleBy(5.5);
+				v.scaleBy(Math.max(5.5,Util.point_dist(player.x,player.y,this.x,this.y)/200 * 5 + 5.5));
 				_vel.x = v.x;
 				_vel.y = v.y;
 			} else {

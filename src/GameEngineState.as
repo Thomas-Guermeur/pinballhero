@@ -35,6 +35,7 @@ package  {
 			
 			this.add(_background_elements);
 			this.add(_aimretic);
+			update_aimretic();
 			this.add(_mountains);
 			this.add(_game_objects);
 			this.add(_player_balls_in_queue);
@@ -55,7 +56,7 @@ package  {
 			
 			_background_elements.add(new FlxSprite(-100, -200, Resource.TEST_BACKGROUND).set_cameras([_gamecamera]));
 			
-			for (var i:Number = 0; i < 5; i++) {
+			for (var i:Number = 0; i < 3; i++) {
 				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
 			}
 			
@@ -74,7 +75,7 @@ package  {
 		public static var ZOOM_CONST:Number = 0.3;
 		public var _gamecamera:FlxCamera = null;
 		public var _hudcamera:FlxCamera = null;
-		private var _current_zoom:Number = 1;
+		
 		public function set_zoom(zoom_scale:Number):void {
 			var neu_camera:FlxCamera;
 			if (_gamecamera == null) {
@@ -98,17 +99,38 @@ package  {
 			}
 		}
 		
+		private var _current_zoom:Number = 1;
+		private var _current_focus:FlxPoint = new FlxPoint();
+		
+		private var _hold_mouse_ct:Number = 0;
+		private var _hold_mouse_ct_max:Number = 50;
+		
 		private function update_camera():void {
+			var tar_focus:FlxPoint = new FlxPoint(_current_focus.x, _current_focus.y);
+			var tar_zoom:Number = _current_zoom;
+			var drpf:Number = 10;
 			var magn:Number = Util.point_dist(Util.smouse_x(), Util.smouse_y(), 1000 / 2, 500 / 2);
 			var dir:Vector3D = Util.normalized(Util.smouse_x() - 1000 / 2, Util.smouse_y() - 500 / 2);
-			magn = (magn / 600) * 300;
-			dir.scaleBy(magn);
+			if (FlxG.mouse.pressed() && _player_balls_in_queue.countLiving() > 0) {
+				_hold_mouse_ct = Math.min(_hold_mouse_ct+1,_hold_mouse_ct_max);
+				var scf:Number = _hold_mouse_ct / _hold_mouse_ct_max;
+				magn = (magn / 600) * (300 + scf*500);
+				dir.scaleBy(magn);
+				tar_focus.x = _current_town.get_center().x + dir.x;
+				tar_focus.y = _current_town.get_center().y + dir.y;
+				
+			} else {
+				magn = (magn / 600) * 300;
+				dir.scaleBy(magn);
+				tar_focus.x = _current_town.get_center().x + dir.x;
+				tar_focus.y = _current_town.get_center().y + dir.y;
+				tar_zoom = 1;
+			}
+			_current_focus = Util.drp_pos(_current_focus, tar_focus, drpf);
+			_current_zoom = Util.drp(_current_zoom, tar_zoom, 20);
 			
-			FlxG.camera.focusOn(
-				Util.flxpt(
-					_current_town.get_center().x + dir.x, 
-					_current_town.get_center().y + dir.y
-			));
+			FlxG.camera.focusOn(_current_focus);
+			set_zoom(_current_zoom);
 		}
 		
 		public override function update():void {
@@ -152,10 +174,12 @@ package  {
 			
 			_aimretic.angle = Util.RAD_TO_DEG * Math.atan2(Util.wmouse_y() - _current_town.get_center().y, Util.wmouse_x() - _current_town.get_center().x) + 90;
 			
-			if (FlxG.mouse.justPressed() && _player_balls_in_queue.countLiving() > 0) {
+			if (FlxG.mouse.justReleased() && _player_balls_in_queue.countLiving() > 0) {
 				var neu_ball:PlayerBall = (cons(PlayerBall, _player_balls) as PlayerBall).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
-				var dir:Vector3D = Util.normalized(Util.wmouse_x() - _current_town.get_center().x,Util.wmouse_y() - _current_town.get_center().y);
-				dir.scaleBy(3.5);
+				var dir:Vector3D = Util.normalized(Util.wmouse_x() - _current_town.get_center().x, Util.wmouse_y() - _current_town.get_center().y);
+				var scf:Number = _hold_mouse_ct / _hold_mouse_ct_max;
+				dir.scaleBy(2 + 9 * scf);
+				_hold_mouse_ct = 0;
 				neu_ball.velocity.x = dir.x;
 				neu_ball.velocity.y = dir.y;
 				
@@ -165,16 +189,6 @@ package  {
 						break;
 					}
 				}
-			}
-			
-			if (Util.is_key(Util.MOVE_UP, true)) {
-				_current_zoom -= 0.1;
-				set_zoom(_current_zoom);
-				trace(_current_zoom);
-			} else if (Util.is_key(Util.MOVE_DOWN, true)) {
-				_current_zoom += 0.1;
-				set_zoom(_current_zoom);
-				trace(_current_zoom);
 			}
 			
 			if (_gold_until_next_ball <= 0) {
@@ -191,25 +205,28 @@ package  {
 		public var _tilt_count:Number = 100;
 		public var _tilt_count_max:Number = 100;
 		public function update_tilt():void {
-			var tilt_left:Boolean = Util.is_key(Util.USE_SLOT2, true);
-			var tilt_right:Boolean = Util.is_key(Util.USE_SLOT3, true);
-			if ((tilt_left || tilt_right) && _tilt_count >= _tilt_count_max) {
+			var tilt_up:Boolean = Util.is_key(Util.MOVE_UP, true);
+			var tilt_down:Boolean = Util.is_key(Util.MOVE_DOWN, true);
+			var tilt_left :Boolean = Util.is_key(Util.MOVE_LEFT, true);
+			var tilt_right:Boolean = Util.is_key(Util.MOVE_RIGHT, true);
+			if ((tilt_down || tilt_left || tilt_right || tilt_up) && _tilt_count >= _tilt_count_max) {
 				for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 					var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
 					if (itr_playerball.alive) {
-						var vvec:Vector3D = new Vector3D(itr_playerball.velocity.x, itr_playerball.velocity.y, 0);
-						var vvec_sc:Number = vvec.length;
-						var neu_dir:Vector3D;
-						vvec.normalize();
 						if (tilt_left) {
-							neu_dir = Util.Z_VEC.crossProduct(vvec);
-						} else {
-							neu_dir = vvec.crossProduct(Util.Z_VEC);
+							if (itr_playerball.velocity.x > 0) itr_playerball.velocity.x *= 0.5;
+							itr_playerball.velocity.x -= 7;
+						} else if (tilt_right) {
+							if (itr_playerball.velocity.x < 0) itr_playerball.velocity.x *= 0.5;
+							itr_playerball.velocity.x += 7;
+						} else if (tilt_up) {
+							if (itr_playerball.velocity.y > 0) itr_playerball.velocity.y *= 0.5;
+							itr_playerball.velocity.y -= 10;
+						} else if (tilt_down) {
+							if (itr_playerball.velocity.y < 0) itr_playerball.velocity.y *= 0.5;
+							itr_playerball.velocity.y += 7;
 						}
-						neu_dir.normalize();
-						neu_dir.scaleBy(vvec_sc);
-						itr_playerball.velocity.x = neu_dir.x
-						itr_playerball.velocity.y = neu_dir.y;
+						
 						if (itr_playerball._hitpoints > 1) {
 							itr_playerball._hitpoints -= 1;
 						}
@@ -239,8 +256,8 @@ package  {
 		public function parseLevel(level:Object):void {
 			for each (var p:Object in level.islands) {
 				var tp:ThickPath = new ThickPath(new Array(
-					new FlxPoint(p.x1, p.y1),
-					new FlxPoint(p.x2, p.y2)
+					new FlxPoint(p.x1, -p.y1),
+					new FlxPoint(p.x2, -p.y2)
 				), 30);
 				
 				_walls.push(tp);
@@ -254,7 +271,13 @@ package  {
 			var mark:GameObject;
 			for each (var obj:Object in level.objects) {
 				switch (obj.type) {
-				case "sign":
+				case "1upobject":
+					mark = _current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(obj.x,-obj.y) as TownLandmark);
+					break;
+				case "birdflock":
+					mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, -obj.y);
+					break;
+				case "sign": //make negative !!!!
 					mark = cons(SignLandmark, _game_objects);
 					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
 					break;
@@ -273,12 +296,6 @@ package  {
 				case "tree":
 					mark = cons(TreeLandmark, _game_objects);
 					(mark as Landmark).setVector(obj.x, obj.y);
-					break;
-				case "town":
-					mark = _current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(obj.x,obj.y) as TownLandmark);
-					break;
-				case "enemy":
-					mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
 					break;
 				case "bear":
 					mark = (cons(BearEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
@@ -303,6 +320,10 @@ package  {
 				}
 				_game_objects.add(mark);
 			}
+		}
+		
+		public function update_aimretic():void {
+			
 		}
 		
 		/**

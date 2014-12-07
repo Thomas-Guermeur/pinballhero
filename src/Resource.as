@@ -18,6 +18,7 @@ package
 		[Embed(source = "../resc/mapobj/castle.png")] public static var CASTLE:Class;
 
 		[Embed(source = "../resc/ui/aimretic.png")] public static var AIMRETIC:Class;
+		[Embed(source = "../resc/ui/aimretic_empty.png")] public static var AIMRETIC_EMPTY:Class;
 		[Embed(source = "../resc/ui/hud_tilttext.png")] public static var HUD_TILTTEXT:Class;
 		[Embed(source = "../resc/ui/hud_tiltcontrols.png")] public static var HUD_TILTCONTROLS:Class;
 		[Embed(source = "../resc/ui/hud_tiltbar.png")] public static var HUD_TILTBAR:Class;

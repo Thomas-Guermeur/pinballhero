@@ -91,6 +91,9 @@ package geom {
 				FlxG.shake(0.002, 0.1);
 				if (particle is PlayerBall) {
 					(particle as PlayerBall)._hitpoints--;
+					var player:PlayerBall = particle as PlayerBall;
+					player.velocity.x *= 0.9;
+					player.velocity.y *= 0.9;
 				}
 			}
 			

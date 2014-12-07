@@ -17,8 +17,8 @@ package
 		
 		public var _battling_enemies:Vector.<BaseEnemyGameObject> = new Vector.<BaseEnemyGameObject>();
 		
-		public var _hitpoints:Number = 15;
-		public var _max_hitpoints:Number = 15;
+		public var _hitpoints:Number = 20;
+		public var _max_hitpoints:Number = 20;
 		
 		public function init():GameObject {
 			_hitpoints = _max_hitpoints;
@@ -142,6 +142,7 @@ package
 				var center:FlxPoint = this.get_center();
 				center.x += velocity.x;
 				center.y += velocity.y;
+				velocity.y += 0.135;
 				this.set_centered_position(center.x, center.y);
 			}
 		}

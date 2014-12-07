@@ -10,7 +10,6 @@ package
 	{
 		
 		public var _tiltBar:FlxSprite;
-		public var _tiltControls:FlxSprite;
 		public var _tiltText:FlxSprite;
 		
 		public function GameEngineHUD(g:GameEngineState) 
@@ -20,9 +19,6 @@ package
 			
 			_tiltText = new FlxSprite(966, 20, Resource.HUD_TILTTEXT).set_cameras([g._hudcamera]);
 			this.add(_tiltText);
-			
-			_tiltControls = new FlxSprite(966, 200, Resource.HUD_TILTCONTROLS).set_cameras([g._hudcamera]);
-			this.add(_tiltControls);
 		}
 		
 		private var _animct:int = 0;
@@ -30,15 +26,11 @@ package
 		{
 			_animct++;
 			if (g._tilt_count >= g._tilt_count_max) {
-				
-				_tiltControls.visible = true;
 				if (_animct % 20 == 0) {
 					_tiltText.visible = !_tiltText.visible;
 				}
 				
 			} else {
-				
-				_tiltControls.visible = false;
 				_tiltText.visible = false;
 			}
 			update_tiltbar(g._tilt_count / g._tilt_count_max);
