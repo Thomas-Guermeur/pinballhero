@@ -287,12 +287,16 @@ package  {
 			return RIGHT_MOUSE_PRESSED || FlxG.keys.SPACE;
 		}
 		
+		public static function smouse_x():Number { return FlxG.stage.mouseX; }
+		public static function smouse_y():Number { return FlxG.stage.mouseY; }
+
 		public static function wmouse_x():Number {
-			return FlxG.mouse.getWorldPosition(FlxG.camera).x + FlxG.camera.x / FlxG.camera.zoom;
+			var rtv:Number = FlxG.camera.scroll.x - FlxG.camera.x + 1000 / 2 + (smouse_x() - 1000 / 2)/FlxG.camera.zoom;
+			return rtv;
 		}
-		
 		public static function wmouse_y():Number {
-			return FlxG.mouse.getWorldPosition(FlxG.camera).y + FlxG.camera.y / FlxG.camera.zoom;
+			var rtv:Number = FlxG.camera.scroll.y - FlxG.camera.y + 500/2 + (smouse_y() - 500 / 2)/FlxG.camera.zoom;
+			return rtv;
 		}
 		
 	}

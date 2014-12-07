@@ -39,7 +39,7 @@ package  {
 			this.add(_player_balls_in_queue);
 			this.add(_player_balls);
 			this.add(_particles);
-			
+			this.add(_hud);
 			this.add(_healthbars);
 			
 			FlxG.visualDebug = false;
@@ -55,14 +55,26 @@ package  {
 			set_zoom(1);
 		}
 		
+		public static var ZOOM_CONST:Number = 0.3;
+		private var _tmp:Boolean = false;
 		private var _current_zoom:Number = 1;
 		public function set_zoom(zoom_scale:Number):void {
-			var neu_camera:FlxCamera = new FlxCamera(0, 0, 1000 / zoom_scale, 500 / zoom_scale);			
+			var neu_camera:FlxCamera;
+			if (!_tmp) {
+				neu_camera = new FlxCamera(0, 0, 1000 / ZOOM_CONST, 500 / ZOOM_CONST);
+				neu_camera.antialiasing = true;
+			} else {
+				neu_camera = FlxG.camera;
+			}
+					
 			neu_camera.zoom = zoom_scale;
-			neu_camera.antialiasing = true;
-			neu_camera.x = ((1000 * zoom_scale) - 1000) / 2 / zoom_scale;
-			neu_camera.y = ((500 * zoom_scale) - 500) / 2 / zoom_scale;
-			FlxG.resetCameras(neu_camera);
+			
+			neu_camera.x = ((1000 * ZOOM_CONST) - 1000) / 2 / ZOOM_CONST;
+			neu_camera.y = ((500 * ZOOM_CONST) - 500) / 2 / ZOOM_CONST;
+			if (!_tmp) {
+				FlxG.resetCameras(neu_camera);
+				_tmp = true;
+			}
 			FlxG.camera.focusOn(new FlxPoint(_current_town.get_center().x, _current_town.get_center().y));
 		}
 		
@@ -102,7 +114,7 @@ package  {
 					(mark as Landmark).setVector(obj.x, obj.y);
 					break;
 				case "town":
-					mark = _current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(obj.x, obj.y) as TownLandmark);
+					mark = _current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(obj.x,obj.y) as TownLandmark);
 					break;
 				case "enemy":
 					mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
@@ -189,9 +201,11 @@ package  {
 			if (Util.is_key(Util.MOVE_UP, true)) {
 				_current_zoom -= 0.1;
 				set_zoom(_current_zoom);
+				trace(_current_zoom);
 			} else if (Util.is_key(Util.MOVE_DOWN, true)) {
 				_current_zoom += 0.1;
 				set_zoom(_current_zoom);
+				trace(_current_zoom);
 			}
 			
 			if (Util.is_key(Util.USE_SLOT1,true)) {
@@ -236,7 +250,6 @@ package  {
 		}
 		
 		public function pickup_gold():void {
-			trace("todo -- pick up gold");
 		}
 		
 		/**
