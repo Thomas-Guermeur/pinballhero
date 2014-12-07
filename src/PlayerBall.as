@@ -16,6 +16,7 @@ package
 		public static const SIGN_TIME:int = 40;
 		
 		public var _battling_enemies:Vector.<BaseEnemyGameObject> = new Vector.<BaseEnemyGameObject>();
+		public var _visiting_landmark:Landmark = null;
 		
 		public var _hitpoints:Number = 20;
 		public var _max_hitpoints:Number = 20;
@@ -91,6 +92,7 @@ package
 		public var _sign_time:int = 0;
 		private var _health_decr_ct:Number = 0;
 		public override function game_update(g:GameEngineState):void {
+			
 			_invuln_ct--;
 			this.update_health_bar(g);
 			_health_decr_ct++;
@@ -118,13 +120,11 @@ package
 			}
 			if (_sign_time > 0) {
 				_sign_time--;
-			}
-			else if (_pause_time > 0) {
+			} else if (_pause_time > 0) {
 				_pause_time--;
 				this.update_celebrate_anim();
 				
-			}
-			else if (_battling_enemies.length > 0) {
+			} else if (_battling_enemies.length > 0) {
 				var attack_this_frame:Boolean = attack_animation_update();
 				play("attack");
 				if (attack_this_frame) {
@@ -143,6 +143,8 @@ package
 					}
 				}
 				
+			} else if (_visiting_landmark != null) {
+
 			} else {
 				_first_battle_tick = false;
 				_attack_anim_ct = 0;

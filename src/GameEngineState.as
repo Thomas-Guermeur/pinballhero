@@ -58,7 +58,7 @@ package  {
 			_chatmanager.push_message("And so our story begins...");
 			this.add(_chatmanager);
 			
-			var level:Object = Resource.LEVEL1_DATA_OBJECT;
+			var level:Object = Resource.LEVEL2_DATA_OBJECT;
 			parseLevel(level);
 			
 			_bgmgr = new BackgroundManager(this);
@@ -336,13 +336,21 @@ package  {
 			
 			var mark:GameObject;
 			for each (var obj:Object in level.objects) {
+				var objx:Number = obj.x;
+				var objy:Number = -obj.y;
+				
 				switch (obj.type) {
 				case "1upobject":
-					mark = _current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(obj.x,-obj.y) as TownLandmark);
+					mark = _current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(objx,objy) as TownLandmark);
 					break;
 				case "birdflock":
-					mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, -obj.y);
+					mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(objx,objy);
 					break;
+				case "coin":
+					mark = (cons(CastleLandmark, _game_objects) as CastleLandmark).init().set_centered_position(objx,objy);
+					break;
+					
+				/*	
 				case "sign": //make negative !!!!
 					mark = cons(SignLandmark, _game_objects);
 					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
@@ -379,10 +387,7 @@ package  {
 					mark = cons(DeathLandmark, _game_objects);
 					(mark as Landmark).setVector(obj.x, obj.y);
 					break;
-				case "goal":
-					mark = cons(CastleLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y);
-					break;
+				*/
 				}
 				_game_objects.add(mark);
 			}
