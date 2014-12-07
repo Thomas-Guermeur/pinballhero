@@ -186,7 +186,6 @@ package org.flixel
 			//Don't bother adding an object twice.
 			if(members.indexOf(Object) >= 0)
 				return Object;
-			
 			//First, look for a null entry where we can add the object.
 			var i:uint = 0;
 			var l:uint = members.length;

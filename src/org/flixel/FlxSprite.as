@@ -168,6 +168,11 @@ package org.flixel
 			return this;
 		}
 		
+		public function set_cameras(c:Array):FlxSprite {
+			this.cameras = c;
+			return this;
+		}
+		
 		/**
 		 * Creates a white 8x8 square <code>FlxSprite</code> at the specified position.
 		 * Optionally can load a simple, one-frame graphic instead.

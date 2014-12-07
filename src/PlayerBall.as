@@ -61,6 +61,7 @@ package
 			if (this._hitpoints >= _max_hitpoints) return; 
 			if (_healthbar == null) {
 				_healthbar = new FlxBar(0, 0, FlxBar.FILL_LEFT_TO_RIGHT, 30, 4, this, "_hitpoints", 0, _max_hitpoints);
+				_healthbar.cameras = [g._gamecamera];
 				g._healthbars.add(_healthbar);
 			}
 			_healthbar.trackParent(9, 3);
@@ -75,7 +76,6 @@ package
 			(GameEngineState.particle_cons(RotateFadeParticle, g._particles) as RotateFadeParticle)
 				.init(_actual_position.x, _actual_position.y - 10, Resource.QUESTION)
 				.p_set_delay(Util.float_random(0, 10))
-				.p_set_vr(Util.float_random( -2, 2))
 				.p_set_alpha(0.8, 0)
 				.p_set_velocity(0, Util.float_random(-1.2, -1))
 				.p_set_ctspeed(0.01);

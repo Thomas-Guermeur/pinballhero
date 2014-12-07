@@ -138,7 +138,9 @@ package geom {
 				
 				var lengthLeft:Number = Util.point_dist(curr.x, curr.y, next.x, next.y) - LENGTH / 2;
 				while (lengthLeft > 0) {
-					g.add(new Mountain(cx, cy));
+					var tmp:FlxSprite = new Mountain(cx, cy);
+					tmp.cameras = g.cameras;
+					g.add(tmp);
 					
 					cx += dx;
 					cy += dy;

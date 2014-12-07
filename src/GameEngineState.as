@@ -42,25 +42,34 @@ package  {
 			this.add(_hud);
 			this.add(_healthbars);
 			
+			
 			FlxG.visualDebug = false;
+			
+			set_zoom(1);
+			_player_balls.cameras = _mountains.cameras = _aimretic.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
 			
 			var level:Object = Resource.LEVEL2_DATA_OBJECT;
 			parseLevel(level);
 			
-			_background_elements.add(new FlxSprite(-500, -300, Resource.TEST_BACKGROUND));
+			_background_elements.add(new FlxSprite(-100, -200, Resource.TEST_BACKGROUND).set_cameras([_gamecamera]));
 			
 			for (var i:Number = 0; i < 5; i++) {
 				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
 			}
+			
+			_hud.add(new FlxSprite(50, 50, Resource.QUESTION).set_cameras([_hudcamera]));
+			
 			set_zoom(1);
+			
 		}
 		
 		public static var ZOOM_CONST:Number = 0.3;
-		private var _tmp:Boolean = false;
+		public var _gamecamera:FlxCamera = null;
+		public var _hudcamera:FlxCamera = null;
 		private var _current_zoom:Number = 1;
 		public function set_zoom(zoom_scale:Number):void {
 			var neu_camera:FlxCamera;
-			if (!_tmp) {
+			if (_gamecamera == null) {
 				neu_camera = new FlxCamera(0, 0, 1000 / ZOOM_CONST, 500 / ZOOM_CONST);
 				neu_camera.antialiasing = true;
 			} else {
@@ -71,11 +80,17 @@ package  {
 			
 			neu_camera.x = ((1000 * ZOOM_CONST) - 1000) / 2 / ZOOM_CONST;
 			neu_camera.y = ((500 * ZOOM_CONST) - 500) / 2 / ZOOM_CONST;
-			if (!_tmp) {
+			if (_gamecamera == null) {
 				FlxG.resetCameras(neu_camera);
-				_tmp = true;
+				_gamecamera = neu_camera;
+				
+				_hudcamera = new FlxCamera(0, 0, 1000, 500);
+				_hudcamera.bgColor = 0x00000000;
+				FlxG.addCamera(_hudcamera);
 			}
-			FlxG.camera.focusOn(new FlxPoint(_current_town.get_center().x, _current_town.get_center().y));
+			if (_current_town != null) {
+				FlxG.camera.focusOn(new FlxPoint(_current_town.get_center().x, _current_town.get_center().y));
+			}
 		}
 		
 		public function parseLevel(level:Object):void {
@@ -87,7 +102,10 @@ package  {
 				
 				_walls.push(tp);
 				// wrap mountains in FlxSprite
-				_mountains.add(new MountainRange(tp));
+				var tmp:MountainRange = new MountainRange();
+				tmp.cameras = _mountains.cameras;
+				tmp.init(tp);
+				_mountains.add(tmp);
 			}
 			
 			var mark:GameObject;
@@ -140,7 +158,6 @@ package  {
 					(mark as Landmark).setVector(obj.x, obj.y);
 					break;
 				}
-				
 				_game_objects.add(mark);
 			}
 		}
@@ -185,7 +202,7 @@ package  {
 			
 			if (FlxG.mouse.justPressed() && _player_balls_in_queue.countLiving() > 0) {
 				var neu_ball:PlayerBall = (cons(PlayerBall, _player_balls) as PlayerBall).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
-				var dir:Vector3D = Util.normalized(FlxG.mouse.x - _current_town.get_center().x,FlxG.mouse.y - _current_town.get_center().y);
+				var dir:Vector3D = Util.normalized(Util.wmouse_x() - _current_town.get_center().x,Util.wmouse_y() - _current_town.get_center().y);
 				dir.scaleBy(3.5);
 				neu_ball.velocity.x = dir.x;
 				neu_ball.velocity.y = dir.y;
@@ -262,6 +279,7 @@ package  {
 				rtv = new gameClass();
 				g.add(rtv);
 			}
+			rtv.cameras = g.cameras;
 			return rtv;
 		}
 		public static function particle_cons(gameClass:Class, g:FlxGroup):BaseParticle {
@@ -271,6 +289,7 @@ package  {
 				rtv = new gameClass();
 				g.add(rtv);
 			}
+			rtv.cameras = g.cameras;
 			return rtv;
 		}
 		

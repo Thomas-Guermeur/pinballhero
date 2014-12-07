@@ -11,9 +11,10 @@ package gameobjs
 		
 		private var mountains:ThickPath;
 		
-		public function MountainRange(Mountains:ThickPath) {
+		public function init(Mountains:ThickPath):MountainRange {
 			mountains = Mountains;
 			mountains.createSprites(this);
+			return this;
 		}
 		
 		/*public override function drawDebug(Camera:FlxCamera = null):void {

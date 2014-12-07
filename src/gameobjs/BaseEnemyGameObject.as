@@ -59,6 +59,7 @@ package gameobjs
 			if (_healthbar == null) {
 				
 				_healthbar = new FlxBar(0, 0, FlxBar.FILL_LEFT_TO_RIGHT, 60, 4, this, "_hitpoints", 0, _max_hitpoints);
+				_healthbar.cameras = [g._gamecamera];
 				g._healthbars.add(_healthbar);
 			}
 			_healthbar.trackParent(-5, -7);
