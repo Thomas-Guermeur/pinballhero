@@ -95,10 +95,11 @@ package
 			
 			_invuln_ct--;
 			this.update_health_bar(g);
-			_health_decr_ct++;
-			if (_health_decr_ct > 150) {
-				_hitpoints--;
-				_health_decr_ct = 0;
+			
+			if (_visiting_landmark != null) {
+				this.visible = false;
+			} else {
+				this.visible = true;
 			}
 			
 			for (var i:Number = _battling_enemies.length - 1; i >= 0; i--) {

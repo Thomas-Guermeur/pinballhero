@@ -364,39 +364,9 @@ package org.flixel
 		 */
 		override public function postUpdate():void
 		{
-			if(moves)
-				updateMotion();
 			
 			wasTouching = touching;
 			touching = NONE;
-		}
-		
-		/**
-		 * Internal function for updating the position and speed of this object.
-		 * Useful for cases when you need to update this but are buried down in too many supers.
-		 * Does a slightly fancier-than-normal integration to help with higher fidelity framerate-independenct motion.
-		 */
-		protected function updateMotion():void
-		{
-			var delta:Number;
-			var velocityDelta:Number;
-
-			velocityDelta = (FlxU.computeVelocity(angularVelocity,angularAcceleration,angularDrag,maxAngular) - angularVelocity)/2;
-			angularVelocity += velocityDelta; 
-			angle += angularVelocity*FlxG.elapsed;
-			angularVelocity += velocityDelta;
-			
-			velocityDelta = (FlxU.computeVelocity(velocity.x,acceleration.x,drag.x,maxVelocity.x) - velocity.x)/2;
-			velocity.x += velocityDelta;
-			delta = velocity.x*FlxG.elapsed;
-			velocity.x += velocityDelta;
-			x += delta;
-			
-			velocityDelta = (FlxU.computeVelocity(velocity.y,acceleration.y,drag.y,maxVelocity.y) - velocity.y)/2;
-			velocity.y += velocityDelta;
-			delta = velocity.y*FlxG.elapsed;
-			velocity.y += velocityDelta;
-			y += delta;
 		}
 		
 		/**
