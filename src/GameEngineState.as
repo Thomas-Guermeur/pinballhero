@@ -24,7 +24,8 @@ package  {
 		public var _particles:FlxGroup = new FlxGroup();
 		public var _mountains:FlxGroup = new FlxGroup();
 		public var _current_town:TownLandmark;
-		public var _hud:FlxGroup = new FlxGroup();
+		public var _hud:GameEngineHUD;
+		public var _next_hero_popup:NextHeroPopup;
 		
 		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
 		public var _walls:Array = new Array();
@@ -39,7 +40,8 @@ package  {
 			this.add(_player_balls_in_queue);
 			this.add(_player_balls);
 			this.add(_particles);
-			this.add(_hud);
+			
+			
 			this.add(_healthbars);
 			
 			
@@ -57,10 +59,15 @@ package  {
 				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
 			}
 			
-			_hud.add(new FlxSprite(50, 50, Resource.QUESTION).set_cameras([_hudcamera]));
+			_hud = new GameEngineHUD(this);
+			this.add(_hud);
+			
+			_next_hero_popup = new NextHeroPopup(this);
+			this.add(_next_hero_popup);
 			
 			set_zoom(1);
-			
+			_max_gold_until_next_ball = 15;
+			_gold_until_next_ball = _max_gold_until_next_ball;
 		}
 		
 		public static var ZOOM_CONST:Number = 0.3;
@@ -165,6 +172,8 @@ package  {
 		public override function update():void {
 			super.update();
 			
+			_hud.game_update(this);
+			_next_hero_popup.game_update(this);
 			update_heroes_in_queue();
 			
 			for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
@@ -225,15 +234,25 @@ package  {
 				trace(_current_zoom);
 			}
 			
-			if (Util.is_key(Util.USE_SLOT1,true)) {
+			if (_gold_until_next_ball <= 0) {
 				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
+				_gold_until_next_ball = _max_gold_until_next_ball;
+				_max_gold_until_next_ball += 5;
 			}
 			
+			update_tilt();
+		}
+		public var _gold_until_next_ball:Number;
+		public var _max_gold_until_next_ball:Number;
+		
+		public var _tilt_count:Number = 100;
+		public var _tilt_count_max:Number = 100;
+		public function update_tilt():void {
 			var tilt_left:Boolean = Util.is_key(Util.USE_SLOT2, true);
 			var tilt_right:Boolean = Util.is_key(Util.USE_SLOT3, true);
-			if (tilt_left || tilt_right) {
-				for (i_playerball = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
-					itr_playerball = _player_balls.members[i_playerball];
+			if ((tilt_left || tilt_right) && _tilt_count >= _tilt_count_max) {
+				for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
+					var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
 					if (itr_playerball.alive) {
 						var vvec:Vector3D = new Vector3D(itr_playerball.velocity.x, itr_playerball.velocity.y, 0);
 						var vvec_sc:Number = vvec.length;
@@ -248,11 +267,15 @@ package  {
 						neu_dir.scaleBy(vvec_sc);
 						itr_playerball.velocity.x = neu_dir.x
 						itr_playerball.velocity.y = neu_dir.y;
-						
-						itr_playerball._hitpoints -= 3;
+						if (itr_playerball._hitpoints > 1) {
+							itr_playerball._hitpoints -= 1;
+						}
 					}
 				}
 				FlxG.shake(0.01, 0.2);
+				_tilt_count = 0;
+			} else if (_tilt_count < _tilt_count_max) {
+				_tilt_count++;
 			}
 		}
 		
@@ -267,6 +290,7 @@ package  {
 		}
 		
 		public function pickup_gold():void {
+			_gold_until_next_ball--;
 		}
 		
 		/**

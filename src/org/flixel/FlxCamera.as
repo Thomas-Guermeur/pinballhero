@@ -669,7 +669,7 @@ package org.flixel
 		 * @param	Color		The color to fill with in 0xAARRGGBB hex format.
 		 * @param	BlendAlpha	Whether to blend the alpha value or just wipe the previous contents.  Default is true.
 		 */
-		public function fill(Color:uint,BlendAlpha:Boolean=true):void
+		public function fill(Color:uint,BlendAlpha:Boolean=false):void
 		{
 			_fill.fillRect(_flashRect,Color);
 			buffer.copyPixels(_fill,_flashRect,_flashPoint,null,null,BlendAlpha);
