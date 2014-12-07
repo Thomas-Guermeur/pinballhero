@@ -13,7 +13,7 @@ package geom {
 			thickness = Thickness;
 		}
 		
-		public function bounceCollision(particle:FlxObject):void {
+		public function bounceCollision(particle:FlxObject, g:GameEngineState):void {
 			var cx:Number = particle.x + particle.width / 2;
 			var cy:Number = particle.y + particle.height / 2;
 			var nextParticle:FlxPoint = new FlxPoint(
@@ -88,12 +88,18 @@ package geom {
 				particle.velocity.x = d * Math.cos(rad);
 				particle.velocity.y = d * Math.sin(rad);
 				
-				FlxG.shake(0.002, 0.1);
+				if (g._player_balls.countLiving() == 1) {
+					FlxG.shake(0.002, 0.1);
+				}
 				if (particle is PlayerBall) {
-					(particle as PlayerBall)._hitpoints--;
+					
 					var player:PlayerBall = particle as PlayerBall;
-					player.velocity.x *= 0.9;
-					player.velocity.y *= 0.9;
+					if (player._invuln_ct <= 0) {
+						player._hitpoints--;
+						player._invuln_ct = 5;
+					}
+					player.velocity.x *= 0.8;
+					player.velocity.y *= 0.8;
 				}
 			}
 			

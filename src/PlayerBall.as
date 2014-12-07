@@ -19,6 +19,7 @@ package
 		
 		public var _hitpoints:Number = 20;
 		public var _max_hitpoints:Number = 20;
+		public var _invuln_ct:Number = 0;
 		
 		public function init():GameObject {
 			_hitpoints = _max_hitpoints;
@@ -33,7 +34,7 @@ package
 			this.play("walk");
 			this.set_timestamp();
 			play("walk");
-			_randincr = Util.float_random(0.3, 0.8);
+			_invuln_ct = 0;
 			return this;
 		}
 		
@@ -88,6 +89,7 @@ package
 		public var _sign_time:int = 0;
 		private var _health_decr_ct:Number = 0;
 		public override function game_update(g:GameEngineState):void {
+			_invuln_ct--;
 			this.update_health_bar(g);
 			_health_decr_ct++;
 			if (_health_decr_ct > 150) {
@@ -219,7 +221,7 @@ package
 			return -1;
 		}
 		
-		public var _randincr:Number = 0;
+		
 	}
 
 }

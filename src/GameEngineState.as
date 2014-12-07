@@ -14,7 +14,6 @@ package  {
 	 * @author spotco
 	 */
 	public class GameEngineState extends FlxState {
-		
 		public var _background_elements:FlxGroup = new FlxGroup();
 		
 		public var _player_balls:FlxGroup = new FlxGroup();
@@ -50,7 +49,7 @@ package  {
 			set_zoom(1);
 			_player_balls.cameras = _mountains.cameras = _aimretic.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
 			
-			var level:Object = Resource.LEVEL2_DATA_OBJECT;
+			var level:Object = Resource.LEVEL1_DATA_OBJECT;
 			parseLevel(level);
 			
 			_background_elements.add(new FlxSprite(-100, -200, Resource.TEST_BACKGROUND).set_cameras([_gamecamera]));
@@ -117,6 +116,47 @@ package  {
 				dir.scaleBy(magn);
 				tar_focus.x = _current_town.get_center().x + dir.x;
 				tar_focus.y = _current_town.get_center().y + dir.y;
+				tar_zoom = 1;
+				
+			} else if (_player_balls.countLiving() == 1) {
+				for (var i:Number = 0; i < _player_balls.length; i++) {
+					var itr:PlayerBall = _player_balls.members[i];
+					if (itr.alive) {
+						tar_focus.x = itr.get_center().x;
+						tar_focus.y = itr.get_center().y;
+					}
+				}
+				tar_zoom = 1;
+				
+			} else if (_player_balls.countLiving() > 0) {
+				var cx:Number = 0;
+				var cy:Number = 0;
+				var ct:Number = 0;
+				var minx:Number = Number.POSITIVE_INFINITY; 
+				var miny:Number = Number.POSITIVE_INFINITY;
+				var maxx:Number = Number.NEGATIVE_INFINITY; 
+				var maxy:Number = Number.NEGATIVE_INFINITY;
+				
+				for (var i:Number = 0; i < _player_balls.length; i++) {
+					var itr:PlayerBall = _player_balls.members[i];
+					if (itr.alive) {
+						cx += itr.get_center().x;
+						cy += itr.get_center().y;
+						minx = Math.min(minx, itr.get_center().x);
+						miny = Math.min(miny, itr.get_center().y);
+						maxx = Math.max(maxx, itr.get_center().x);
+						maxy = Math.max(maxy, itr.get_center().y);
+						ct++;
+					}
+				}
+				cx /= ct;
+				cy /= ct;
+				tar_focus.x = cx;
+				tar_focus.y = cy;
+				var max_dist:Number = Math.max(Math.abs(maxy - miny), Math.abs(maxx - minx));
+				max_dist = Math.max(max_dist - 450, 0);
+				max_dist = Math.min(max_dist, 3000);
+				tar_zoom = 1 - max_dist / 3000 * 0.6;
 				
 			} else {
 				magn = (magn / 600) * 300;
@@ -147,7 +187,7 @@ package  {
 					itr_playerball.game_update(this);
 					if (itr_playerball._battling_enemies.length == 0 && itr_playerball._pause_time <= 0) {
 						for each (var wall:ThickPath in _walls) {
-							wall.bounceCollision(itr_playerball);
+							wall.bounceCollision(itr_playerball,this);
 						}
 					}
 					if (itr_playerball.should_remove(this)) itr_playerball.do_remove(this);
@@ -193,8 +233,8 @@ package  {
 			
 			if (_gold_until_next_ball <= 0) {
 				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
-				_gold_until_next_ball = _max_gold_until_next_ball;
 				_max_gold_until_next_ball += 5;
+				_gold_until_next_ball = _max_gold_until_next_ball;
 			}
 			
 			update_tilt();
@@ -212,7 +252,7 @@ package  {
 			if ((tilt_down || tilt_left || tilt_right || tilt_up) && _tilt_count >= _tilt_count_max) {
 				for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 					var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
-					if (itr_playerball.alive) {
+					if (itr_playerball.alive && itr_playerball._battling_enemies.length == 0 ) {
 						if (tilt_left) {
 							if (itr_playerball.velocity.x > 0) itr_playerball.velocity.x *= 0.5;
 							itr_playerball.velocity.x -= 7;
@@ -225,10 +265,6 @@ package  {
 						} else if (tilt_down) {
 							if (itr_playerball.velocity.y < 0) itr_playerball.velocity.y *= 0.5;
 							itr_playerball.velocity.y += 7;
-						}
-						
-						if (itr_playerball._hitpoints > 1) {
-							itr_playerball._hitpoints -= 1;
 						}
 					}
 				}
