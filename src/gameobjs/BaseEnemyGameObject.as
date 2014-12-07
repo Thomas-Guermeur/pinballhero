@@ -103,6 +103,8 @@ package gameobjs
 				}
 			} else {
 				_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 4, _attack_anim_ct_max + 4);
+				_first_battle_tick = false;
+				_attack_anim_ct = 0;
 			}
 		}
 		
@@ -112,14 +114,23 @@ package gameobjs
 			return super.set_centered_position(x, y);
 		}
 		
+		private var _first_battle_tick:Boolean = false;
 		private var _attack_anim_ct:Number = 0;
 		private var _attack_anim_ct_max:Number = 20;
 		private var _attack_random_dir:Vector3D = new Vector3D();
 		private function attack_animation_update():Boolean {
 			if (_attack_anim_ct <= 0) {
 				_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 4, _attack_anim_ct_max + 4);
-				_attack_random_dir = Util.normalized(Util.float_random( -1, 1), Util.float_random( -1, 1));
-				FlxG.shake(0.001, 0.1);
+				if (!_first_battle_tick && _battling_heros.length > 0) {
+					var tar_hero:PlayerBall = _battling_heros[0];
+					_attack_random_dir = Util.normalized( tar_hero.velocity.x, tar_hero.velocity.y);
+					_attack_random_dir.scaleBy(8);
+					_first_battle_tick = true;
+					
+				} else {
+					_attack_random_dir = Util.normalized(Util.float_random( -1, 1), Util.float_random( -1, 1));
+					_attack_random_dir.scaleBy(4);
+				}
 				return true;
 			} else {
 				_attack_anim_ct--;

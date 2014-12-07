@@ -26,14 +26,17 @@ package  {
 		public var _hud:GameEngineHUD;
 		public var _next_hero_popup:NextHeroPopup;
 		
-		public var _aimretic:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
+		public var _aimretic_l:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
+		public var _aimretic_r:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
+		
 		public var _walls:Array = new Array();
 		
 		public override function create():void {
 			super.update();
 			
 			this.add(_background_elements);
-			this.add(_aimretic);
+			this.add(_aimretic_l);
+			this.add(_aimretic_r);
 			this.add(_mountains);
 			this.add(_game_objects);
 			this.add(_player_balls_in_queue);
@@ -47,7 +50,7 @@ package  {
 			FlxG.visualDebug = false;
 			
 			set_zoom(1);
-			_player_balls.cameras = _mountains.cameras = _aimretic.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
+			_player_balls.cameras = _mountains.cameras = _aimretic_l.cameras = _aimretic_r.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
 			
 			var level:Object = Resource.LEVEL1_DATA_OBJECT;
 			parseLevel(level);
@@ -101,7 +104,7 @@ package  {
 		private var _current_focus:FlxPoint = new FlxPoint();
 		
 		private var _hold_mouse_ct:Number = 0;
-		private var _hold_mouse_ct_max:Number = 50;
+		private var _hold_mouse_ct_max:Number = 75;
 		
 		private function update_camera():void {
 			var tar_focus:FlxPoint = new FlxPoint(_current_focus.x, _current_focus.y);
@@ -154,9 +157,9 @@ package  {
 				tar_focus.x = cx;
 				tar_focus.y = cy;
 				var max_dist:Number = Math.max(Math.abs(maxy - miny), Math.abs(maxx - minx));
-				max_dist = Math.max(max_dist - 450, 0);
-				max_dist = Math.min(max_dist, 3000);
-				tar_zoom = 1 - max_dist / 3000 * 0.6;
+				max_dist = Math.max(max_dist - 400, 0);
+				max_dist = Math.min(max_dist, 2000);
+				tar_zoom = 1 - max_dist / 2000 * 0.6;
 				
 			} else {
 				magn = (magn / 600) * 300;
@@ -209,10 +212,6 @@ package  {
 					if (itr_particle.should_remove(this)) itr_particle.do_remove(this);
 				}
 			}
-			
-			_aimretic.set_position(_current_town.get_center().x, _current_town.get_center().y - 150);
-			
-			_aimretic.angle = Util.RAD_TO_DEG * Math.atan2(Util.wmouse_y() - _current_town.get_center().y, Util.wmouse_x() - _current_town.get_center().x) + 90;
 			
 			if (FlxG.mouse.justReleased() && _player_balls_in_queue.countLiving() > 0) {
 				var neu_ball:PlayerBall = (cons(PlayerBall, _player_balls) as PlayerBall).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
@@ -370,20 +369,27 @@ package  {
 			}
 		}
 		
-		private static var AIMRETIC:FlxSprite;
-		private static var AIMRETIC_EMPTY:FlxSprite;
 		public function update_aimretic():void {
-			if (AIMRETIC == null) AIMRETIC = new FlxSprite(0, 0, Resource.AIMRETIC)
-			if (AIMRETIC_EMPTY == null) AIMRETIC_EMPTY = new FlxSprite(0, 0, Resource.AIMRETIC_EMPTY);
+			_aimretic_l.set_position(_current_town.get_center().x, _current_town.get_center().y - 150);
+			_aimretic_r.set_position(_current_town.get_center().x, _current_town.get_center().y - 150);
+						
 			var next_hero_popup_tar_alpha:Number = 1;
 			if (FlxG.mouse.pressed() && _player_balls_in_queue.countLiving() > 0) {
 				var pct:Number = _hold_mouse_ct / _hold_mouse_ct_max;
 
-				_aimretic.alpha = pct * 0.9 + 0.1;
-				_aimretic.visible = true;
+				_aimretic_l.angle = Util.RAD_TO_DEG * Math.atan2(Util.wmouse_y() - _current_town.get_center().y, Util.wmouse_x() - _current_town.get_center().x) + 90 + 45 * (1-pct);
+				_aimretic_r.angle = Util.RAD_TO_DEG * Math.atan2(Util.wmouse_y() - _current_town.get_center().y, Util.wmouse_x() - _current_town.get_center().x) + 90 - 45 * (1-pct);
+				
+				_aimretic_l.alpha = pct*pct;
+				_aimretic_l.visible = true;
+				_aimretic_r.alpha = pct*pct;
+				_aimretic_r.visible = true;
+				_aimretic_l.set_scale( 1 + 0.75 * (1 - pct));
+				_aimretic_r.set_scale(1 + 0.75 * (1 - pct));
 				next_hero_popup_tar_alpha = 0;
 			} else {
-				_aimretic.visible = false;
+				_aimretic_l.visible = false;
+				_aimretic_r.visible = false;
 				next_hero_popup_tar_alpha = Util.pt_dist(Util.smouse_x(),Util.smouse_y(),500,250)/300 + 0;
 			}
 			_next_hero_popup.set_alpha(Util.drp(_next_hero_popup.get_alpha(),next_hero_popup_tar_alpha,10));

@@ -89,7 +89,7 @@ package geom {
 				particle.velocity.y = d * Math.sin(rad);
 				
 				if (g._player_balls.countLiving() == 1) {
-					FlxG.shake(0.002, 0.1);
+					FlxG.shake(0.001, 0.1);
 				}
 				if (particle is PlayerBall) {
 					

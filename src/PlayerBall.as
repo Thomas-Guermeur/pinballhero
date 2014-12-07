@@ -141,8 +141,9 @@ package
 					}
 				}
 				
-			}
-			else {
+			} else {
+				_first_battle_tick = false;
+				_attack_anim_ct = 0;
 				//this.angle = Util.RAD_TO_DEG * Math.atan2(velocity.y, velocity.x) + 90;
 				var center:FlxPoint = this.get_center();
 				center.x += velocity.x;
@@ -162,19 +163,30 @@ package
 			return super.set_centered_position(x, y);
 		}
 		
+		private var _first_battle_tick:Boolean = false;
 		private var _attack_anim_ct:Number = 0;
 		private var _attack_anim_ct_max:Number = 20;
 		private var _attack_random_dir:Vector3D = new Vector3D();
 		private function attack_animation_update():Boolean {
 			if (_attack_anim_ct <= 0) {
 				_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 5, _attack_anim_ct_max + 5);
-				_attack_random_dir = Util.normalized(Util.float_random( -1, 1), Util.float_random( -1, 1));
+				
+				if (!_first_battle_tick) {
+					_attack_random_dir = Util.normalized( -velocity.x, -velocity.y);
+					_attack_random_dir.scaleBy(50);
+					_first_battle_tick = true;
+					FlxG.shake(0.005, 0.1);
+					
+				} else {
+					_attack_random_dir = Util.normalized(Util.float_random( -1, 1), Util.float_random( -1, 1));
+					_attack_random_dir.scaleBy(10);
+				}
 				//this.angle = Util.RAD_TO_DEG * Math.atan2(_attack_random_dir.y,_attack_random_dir.x) + 90;
 				return true;
 			} else {
 				_attack_anim_ct--;
 				var theta:Number = (1 - (_attack_anim_ct / _attack_anim_ct_max))*Math.PI;
-				super.set_centered_position(_actual_position.x + Math.sin(theta) * _attack_random_dir.x * 10, _actual_position.y + Math.sin(theta) * _attack_random_dir.y * 10);
+				super.set_centered_position(_actual_position.x + Math.sin(theta) * _attack_random_dir.x, _actual_position.y + Math.sin(theta) * _attack_random_dir.y);
 				return false;
 			}
 		}
