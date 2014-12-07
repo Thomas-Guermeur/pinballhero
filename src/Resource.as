@@ -10,7 +10,7 @@ package
 	 */
 	public class Resource {
 		
-		[Embed(source = "../resc/background/testbackground.png")] public static var TEST_BACKGROUND:Class;
+		[Embed(source = "../resc/background/groundtile_1.png")] public static var GROUNDTILE_1:Class;
 		[Embed(source = "../resc/character/fox_small.png")] public static var ENEMY:Class;
 		[Embed(source = "../resc/character/bear_idle.png")] public static var BEAR:Class;
 		[Embed(source = "../resc/character/Hero1.png")] public static var PLAYER:Class;

@@ -26,6 +26,7 @@ package  {
 		public var _hud:GameEngineHUD;
 		public var _next_hero_popup:NextHeroPopup;
 		public var _chatmanager:ChatManager;
+		public var _bgmgr:BackgroundManager;
 		
 		public var _aimretic_l:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
 		public var _aimretic_r:FlxSprite = new FlxSprite(0, 0, Resource.AIMRETIC);
@@ -60,7 +61,8 @@ package  {
 			var level:Object = Resource.LEVEL1_DATA_OBJECT;
 			parseLevel(level);
 			
-			_background_elements.add(new FlxSprite(-100, -200, Resource.TEST_BACKGROUND).set_cameras([_gamecamera]));
+			_bgmgr = new BackgroundManager(this);
+			_background_elements.add(_bgmgr);
 			
 			for (var i:Number = 0; i < 3; i++) {
 				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
@@ -162,9 +164,9 @@ package  {
 				tar_focus.x = cx;
 				tar_focus.y = cy;
 				var max_dist:Number = Math.max(Math.abs(maxy - miny), Math.abs(maxx - minx));
-				max_dist = Math.max(max_dist - 400, 0);
-				max_dist = Math.min(max_dist, 2000);
-				tar_zoom = 1 - max_dist / 2000 * 0.6;
+				max_dist = Math.max(max_dist - 200, 0);
+				max_dist = Math.min(max_dist, 1500);
+				tar_zoom = 1 - max_dist / 1500 * 0.6;
 				
 			} else {
 				magn = (magn / 600) * 300;
@@ -189,6 +191,7 @@ package  {
 			update_camera();
 			update_aimretic();
 			_chatmanager.game_update(this);
+			_bgmgr.game_update(this);
 			
 			for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 				var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
