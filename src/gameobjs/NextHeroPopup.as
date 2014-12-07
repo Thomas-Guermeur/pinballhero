@@ -46,6 +46,9 @@ package gameobjs
 			_toptext.alpha = n;
 			_bottomtext.alpha = n;
 		}
+		public function get_alpha():Number {
+			return _bubble.alpha;
+		}
 		
 		public function game_update(g:GameEngineState) {
 			this.set_town_position(g._current_town.get_center().x -68, g._current_town.get_center().y - 110);

@@ -3,7 +3,7 @@ package  {
 	import flash.ui.*;
 	import flash.geom.Vector3D;
 	import gameobjs.TownLandmark;
-	
+	import flash.geom.*;
 	import org.flixel.*;
 	
 	import gameobjs.*;
@@ -35,7 +35,6 @@ package  {
 			
 			this.add(_background_elements);
 			this.add(_aimretic);
-			update_aimretic();
 			this.add(_mountains);
 			this.add(_game_objects);
 			this.add(_player_balls_in_queue);
@@ -140,6 +139,7 @@ package  {
 			_next_hero_popup.game_update(this);
 			update_heroes_in_queue();
 			update_camera();
+			update_aimretic();
 			
 			for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 				var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
@@ -242,10 +242,22 @@ package  {
 		public function update_heroes_in_queue():void {
 			for each(var itr:PlayerBall in _player_balls_in_queue.members) {
 				var ct:Number = itr.is_nth_is_group(_player_balls_in_queue);
-				itr.set_centered_position(
-					Util.drp(itr.get_center().x,_current_town.get_center().x + ct * 50,15),
-					Util.drp(itr.get_center().y,_current_town.get_center().y, 15)
-				);
+				var tar_scale:Number = 0.2 + 0.8 * (1/(ct+1));
+				itr.set_scale(Util.drp(itr.scale.x, tar_scale, 10));
+				
+				if (ct == 0) {
+					itr.set_centered_position(
+						Util.drp(itr.get_center().x,_current_town.get_center().x, 15),
+						Util.drp(itr.get_center().y,_current_town.get_center().y, 15)
+					);
+				} else {
+					var theta:Number = Math.PI*0.2 * ct;
+					var dist:Number = Math.sqrt(ct) * 15 + 12;
+					itr.set_centered_position(
+						Util.drp(itr.get_center().x,_current_town.get_center().x + Math.sin(theta)*dist, 15),
+						Util.drp(itr.get_center().y,_current_town.get_center().y + Math.cos(theta)*dist, 15)
+					);
+				}
 			}
 		}
 		
@@ -322,8 +334,23 @@ package  {
 			}
 		}
 		
+		private static var AIMRETIC:FlxSprite;
+		private static var AIMRETIC_EMPTY:FlxSprite;
 		public function update_aimretic():void {
-			
+			if (AIMRETIC == null) AIMRETIC = new FlxSprite(0, 0, Resource.AIMRETIC)
+			if (AIMRETIC_EMPTY == null) AIMRETIC_EMPTY = new FlxSprite(0, 0, Resource.AIMRETIC_EMPTY);
+			var next_hero_popup_tar_alpha:Number = 1;
+			if (FlxG.mouse.pressed() && _player_balls_in_queue.countLiving() > 0) {
+				var pct:Number = _hold_mouse_ct / _hold_mouse_ct_max;
+
+				_aimretic.alpha = pct * 0.9 + 0.1;
+				_aimretic.visible = true;
+				next_hero_popup_tar_alpha = 0;
+			} else {
+				_aimretic.visible = false;
+				next_hero_popup_tar_alpha = Util.pt_dist(Util.smouse_x(),Util.smouse_y(),500,250)/300 + 0;
+			}
+			_next_hero_popup.set_alpha(Util.drp(_next_hero_popup.get_alpha(),next_hero_popup_tar_alpha,10));
 		}
 		
 		/**

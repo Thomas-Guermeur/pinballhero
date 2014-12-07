@@ -27,10 +27,13 @@ package
 			_sign_time = 0;
 			_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 5, _attack_anim_ct_max + 5);
 			
+			this.set_scale(1);
+			
 			this.reset(0, 0);
 			this.play("walk");
 			this.set_timestamp();
 			play("walk");
+			_randincr = Util.float_random(0.3, 0.8);
 			return this;
 		}
 		
@@ -216,6 +219,7 @@ package
 			return -1;
 		}
 		
+		public var _randincr:Number = 0;
 	}
 
 }
