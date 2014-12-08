@@ -12,6 +12,7 @@ package
 		
 		[Embed(source = "../resc/background/groundtile_1.png")] public static var GROUNDTILE_1:Class;
 		[Embed(source = "../resc/background/checkertile.png")] public static var CHERCKERTILE:Class;
+		[Embed(source = "../resc/background/beach_entry.png")] public static var BEACH_ENTRY:Class;
 		
 		[Embed(source = "../resc/character/fox_small.png")] public static var ENEMY:Class;
 		[Embed(source = "../resc/character/bear_idle.png")] public static var BEAR:Class;

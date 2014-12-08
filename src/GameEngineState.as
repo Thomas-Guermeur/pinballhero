@@ -56,8 +56,7 @@ package  {
 			set_zoom(1);
 			_player_balls.cameras = _mountains.cameras = _aimretic_l.cameras = _aimretic_r.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
 			
-			var level:Object = Resource.LEVEL2_DATA_OBJECT;
-			parseLevel(level, 0, 0);
+			parseLevel(Resource.LEVEL2_DATA_OBJECT, 0, 0);
 			
 			_hud = new GameEngineHUD(this);
 			this.add(_hud);
@@ -78,9 +77,29 @@ package  {
 			_max_gold_until_next_ball = 15;
 			_gold_until_next_ball = _max_gold_until_next_ball;
 			
-			_current_mode = MODE_GAME;
-			set_starting_balls(3);
+			var beach:FlxSprite = new FlxSprite(_current_town.get_center().x - 1500 -727, _current_town.get_center().y - 350, Resource.BEACH_ENTRY);
+			beach.cameras = [_gamecamera];
+			beach.set_scale(2);
+			this.add(beach);
+			
+			_transition_airship = new TransitionAirship(this);
+			this.add(_transition_airship);
+			
+			
+			_transition_airship.set_position(_current_town.get_center().x - 2000, _current_town.get_center().y);
+			_transition_airship._transition_initial_pos.x = _transition_airship._pos.x;
+			_transition_airship._transition_initial_pos.y = _transition_airship._pos.y;
+			_transition_airship._hei = _transition_airship._hei_max;
+			_transition_airship._mode = 1;
+			_current_mode = MODE_AIRSHIP_TRANSITION_TO_NEXT;
+			_hud._gameui.visible = false;
+			
+			_hold_focus = 35;
+			_current_focus.x = -480;
+			_current_focus.y = -520;
+			_current_zoom = 0.8;
 		}
+		public var _hold_focus:Number = 0;
 		
 		public function set_starting_balls(n:Number):void {
 			for (var i:Number = 0; i < n; i++) {
@@ -161,8 +180,8 @@ package  {
 		
 		public function transition_next_level():void {
 			_current_level++;
-			_level_offset.x += Util.float_random(1000,1500) * Util.sig_n(Util.float_random( -1, 1));
-			_level_offset.y -= Util.float_random(1000,1500);
+			_level_offset.x += 1500;
+			_level_offset.y += 1000 * (_current_level%2==0?-1:1);
 			_chatmanager.clear_messages();
 			
 			for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
@@ -253,7 +272,11 @@ package  {
 					camera_focus_events_regular.push(c);
 				}
 			}
-			if (_current_mode == MODE_AIRSHIP_TRANSITION_TO_NEXT) {
+			if (_hold_focus > 0) {
+				_hold_focus--;
+				tar_zoom = _current_zoom;
+				
+			} else if (_current_mode == MODE_AIRSHIP_TRANSITION_TO_NEXT) {
 				tar_zoom = 1 - 0.3 * (_transition_airship._hei / _transition_airship._hei_max);
 				tar_focus.x = _transition_airship._pos.x - 118/2;
 				tar_focus.y = _transition_airship._pos.y - _transition_airship._hei - 92/2;
