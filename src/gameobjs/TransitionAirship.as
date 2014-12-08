@@ -17,7 +17,9 @@ package gameobjs
 			this.add(_shadow);
 			
 			_ship = new FlxSprite();
-			_ship.loadGraphic(Resource.AIRSHIP);
+			_ship.loadGraphic(Resource.AIRSHIP, true, false, 171, 126);
+			_ship.addAnimation("play", [0, 1], 10);
+			_ship.play("play");
 			_ship.cameras = [g._gamecamera];
 			this.add(_ship);
 			
@@ -38,7 +40,7 @@ package gameobjs
 		public function set_position(x:Number, y:Number):void {
 			_hei_theta += 0.1;
 			_ship.set_position(x - _ship.width / 2, y - _ship.height - _hei + Math.sin(_hei_theta)*5);
-			_shadow.set_scale((1 - (_hei / _hei_max))*0.3+0.5);
+			_shadow.set_scale((1 - (_hei / _hei_max))*0.2+0.6);
 			_shadow.set_position(x - _shadow.width / 2, y - _shadow.height/ 2);
 			_pos.x = x;
 			_pos.y = y;

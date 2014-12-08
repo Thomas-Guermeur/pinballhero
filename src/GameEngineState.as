@@ -44,7 +44,7 @@ package  {
 		
 		public var _keys:Number = 0;
 		
-		static var LOAD_LEVEL = Resource.LEVEL1_DATA;
+		static var LOAD_LEVEL = Resource.LEVEL2_DATA;
 		
 		public override function create():void {
 			super.update();
@@ -82,10 +82,10 @@ package  {
 			
 			set_zoom(1);
 			FlxG.camera.focusOn(new FlxPoint(_current_town.get_center().x, _current_town.get_center().y));
-			_max_gold_until_next_ball = 15;
+			_max_gold_until_next_ball = 5;
 			_gold_until_next_ball = _max_gold_until_next_ball;
 			
-			_beach = new FlxSprite(_current_town.get_center().x - 1500 -727, _current_town.get_center().y - 350, Resource.BEACH_ENTRY);
+			_beach = new FlxSprite(_current_town.get_center().x - 1000 -727, _current_town.get_center().y - 350, Resource.BEACH_ENTRY);
 			_beach.cameras = [_gamecamera];
 			_beach.set_scale(2);
 			this.add(_beach);
@@ -94,7 +94,7 @@ package  {
 			_transition_airship.cameras = [_gamecamera];
 			this.add(_transition_airship);
 			
-			if (false) {
+			if (true) {
 				_transition_airship.set_position(_current_town.get_center().x - 2000, _current_town.get_center().y);
 				_transition_airship._transition_initial_pos.x = _transition_airship._pos.x;
 				_transition_airship._transition_initial_pos.y = _transition_airship._pos.y;
@@ -125,6 +125,25 @@ package  {
 			for (var i:Number = 0; i < n; i++) {
 				add_ball(_current_town.get_center().x + Util.float_random( -40, 40), _current_town.get_center().y + Util.float_random( -40, 40));
 			}
+		}
+		
+		public function pt_in_gamearea(x:Number, y:Number):Boolean {
+			var minx:Number = Number.POSITIVE_INFINITY;
+			var maxx:Number = Number.NEGATIVE_INFINITY;
+			var miny:Number = Number.POSITIVE_INFINITY;
+			var maxy:Number = Number.NEGATIVE_INFINITY;
+			for (var i_gameobj:Number = _game_objects.length - 1; i_gameobj >= 0; i_gameobj--) {
+				var itr_gameobj:GameObject = _game_objects.members[i_gameobj];
+				minx = Math.min(itr_gameobj.get_center().x, minx);
+				maxx = Math.max(itr_gameobj.get_center().x, maxx);
+				miny = Math.min(itr_gameobj.get_center().y, miny);
+				maxy = Math.max(itr_gameobj.get_center().y, maxy);
+			}
+			minx -= 1000;
+			maxx += 1000;
+			miny -= 1000;
+			maxy += 1000;
+			return (x > minx) && (x < maxx) && (y > miny) && (y < maxy);
 		}
 				
 		public override function update():void {
@@ -402,8 +421,8 @@ package  {
 				tar_focus.y = cy;
 				var max_dist:Number = Math.max(Math.abs(maxy - miny), Math.abs(maxx - minx));
 				max_dist = Math.max(max_dist - 200, 0);
-				max_dist = Math.min(max_dist, 1500);
-				tar_zoom = 1 - max_dist / 1500 * 0.6;
+				max_dist = Math.min(max_dist, 1200);
+				tar_zoom = 1 - max_dist / 1200 * 0.7;
 				
 			} else {
 				magn = (magn / 600) * 300;
@@ -432,7 +451,6 @@ package  {
 				_max_gold_until_next_ball += 5;
 				_gold_until_next_ball = _max_gold_until_next_ball;
 				_chatmanager.push_message("A new hero has joined the battle!");
-				_camera_focus_events.push(new CameraFocusEvent(_current_town.get_center().x, _current_town.get_center().y+40, 30, 1.1));
 			}
 		}
 		

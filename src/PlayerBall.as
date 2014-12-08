@@ -57,9 +57,11 @@ package
 			
 			(GameEngineState.particle_cons(RotateFadeParticle,g._particles) as RotateFadeParticle)
 			.init(this.get_center().x - 14, this.get_center().y - 22, Resource.HEROGHOST)
-			.p_set_ctspeed(0.025)
+			.p_set_ctspeed(0.005)
 			.p_set_alpha(1, 0)
 			.p_set_velocity(0, Util.float_random( -0.1, -0.6));
+			
+			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y, 50, 1.1));
 			
 			g._chatmanager.push_message("A hero has fallen!");
 		}
@@ -110,6 +112,10 @@ package
 				this.visible = false;
 			} else {
 				this.visible = true;
+			}
+			
+			if (!g.pt_in_gamearea(this.get_center().x, this.get_center().y)) {
+				this._hitpoints--;
 			}
 			
 			for (var i:Number = _battling_enemies.length - 1; i >= 0; i--) {

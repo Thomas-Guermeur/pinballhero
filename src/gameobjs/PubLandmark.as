@@ -52,7 +52,7 @@ package gameobjs {
 		}
 		
 		public override function regen_duration():Number {
-			return 1000;
+			return 2000;
 		}
 	}
 

@@ -74,11 +74,9 @@ package
 		
 		
 		[Embed( source = "../resc/levels/level1.json", mimeType="application/octet-stream")] public static var LEVEL1_DATA:Class;
-		
 		[Embed( source = "../resc/levels/level2.json", mimeType="application/octet-stream")] public static var LEVEL2_DATA:Class;
-		
-		[Embed( source = "../resc/levels/level2.json", mimeType="application/octet-stream")] public static var LEVEL3_DATA:Class;
-		//public static var LEVEL3_DATA_OBJECT:Object = JSON.decode((new LEVEL3_DATA as ByteArray).toString());
+		[Embed( source = "../resc/levels/level3.json", mimeType="application/octet-stream")] public static var LEVEL3_DATA:Class;
+		[Embed( source = "../resc/levels/level4.json", mimeType="application/octet-stream")] public static var LEVEL4_DATA:Class;
 	}
 
 }
