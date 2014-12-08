@@ -57,7 +57,7 @@ package  {
 			set_zoom(1);
 			_player_balls.cameras = _mountains.cameras = _aimretic_l.cameras = _aimretic_r.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
 			
-			parseLevel(Resource.LEVEL1_DATA_OBJECT, 0, 0);
+			parseLevel(Resource.LEVEL2_DATA_OBJECT, 0, 0);
 			
 			_hud = new GameEngineHUD(this);
 			this.add(_hud);
@@ -86,24 +86,28 @@ package  {
 			_transition_airship = new TransitionAirship(this);
 			this.add(_transition_airship);
 			
-			
-			_transition_airship.set_position(_current_town.get_center().x - 2000, _current_town.get_center().y);
-			_transition_airship._transition_initial_pos.x = _transition_airship._pos.x;
-			_transition_airship._transition_initial_pos.y = _transition_airship._pos.y;
-			_transition_airship._hei = _transition_airship._hei_max;
-			_transition_airship._mode = 1;
-			_current_mode = MODE_AIRSHIP_TRANSITION_TO_NEXT;
-			_hud._gameui.visible = false;
-			
-			_hold_focus = 70;
-			_current_focus.x = -480;
-			_current_focus.y = -520;
-			_current_zoom = 0.8;
-			
-			_initialcover = new FlxSprite();
-			_initialcover.cameras = [_hudcamera];
-			_initialcover.makeGraphic(1000, 500, 0xAA000000);
-			this.add(_initialcover);
+			if (false) {
+				_transition_airship.set_position(_current_town.get_center().x - 2000, _current_town.get_center().y);
+				_transition_airship._transition_initial_pos.x = _transition_airship._pos.x;
+				_transition_airship._transition_initial_pos.y = _transition_airship._pos.y;
+				_transition_airship._hei = _transition_airship._hei_max;
+				_transition_airship._mode = 1;
+				_current_mode = MODE_AIRSHIP_TRANSITION_TO_NEXT;
+				_hud._gameui.visible = false;
+				
+				_hold_focus = 70;
+				_current_focus.x = -480;
+				_current_focus.y = -520;
+				_current_zoom = 0.8;
+				
+				_initialcover = new FlxSprite();
+				_initialcover.cameras = [_hudcamera];
+				_initialcover.makeGraphic(1000, 500, 0xAA000000);
+				this.add(_initialcover);
+			} else {
+				_current_mode = MODE_GAME;
+				this.set_starting_balls(3);
+			}
 		}
 		public var _beach:FlxSprite;
 		public var _initialcover:FlxSprite;
@@ -504,7 +508,7 @@ package  {
 					itr.get_center().x, 
 					itr.get_center().y, 
 					_current_town.get_center().x + Math.sin(theta)*dist, 
-					_current_town.get_center().y + Math.cos(theta)*dist) > 10) {
+					_current_town.get_center().y + Math.cos(theta)*dist) > 20) {
 					itr.set_scale(1);
 				} else {
 					var tar_scale:Number = 0.2 + 0.8 * (1 / (ct + 1));
@@ -587,7 +591,15 @@ package  {
 					case "coin":
 						mark = (cons(CastleLandmark, _game_objects) as CastleLandmark).init(this).set_centered_position(objx,objy);
 						break;
-					
+					case "copter":
+						mark = (cons(InnLandmark, _game_objects) as InnLandmark).init().set_centered_position(objx,objy);
+						break;
+					case "dogarmor":
+						mark = (cons(PubLandmark, _game_objects) as PubLandmark).init().set_centered_position(objx,objy);
+						break;
+					case "dogbone":
+						mark = (cons(TreeLandmark, _game_objects) as TreeLandmark).init().set_centered_position(objx,objy);
+						break;
 				/*	
 				case "sign": //make negative !!!!
 					mark = cons(SignLandmark, _game_objects);
@@ -596,14 +608,6 @@ package  {
 				case "rotatingsign":
 					mark = cons(RotatingSignLandmark, _game_objects);
 					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
-					break;
-				case "inn":
-					mark = cons(InnLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y);
-					break;
-				case "pub":
-					mark = cons(PubLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y);
 					break;
 				case "tree":
 					mark = cons(TreeLandmark, _game_objects);

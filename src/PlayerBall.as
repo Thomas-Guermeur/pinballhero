@@ -25,7 +25,7 @@ package
 		public var _max_hitpoints:Number = 20;
 		public var _invuln_ct:Number = 0;
 		
-		public function init():GameObject {
+		public function init():PlayerBall {
 			this.reset(0, 0);
 			_hitpoints = _max_hitpoints;
 			_battling_enemies.length = 0;
@@ -99,6 +99,7 @@ package
 		public var _sign_time:int = 0;
 		private var _health_decr_ct:Number = 0;
 		public var _launched_ct:Number = 0;
+		private static var STAR_COLORS:Array = [0x80D5D5, 0xBFEAEA, 0xFFFFFF, 0x71DD55, 0xA6EA95, 0x9FDFDF, 0xF1F163];
 		public override function game_update(g:GameEngineState):void {
 			_invuln_ct--;
 			this.update_health_bar(g);
@@ -121,8 +122,10 @@ package
 							.p_set_scale(Util.float_random(0.3, 0.5))
 							.p_set_delay(Util.float_random(0, 10))
 							.p_set_vr(Util.float_random( -10, 10))
-							.p_set_alpha(0.8, 0).p_set_velocity(0, Util.float_random(-3, -1))
-							.p_set_ctspeed(0.025);
+							.p_set_alpha(0.8, 0)
+							.p_set_velocity(0, Util.float_random(-3, -1))
+							.p_set_ctspeed(0.025)
+							.p_set_color(STAR_COLORS[Math.floor(Math.random()*STAR_COLORS.length)]);
 					}
 				}
 			}
@@ -218,7 +221,7 @@ package
 		}
 		
 		private static var TIMESTAMP_CT:Number = 0;
-		private var _timestamp:Number = 0;
+		public var _timestamp:Number = 0;
 		private function set_timestamp():PlayerBall {
 			_timestamp = TIMESTAMP_CT++;
 			return this;

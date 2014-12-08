@@ -40,13 +40,17 @@ package
 		[Embed(source = "../resc/mapobj/Guild.png")] public static var PUB:Class;
 		[Embed(source = "../resc/mapobj/inn.png")] public static var INN:Class;
 		[Embed(source = "../resc/mapobj/town.png")] public static var SIGN:Class;
-		[Embed(source = "../resc/mapobj/town.png")] public static var TREE:Class;
-		[Embed(source = "../resc/mapobj/town.png")] public static var DEATH:Class
+		[Embed(source = "../resc/mapobj/treebumper.png")] public static var TREEBUMPER:Class;
+		[Embed(source = "../resc/mapobj/treebumper2.png")] public static var TREEBUMPER2:Class;
+		[Embed(source = "../resc/mapobj/treebumper3.png")] public static var TREEBUMPER3:Class;
+		/*[Embed(source = "../resc/mapobj/town.png")] public static var TREE:Class;
+		[Embed(source = "../resc/mapobj/town.png")] public static var DEATH:Class*/
 
 		[Embed(source = "../resc/effects/question.png")] public static var QUESTION:Class;
 		[Embed(source = "../resc/effects/explosion.png")] public static var EXPLOSION:Class;
 		[Embed(source = "../resc/effects/heroghost.png")] public static var HEROGHOST:Class;
 		[Embed(source = "../resc/effects/star.png")] public static var SPARKLE:Class;
+		[Embed(source = "../resc/effects/hp_spark.png")] public static var HP_SPARK:Class;
 		
 		[Embed(source = "../resc/background/mountain_small.png")] public static var MOUNTAIN_SMALL:Class;
 		[Embed(source = "../resc/background/mountain.png")] public static var MOUNTAIN_MED:Class;
