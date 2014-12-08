@@ -1,5 +1,6 @@
 package org.flixel
 {
+	import flash.utils.getQualifiedClassName;
 	/**
 	 * This is an organizational class that can update and render a bunch of <code>FlxBasic</code>s.
 	 * NOTE: Although <code>FlxGroup</code> extends <code>FlxBasic</code>, it will not automatically
@@ -394,7 +395,8 @@ package org.flixel
 			while(i < length)
 			{
 				basic = members[i++] as FlxBasic;
-				if((basic != null) && !basic.exists && ((ObjectClass == null) || (basic is ObjectClass)))
+				
+				if((basic != null) && !basic.exists && ((ObjectClass == null) || (getQualifiedClassName(basic) == getQualifiedClassName(ObjectClass))))
 					return basic;
 			}
 			return null;

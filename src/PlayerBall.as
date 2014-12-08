@@ -142,7 +142,7 @@ package
 				play("attack");
 				if (attack_this_frame) {
 					for (i = _battling_enemies.length-1; i >= 0; i--) {
-						_battling_enemies[i]._hitpoints--;
+						_battling_enemies[i]._hitpoints -= 1;
 						var hfp:Vector3D = new Vector3D(
 							_battling_enemies[i].get_center().x - this.get_center().x,
 							_battling_enemies[i].get_center().y - this.get_center().y
@@ -199,7 +199,6 @@ package
 					_attack_random_dir = Util.normalized( -velocity.x, -velocity.y);
 					_attack_random_dir.scaleBy(50);
 					_first_battle_tick = true;
-					FlxG.shake(0.005, 0.1);
 					
 				} else {
 					_attack_random_dir = Util.normalized(Util.float_random( -1, 1), Util.float_random( -1, 1));

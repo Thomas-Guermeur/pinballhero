@@ -43,7 +43,7 @@ package gameobjs
 						.p_set_ctspeed(0.025)
 						.p_set_color(STAR_COLORS[Math.floor(Math.random()*STAR_COLORS.length)]);
 				}
-				FlxG.shake(0.01, 0.1);
+				if (g._player_balls.countLiving() == 1) FlxG.shake(0.01, 0.1);
 				
 			} else {
 				super.hit_player(g,itr_playerball);

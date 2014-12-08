@@ -2,15 +2,16 @@ package  {
 	import flash.display.Sprite;
 	import flash.ui.*;
 	import flash.geom.Vector3D;
+	import flash.utils.getQualifiedClassName;
 	import gameobjs.TownLandmark;
 	import flash.geom.*;
 	import mx.core.FlexApplicationBootstrap;
 	import org.flixel.*;
 	import enemy.*;
-	
+	import com.adobe.serialization.json.*;
 	import gameobjs.*;
 	import geom.ThickPath;
-
+	import flash.utils.ByteArray;
 	/**
 	 * ...
 	 * @author spotco
@@ -43,10 +44,11 @@ package  {
 		
 		public var _keys:Number = 0;
 		
-		static var LOAD_LEVEL = Resource.LEVEL1_DATA_OBJECT;
+		static var LOAD_LEVEL = Resource.LEVEL1_DATA;
 		
 		public override function create():void {
 			super.update();
+			
 			inst = this;
 			_bgmgr = new BackgroundManager(this);
 			_background_elements.add(_bgmgr);
@@ -89,6 +91,7 @@ package  {
 			this.add(_beach);
 			
 			_transition_airship = new TransitionAirship(this);
+			_transition_airship.cameras = [_gamecamera];
 			this.add(_transition_airship);
 			
 			if (false) {
@@ -126,6 +129,17 @@ package  {
 				
 		public override function update():void {
 			super.update();
+			
+			//make level 2
+			//make level 3
+			//make level 4
+			
+			//if playerball out of range, kill
+			
+			if (Util.is_key(Util.USE_SLOT4, true)) {
+				transition_next_level();
+			}
+			
 			if (_initialcover != null) {
 				_initialcover.alpha -= 0.1;
 				if (_initialcover.alpha <= 0) {
@@ -255,6 +269,7 @@ package  {
 			_hold_mouse_ct = 0;
 			_camera_focus_events.length = 0;
 			
+			if (_transition_airship != null) this.remove(_transition_airship);
 			_transition_airship = new TransitionAirship(this);
 			this.add(_transition_airship);
 			
@@ -571,6 +586,7 @@ package  {
 		
 		public var _current_level:Number = 0;
 		public function parseLevel(level:Object, offsetx:Number, offsety:Number):void {
+			level = JSON.decode((new level as ByteArray).toString());
 			for each (var p:Object in level.islands) {
 				var tp:ThickPath = new ThickPath(new Array(
 					new FlxPoint(p.x1 + offsetx, -p.y1 + offsety),
@@ -587,6 +603,8 @@ package  {
 			}
 			
 			var mark:GameObject;
+			
+			
 			for each (var obj:Object in level.objects) {
 				var objx:Number = obj.x + offsetx;
 				var objy:Number = -obj.y + offsety;
@@ -609,7 +627,7 @@ package  {
 						break;
 					case "gate":
 						mark = (cons(GateLandmark, _game_objects) as GateLandmark).init().set_centered_position(objx, objy);
-						mark.angle = Util.RAD_TO_DEG * Math.atan2(-obj.dir.y, obj.dir.x);
+						mark.angle = Util.RAD_TO_DEG * Math.atan2( -obj.dir.y, obj.dir.x);
 						break;
 					case "key":
 						mark = (cons(KeyGameObject, _game_objects) as KeyGameObject).init().set_centered_position(objx, objy);
@@ -648,6 +666,7 @@ package  {
 				}
 				if (mark != null) mark._level = _current_level;
 			}
+			
 		}
 		
 		public static var inst:GameEngineState;

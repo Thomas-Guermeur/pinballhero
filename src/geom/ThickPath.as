@@ -91,9 +91,8 @@ package geom {
 				particle.velocity.x = d * Math.cos(rad);
 				particle.velocity.y = d * Math.sin(rad);
 				
-				if (g._player_balls.countLiving() == 1) {
-					FlxG.shake(0.001, 0.1);
-				}
+				if (g._player_balls.countLiving() == 1) FlxG.shake(0.001, 0.1);
+				
 				if (particle is PlayerBall) {
 					
 					var player:PlayerBall = particle as PlayerBall;

@@ -22,9 +22,10 @@ package gameobjs {
 			this.reset(0,0);
 			landmark_init();
 			_princess_help = (GameEngineState.cons(PrincessHelpPopup, g._game_objects) as PrincessHelpPopup).init();
+			
 			_castle_finished = false;
 			this.play("alive");
-			_has_loaded_camera_evt = false;
+			_has_loaded_camera_evt = false;			
 			return this;
 		}
 		private var _has_loaded_camera_evt:Boolean = false;

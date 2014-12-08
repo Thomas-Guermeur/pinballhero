@@ -19,6 +19,7 @@ package gameobjs
 			_kill = false;
 			this.play("play");
 			_tar_alpha = 1;
+			this.visible = false;
 			return this;
 		}
 		
@@ -46,6 +47,7 @@ package gameobjs
 		public function set_castle_pos(x:Number, y:Number):void {
 			_castle_pos.x = x;
 			_castle_pos.y = y;
+			this.visible = true;
 		}
 		
 		

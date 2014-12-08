@@ -39,7 +39,7 @@ package gameobjs
 					if (this.is_hit_game_object(itr_playerball)) {
 						_visiting_player = itr_playerball;
 						itr_playerball._visiting_landmark = this;
-						FlxG.shake(0.005, 0.1);
+						if (g._player_balls.countLiving() == 1) FlxG.shake(0.001, 0.1);
 						this.scale.x = 1.75;
 						_visiting_duration = visit_duration();
 					}
@@ -72,7 +72,7 @@ package gameobjs
 			_visiting_player._visiting_landmark = null;
 			_visiting_player = null;
 			_respawn_duration = regen_duration();
-			FlxG.shake(0.005, 0.1);	
+			if (g._player_balls.countLiving() == 1) FlxG.shake(0.001, 0.1);	
 		}
 		public function visit_duration():Number {
 			return 80;

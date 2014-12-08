@@ -1,30 +1,16 @@
 {
     "start_y": 0,
+    "assert_links": 1,
     "islands": [
-        {"x2": 172, "type": "line", "hei": 50, "x1": 332, "ndir": "left", "y1": 446, "can_fall": true, "ground": "open", "y2": 239},
-        {"x2": 262, "type": "line", "hei": 50, "x1": 172, "ndir": "left", "y1": 239, "can_fall": true, "ground": "open", "y2": 140},
-        {"x2": 414, "type": "line", "hei": 50, "x1": 262, "ndir": "left", "y1": 140, "can_fall": true, "ground": "open", "y2": 61},
-        {"x2": 773, "type": "line", "hei": 50, "x1": 414, "ndir": "left", "y1": 61, "can_fall": true, "ground": "open", "y2": 35},
-        {"x2": 876, "type": "line", "hei": 50, "x1": 773, "ndir": "left", "y1": 35, "can_fall": true, "ground": "open", "y2": 260},
-        {"x2": 817, "type": "line", "hei": 50, "x1": 876, "ndir": "left", "y1": 260, "can_fall": true, "ground": "open", "y2": 444},
-        {"x2": 639, "type": "line", "hei": 50, "x1": 817, "ndir": "left", "y1": 444, "can_fall": true, "ground": "open", "y2": 543},
-        {"x2": 332, "type": "line", "hei": 50, "x1": 639, "ndir": "left", "y1": 543, "can_fall": true, "ground": "open", "y2": 446}
+        {"x2": 532, "type": "line", "hei": 50, "x1": 510, "ndir": "left", "y1": 97, "can_fall": true, "ground": "open", "y2": 568},
+        {"x2": 285, "type": "line", "hei": 50, "x1": 532, "ndir": "left", "y1": 568, "can_fall": true, "ground": "open", "y2": 607}
     ],
-    "assert_links": 8,
+    "connect_pts": {"x2": 532, "y1": 607, "x1": 285, "y2": 568},
     "objects": [
-        {"x": 320, "type": "townstart", "y": 254, "label": "0"},
-        {"x": 686, "type": "castle", "y": 320, "label": "1"},
-        {"x": 576, "type": "town", "y": 159, "label": "2"},
-        {"x": 408, "type": "tree", "y": 149, "label": "3"},
-        {"x": 372, "type": "town", "y": 405, "label": "4"},
-        {"x": 467, "type": "largeslime", "y": 453, "label": "5"},
-        {"x": 542, "type": "key", "y": 489, "label": "6"},
-        {"x": 632, "type": "inn", "y": 510, "label": "7"},
-        {"x": 705, "type": "fox", "y": 477, "label": "8"},
-        {"dir": {"x": -0.77, "y": 0.64}, "x": 793, "type": "gate", "y": 414, "label": "9"},
-        {"x": 831, "type": "dragon", "y": 336, "label": "10"},
-        {"x": 839, "type": "bear", "y": 240, "label": "11"}
+        {"x": 377, "type": "townstart", "y": 168, "label": "0"},
+        {"x": 330, "type": "castle", "y": 568, "label": "1"},
+        {"dir": {"x": 0.15, "y": 0.99}, "x": 507, "type": "gate", "y": 398, "label": "2"},
+        {"x": 473, "type": "key", "y": 259, "label": "3"}
     ],
-    "connect_pts": {"x2": 876, "y1": 239, "x1": 172, "y2": 260},
     "start_x": 0
 }

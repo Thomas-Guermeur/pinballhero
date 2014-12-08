@@ -3,6 +3,7 @@ package
 	import flash.display.*;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
+	import gameobjs.*;
 	import org.flixel.*;
 	import flash.ui.*;
 	import flash.events.*;
@@ -17,7 +18,7 @@ package
 	{
 		
 		public function Main():void 
-		{
+		{	
 			super(1000, 500, GameEngineState);
 		}
 		

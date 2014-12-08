@@ -43,7 +43,7 @@ package gameobjs {
 		public function hit_player(g:GameEngineState, itr_playerball:PlayerBall):void {
 			_cooldown[itr_playerball._timestamp] = 10;
 			this.set_scale(1.7);
-			FlxG.shake(0.005, 0.1);
+			if (g._player_balls.countLiving() == 1) FlxG.shake(0.001, 0.1);
 			
 			var speed:Number = Util.pt_dist(itr_playerball.velocity.x,itr_playerball.velocity.y,0,0);
 			
