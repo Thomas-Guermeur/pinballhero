@@ -63,6 +63,7 @@ package geom {
 			// find closest collision to player
 			var closest:Number = Number.POSITIVE_INFINITY;
 			var collisionLine:Line;
+			var collisionPt:FlxPoint;
 			for (var c:String in collisions) {
 				var point:FlxPoint = collisions[c];
 				
@@ -78,6 +79,7 @@ package geom {
 				if (dist < closest && Math.sqrt(dist) <= particle.width) {
 					closest = dist;
 					collisionLine = collideLines[c];
+					collisionPt = collisions[c];
 				}
 			}
 			
@@ -102,10 +104,18 @@ package geom {
 					player.velocity.x *= 0.8;
 					player.velocity.y *= 0.8;
 				}
+				
+				//trace(collisionPt.x, collisionPt.y);
+				for (i = 0; i < _imgs_group.length; i++) {
+					var mtn:Mountain = _imgs_group.members[i];
+					mtn.hit(collisionPt.x, collisionPt.y);
+				}
 			}
 			
 			// TODO: maybe return something fancy to render game feel
 		}
+		
+		private var _imgs_group:FlxGroup;
 		
 		/*
 		 * Return the extended surface of the wall (after applying thickness
@@ -123,6 +133,7 @@ package geom {
 		
 
 		public function createSprites(g:FlxGroup):void {
+			_imgs_group = g;
 			for (var i:Number = 0; i < nodes.length - 1; i++) {
 				var curr:FlxPoint = nodes[i];
 				var next:FlxPoint = nodes[i + 1];
@@ -148,12 +159,16 @@ package geom {
 				
 				var lengthLeft:Number = Util.point_dist(curr.x, curr.y, next.x, next.y) - LENGTH / 2;
 				while (lengthLeft > 0) {
-					var tmp:FlxSprite = new Mountain(cx, cy);
+					var tmp:FlxSprite = new Mountain(cx + Util.float_random(-10,10), cy + Util.float_random(-10,10));
 					tmp.cameras = g.cameras;
 					g.add(tmp);
 					
 					cx += dx;
 					cy += dy;
+					
+					LENGTH = Util.float_random(10, 40);
+					dx = LENGTH * Math.cos(rad);
+					dy = LENGTH * Math.sin(rad);
 					
 					lengthLeft -= LENGTH;
 				}

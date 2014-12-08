@@ -11,6 +11,10 @@ package
 		
 		public var _tiltBar:FlxSprite;
 		public var _tiltText:FlxSprite;
+		
+		public var _keyImg:FlxSprite;
+		public var _keyText:FlxText;
+		
 		public var _castle_transition_start:FlxPoint = new FlxPoint();
 		
 		public function GameEngineHUD(g:GameEngineState) 
@@ -20,12 +24,15 @@ package
 			super.add(_gameover_ui);
 			
 			_tiltBar = new FlxSprite(963, 0, Resource.HUD_TILTBAR).set_cameras([g._hudcamera]);
-			_tiltBar.cameras = [g._hudcamera];
 			this.add(_tiltBar);
 			
 			_tiltText = new FlxSprite(966, 20, Resource.HUD_TILTTEXT).set_cameras([g._hudcamera]);
-			_tiltText.cameras  = [g._hudcamera];
 			this.add(_tiltText);
+			
+			_keyImg = new FlxSprite(0, 0, Resource.KEY).set_cameras([g._hudcamera]);
+			this.add(_keyImg);
+			_keyText = Util.cons_text(42, 14, "x 0", 0xFFFFFF, 24);
+			this.add(_keyText);
 			
 			_castle_finish_bar = new FlxSprite(0, 340, Resource.CASTLE_FINISH_COVER);
 			_castle_finish_bar.cameras  = [g._hudcamera];
@@ -102,6 +109,14 @@ package
 				}
 				
 			} else if (_gameui.visible) {
+				if (g._keys > 0) {
+					_keyImg.visible = true;
+					_keyText.visible = true;
+					_keyText.text = "x " + g._keys;
+				} else {
+					_keyImg.visible = false;
+					_keyText.visible = false;
+				}
 				_animct++;				
 				if (g._tilt_count >= g._tilt_count_max) {
 					if (_animct % 20 == 0) {

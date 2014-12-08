@@ -40,6 +40,8 @@ package  {
 		public static var MODE_GAME_OVER:Number = 3;
 		public var _current_mode:Number = 0;
 		
+		public var _keys:Number = 0;
+		
 		public override function create():void {
 			super.update();
 			inst = this;
@@ -569,6 +571,7 @@ package  {
 				), 30);
 				tp._level = _current_level;
 				_walls.push(tp);
+				
 				var tmp:MountainRange = new MountainRange();
 				tmp.cameras = _mountains.cameras;
 				tmp.init(tp);
@@ -599,6 +602,13 @@ package  {
 						break;
 					case "dogbone":
 						mark = (cons(TreeLandmark, _game_objects) as TreeLandmark).init().set_centered_position(objx,objy);
+						break;
+					case "cannon":
+						mark = (cons(GateLandmark, _game_objects) as GateLandmark).init().set_centered_position(objx, objy);
+						mark.angle = Util.RAD_TO_DEG * Math.atan2(obj.dir.y, obj.dir.x);
+						break;
+					case "dogcape":
+						mark = (cons(KeyGameObject, _game_objects) as KeyGameObject).init().set_centered_position(objx, objy);
 						break;
 				/*	
 				case "sign": //make negative !!!!

@@ -41,6 +41,7 @@ package
 			this.play("walk");
 			this.set_timestamp();
 			_invuln_ct = 0;
+			_health_decr_ct = 400;
 			return this;
 		}
 		
@@ -166,6 +167,12 @@ package
 				velocity.y += 0.135;
 				this.set_centered_position(center.x, center.y);
 				_launched_ct++;
+				
+				_health_decr_ct--;
+				if (_health_decr_ct <= 0) {
+					_health_decr_ct = 400;
+					_hitpoints--;
+				}
 			}
 		}
 		

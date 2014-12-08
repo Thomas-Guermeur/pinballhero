@@ -1,20 +1,18 @@
 {
     "islands": [
-        {"hei": 50, "y2": 406.6, "x1": 1191.7, "ndir": "left", "y1": 585, "type": "line", "ground": "open", "can_fall": true, "x2": 938.4},
-        {"hei": 50, "y2": 623.3, "x1": 938.4, "ndir": "left", "y1": 406.6, "type": "line", "ground": "open", "can_fall": true, "x2": 523.4},
-        {"hei": 50, "y2": 996.7, "x1": 523.4, "ndir": "left", "y1": 623.3, "type": "line", "ground": "open", "can_fall": true, "x2": 781.7},
-        {"hei": 50, "y2": 953.3, "x1": 781.7, "ndir": "left", "y1": 996.7, "type": "line", "ground": "open", "can_fall": true, "x2": 1103.4},
-        {"hei": 50, "y2": 585, "x1": 1103.4, "ndir": "left", "y1": 953.3, "type": "line", "ground": "open", "can_fall": true, "x2": 1191.7}
+        {"hei": 50, "y2": 915, "x1": 933.4, "ndir": "left", "y1": 1216.7, "type": "line", "ground": "open", "can_fall": true, "x2": 1161.7},
+        {"hei": 50, "y2": 555, "x1": 1161.7, "ndir": "left", "y1": 778.3, "type": "line", "ground": "open", "can_fall": true, "x2": 881.7},
+        {"hei": 50, "y2": 661.6, "x1": 881.7, "ndir": "left", "y1": 555, "type": "line", "ground": "open", "can_fall": true, "x2": 465},
+        {"hei": 50, "y2": 1146.7, "x1": 465, "ndir": "left", "y1": 661.6, "type": "line", "ground": "open", "can_fall": true, "x2": 538.4},
+        {"hei": 50, "y2": 1216.7, "x1": 538.4, "ndir": "left", "y1": 1146.7, "type": "line", "ground": "open", "can_fall": true, "x2": 933.4}
     ],
-    "connect_pts": {"y1": 623.3, "y2": 585, "x1": 523.4, "x2": 1191.7},
+    "connect_pts": {"y1": 661.6, "y2": 915, "x1": 465, "x2": 1161.7},
     "start_y": 0,
     "objects": [
         {"x": 896.7, "type": "1upobject", "label": "2", "y": 853.3},
-        {"x": 936.7, "type": "dogbone", "label": "BID:1", "bid": 1, "y": 481.6},
-        {"x": 1125, "type": "dogbone", "label": "BID:2", "bid": 2, "y": 606.7},
-        {"x": 891.7, "type": "dogbone", "label": "BID:3", "bid": 3, "y": 628.3},
-        {"x": 618.4, "type": "dogbone", "label": "BID:4", "bid": 4, "y": 641.7}
+        {"x": 1171.7, "type": "cannon", "label": "11", "dir": {"x": 0.02, "y": 1}, "y": 855},
+        {"x": 626.7, "type": "dogcape", "label": "12", "y": 850}
     ],
     "start_x": 0,
-    "assert_links": 5
+    "assert_links": 4
 }

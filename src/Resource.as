@@ -26,6 +26,9 @@ package
 		[Embed(source = "../resc/mapobj/town.png")] public static var TOWN:Class;
 		[Embed(source = "../resc/mapobj/castle.png")] public static var CASTLE:Class;
 		[Embed(source = "../resc/mapobj/princess_help.png")] public static var PRINCESS_HELP:Class;
+		
+		[Embed(source = "../resc/mapobj/gate.png")] public static var GATE:Class;
+		[Embed(source = "../resc/mapobj/key.png")] public static var KEY:Class;
 
 		[Embed(source = "../resc/ui/aimretic.png")] public static var AIMRETIC:Class;
 		[Embed(source = "../resc/ui/aimretic_empty.png")] public static var AIMRETIC_EMPTY:Class;
