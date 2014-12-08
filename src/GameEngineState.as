@@ -4,6 +4,7 @@ package  {
 	import flash.geom.Vector3D;
 	import gameobjs.TownLandmark;
 	import flash.geom.*;
+	import mx.core.FlexApplicationBootstrap;
 	import org.flixel.*;
 	
 	import gameobjs.*;
@@ -40,6 +41,7 @@ package  {
 		
 		public override function create():void {
 			super.update();
+			inst = this;
 			_bgmgr = new BackgroundManager(this);
 			_background_elements.add(_bgmgr);
 			this.add(_background_elements);
@@ -82,7 +84,7 @@ package  {
 		
 		public function set_starting_balls(n:Number):void {
 			for (var i:Number = 0; i < n; i++) {
-				add_ball(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
+				add_ball(_current_town.get_center().x + Util.float_random( -40, 40), _current_town.get_center().y + Util.float_random( -40, 40));
 			}
 		}
 				
@@ -90,7 +92,6 @@ package  {
 			super.update();
 			
 			if (_current_mode == MODE_GAME) {
-				_hud.game_update(this);
 				_next_hero_popup.game_update(this);
 				update_heroes_in_queue();
 				update_camera();
@@ -102,33 +103,72 @@ package  {
 				update_particles();
 				update_shoot_ball();
 				update_bonus_balls();
+				_hud.game_update(this);
 			
 			} else if (_current_mode == MODE_CASTLE_FINISH_CUTSCENE) {
 				_hud.game_update(this);
 				update_camera();
 				update_gameobjs();
+				update_particles();
 				
 			} else if (_current_mode == MODE_AIRSHIP_TRANSITION_TO_NEXT) {
+				_hud.game_update(this);
+				update_camera();
+				_bgmgr.game_update(this);
+				update_particles();
 				
+				if (_transition_airship._mode == 0) {
+					_transition_airship._hei += 3;
+					_transition_airship.set_position(_transition_airship._pos.x, _transition_airship._pos.y);
+					if (_transition_airship._hei > _transition_airship._hei_max) {
+						_transition_airship._mode = 1;
+						_transition_airship._transition_t = 0;
+						_transition_airship._transition_initial_pos.x = _transition_airship._pos.x;
+						_transition_airship._transition_initial_pos.y = _transition_airship._pos.y;
+					}
+				} else if (_transition_airship._mode == 1) {
+					_transition_airship._transition_t += 0.01;
+					var neu_pos:FlxPoint =  Util.lerp_pos(_transition_airship._transition_initial_pos, _current_town.get_center(), _transition_airship._transition_t);
+					_transition_airship.set_position(neu_pos.x, neu_pos.y);
+					if (_transition_airship._transition_t >= 1) {
+						_transition_airship._mode = 2;
+					}
+				} else if (_transition_airship._mode == 2) {
+					_transition_airship._hei -= 3;
+					_transition_airship.set_position(_transition_airship._pos.x, _transition_airship._pos.y);
+					if (_transition_airship._hei <= 0) {
+						_current_mode = MODE_GAME;
+						this.remove(_transition_airship);
+						
+						for (var i_gameobj:Number = _game_objects.length - 1; i_gameobj >= 0; i_gameobj--) {
+							var itr_gameobj:GameObject = _game_objects.members[i_gameobj];
+							if (itr_gameobj._level == _current_level) continue;
+							if (itr_gameobj.alive) itr_gameobj.kill();
+						}
+						for (var i_mtn:Number = _mountains.length - 1; i_mtn >= 0; i_mtn--) {
+							if (_mountains.members[i_mtn]._level == _current_level) continue;
+							_mountains.remove(_mountains.members[i_mtn]);
+						}
+						set_starting_balls(3);
+						_hud._gameui.visible = true;
+					}
+				}
 			}
 		}
 		
+		private var _transition_airship:TransitionAirship;
 		private var _level_offset:FlxPoint = new FlxPoint();
+		
 		public function transition_next_level():void {
 			_current_level++;
-			_level_offset.x += Util.float_random(300,500) * Util.sig_n(Util.float_random( -1, 1));
-			_level_offset.y += 300;
+			_level_offset.x += Util.float_random(1000,1500) * Util.sig_n(Util.float_random( -1, 1));
+			_level_offset.y -= Util.float_random(1000,1500);
 			_chatmanager.clear_messages();
 			
 			for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 				var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
 				if (itr_playerball._level == _current_level) continue;
 				if (itr_playerball.alive) itr_playerball.kill();
-			}
-			for (var i_gameobj:Number = _game_objects.length - 1; i_gameobj >= 0; i_gameobj--) {
-				var itr_gameobj:GameObject = _game_objects.members[i_gameobj];
-				if (itr_gameobj._level == _current_level) continue;
-				if (itr_gameobj.alive) itr_gameobj.kill();
 			}
 			for each(var itr:PlayerBall in _player_balls_in_queue.members) {
 				itr.kill();
@@ -144,16 +184,21 @@ package  {
 				if (_walls[i_wall]._level == _current_level) continue;
 				_walls.splice(i_wall, 1);
 			}
-			for (var i_mtn:Number = _mountains.length - 1; i_mtn >= 0; i_mtn--) {
-				if (_mountains.members[i_mtn]._level == _current_level) continue;
-				_mountains.remove(_mountains.members[i_mtn]);
+			for (var i_gameobj:Number = _game_objects.length - 1; i_gameobj >= 0; i_gameobj--) {
+				var itr_gameobj:GameObject = _game_objects.members[i_gameobj];
+				if (itr_gameobj._level == _current_level || itr_gameobj is Landmark) continue;
+				if (itr_gameobj.alive) itr_gameobj.kill();
 			}
+			
 			_hold_mouse_ct = 0;
 			_camera_focus_events.length = 0;
+			
+			_transition_airship = new TransitionAirship(this);
+			this.add(_transition_airship);
+			
+			_transition_airship.set_position(_hud._castle_transition_start.x,_hud._castle_transition_start.y+30);
 			parseLevel(Resource.LEVEL2_DATA_OBJECT, _level_offset.x, _level_offset.y);
-			set_starting_balls(3);
-			//_current_mode = MODE_AIRSHIP_TRANSITION_TO_NEXT;
-			_current_mode = MODE_GAME;
+			_current_mode = MODE_AIRSHIP_TRANSITION_TO_NEXT;
 		}
 		
 		public static var ZOOM_CONST:Number = 0.3;
@@ -208,11 +253,16 @@ package  {
 					camera_focus_events_regular.push(c);
 				}
 			}
-			
-			if (camera_focus_events_cutscene.length > 0) {
+			if (_current_mode == MODE_AIRSHIP_TRANSITION_TO_NEXT) {
+				tar_zoom = 1 - 0.3 * (_transition_airship._hei / _transition_airship._hei_max);
+				tar_focus.x = _transition_airship._pos.x - 118/2;
+				tar_focus.y = _transition_airship._pos.y - _transition_airship._hei - 92/2;
+				
+				
+			} else if (camera_focus_events_cutscene.length > 0) {
 				var c:CameraFocusEvent = camera_focus_events_cutscene.shift();
-				_current_focus.x = c._position.x;
-				_current_focus.y = c._position.y;
+				tar_focus.x = c._position.x;
+				tar_focus.y = c._position.y;
 				tar_zoom = c._zoom_tar;
 				drpf = 30;
 				
@@ -227,8 +277,8 @@ package  {
 				
 			} else if (camera_focus_events_regular.length > 0) {
 				var c:CameraFocusEvent = camera_focus_events_regular.shift();
-				_current_focus.x = c._position.x;
-				_current_focus.y = c._position.y;
+				tar_focus.x = c._position.x;
+				tar_focus.y = c._position.y;
 				tar_zoom = c._zoom_tar;
 				drpf = 30;
 				
@@ -295,7 +345,7 @@ package  {
 		
 		private function update_bonus_balls():void {
 			if (_gold_until_next_ball <= 0) {
-				add_ball(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
+				add_ball(_current_town.get_center().x + Util.float_random(-100,100), _current_town.get_center().y + Util.float_random( -100, 100));
 				_max_gold_until_next_ball += 5;
 				_gold_until_next_ball = _max_gold_until_next_ball;
 				_chatmanager.push_message("A new hero has joined the battle!");
@@ -460,7 +510,6 @@ package  {
 				), 30);
 				tp._level = _current_level;
 				_walls.push(tp);
-				// wrap mountains in FlxSprite
 				var tmp:MountainRange = new MountainRange();
 				tmp.cameras = _mountains.cameras;
 				tmp.init(tp);
@@ -527,6 +576,7 @@ package  {
 			}
 		}
 		
+		public static var inst:GameEngineState;
 		public static function cons(gameClass:Class, g:FlxGroup):GameObject {
 			var rtv:GameObject = g.getFirstAvailable(gameClass) as GameObject;
 			if (rtv == null) {
@@ -535,6 +585,7 @@ package  {
 				g.add(rtv);
 			}
 			rtv.cameras = g.cameras;
+			rtv._level = inst._current_level;
 			return rtv;
 		}
 		public static function particle_cons(gameClass:Class, g:FlxGroup):BaseParticle {

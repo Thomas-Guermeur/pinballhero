@@ -118,11 +118,11 @@ package
 					for (var j:Number = 0; j < 10; j++) {
 						(GameEngineState.particle_cons(RotateFadeParticle, g._particles) as RotateFadeParticle)
 							.init(_actual_position.x + Util.float_random(-50,-10), _actual_position.y + Util.float_random(-10,10), Resource.SPARKLE)
-							.p_set_scale(Util.float_random(0.2, 0.3))
+							.p_set_scale(Util.float_random(0.3, 0.5))
 							.p_set_delay(Util.float_random(0, 10))
 							.p_set_vr(Util.float_random( -10, 10))
 							.p_set_alpha(0.8, 0).p_set_velocity(0, Util.float_random(-3, -1))
-							.p_set_ctspeed(0.05);
+							.p_set_ctspeed(0.025);
 					}
 				}
 			}

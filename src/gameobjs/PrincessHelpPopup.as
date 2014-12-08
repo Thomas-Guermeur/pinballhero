@@ -18,6 +18,7 @@ package gameobjs
 			this.reset(0,0);
 			_kill = false;
 			this.play("play");
+			_tar_alpha = 1;
 			return this;
 		}
 		

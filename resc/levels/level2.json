@@ -1,5 +1,4 @@
 {
-    "connect_pts": {"y1": 520, "y2": 528.3, "x1": 431.7, "x2": 1226.7},
     "islands": [
         {"hei": 50, "y2": 408.3, "x1": 666.7, "ndir": "left", "y1": 503.3, "type": "line", "ground": "open", "can_fall": true, "x2": 723.4},
         {"hei": 50, "y2": 376.6, "x1": 723.4, "ndir": "left", "y1": 408.3, "type": "line", "ground": "open", "can_fall": true, "x2": 820},
@@ -9,14 +8,16 @@
         {"hei": 50, "y2": 198.3, "x1": 826.7, "ndir": "left", "y1": 80, "type": "line", "ground": "open", "can_fall": true, "x2": 500},
         {"hei": 50, "y2": 520, "x1": 500, "ndir": "left", "y1": 198.3, "type": "line", "ground": "open", "can_fall": true, "x2": 431.7},
         {"hei": 50, "y2": 795, "x1": 431.7, "ndir": "left", "y1": 520, "type": "line", "ground": "open", "can_fall": true, "x2": 510},
-        {"hei": 50, "y2": 923.3, "x1": 510, "ndir": "left", "y1": 795, "type": "line", "ground": "open", "can_fall": true, "x2": 836.7},
-        {"hei": 50, "y2": 808.3, "x1": 836.7, "ndir": "left", "y1": 923.3, "type": "line", "ground": "open", "can_fall": true, "x2": 1110},
+        {"hei": 50, "y2": 990, "x1": 510, "ndir": "left", "y1": 795, "type": "line", "ground": "open", "can_fall": true, "x2": 843},
+        {"hei": 50, "y2": 808.3, "x1": 843, "ndir": "left", "y1": 990, "type": "line", "ground": "open", "can_fall": true, "x2": 1110},
         {"hei": 50, "y2": 528.3, "x1": 1110, "ndir": "left", "y1": 808.3, "type": "line", "ground": "open", "can_fall": true, "x2": 1226.7},
         {"hei": 50, "y2": 168.3, "x1": 1226.7, "ndir": "left", "y1": 528.3, "type": "line", "ground": "open", "can_fall": true, "x2": 1150},
         {"hei": 50, "y2": 80, "x1": 1150, "ndir": "left", "y1": 168.3, "type": "line", "ground": "open", "can_fall": true, "x2": 826.7},
         {"hei": 50, "y2": 351.6, "x1": 756.7, "ndir": "left", "y1": 346.6, "type": "line", "ground": "open", "can_fall": true, "x2": 895}
     ],
     "start_x": 0,
+    "connect_pts": {"y1": 520, "y2": 528.3, "x1": 431.7, "x2": 1226.7},
+    "assert_links": 11,
     "start_y": 0,
     "objects": [
         {"x": 825, "type": "1upobject", "label": "0", "y": 451.6},
@@ -24,7 +25,6 @@
         {"x": 605, "type": "birdflock", "label": "3", "y": 321.6},
         {"x": 991.7, "type": "birdflock", "label": "4", "y": 315},
         {"x": 820, "type": "birdflock", "label": "5", "y": 761.7},
-        {"x": 992, "type": "coin", "label": "1", "y": 627}
-    ],
-    "assert_links": 11
+        {"x": 840, "type": "coin", "label": "1", "y": 894}
+    ]
 }

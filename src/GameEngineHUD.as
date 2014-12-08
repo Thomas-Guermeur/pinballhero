@@ -11,6 +11,7 @@ package
 		
 		public var _tiltBar:FlxSprite;
 		public var _tiltText:FlxSprite;
+		public var _castle_transition_start:FlxPoint = new FlxPoint();
 		
 		public function GameEngineHUD(g:GameEngineState) 
 		{
@@ -42,38 +43,44 @@ package
 		}
 		
 		private var _animct:int = 0;
+		private var _fadeout_then_hide_castle_finish:Number = 0;
 		public function game_update(g:GameEngineState):void
 		{
 			if (_castle_finish_ui.visible) {
-				if (_castle_finish_ui_alpha < 1) {
-					_castle_finish_ui_alpha += 0.1;
-					_castle_finish_ui.setAll("alpha", _castle_finish_ui_alpha);
-				}
-				if (_castle_finish_ui_alpha > 0.8) {
-					var prevf:Boolean = _castle_finish_text_scroll.finished();
-					_castle_finish_text_scroll._update();
-					if (_castle_finish_text_scroll.finished()) {
-						if (!prevf) {
-							_animct = 60;
-						} else {
-							_animct--;
-							if (_animct < 0) {
-								if (_castle_finish_ui_remaining_messages.length > 0) {
-									_castle_finish_text_scroll.load(_castle_finish_ui_remaining_messages.shift());
-								} else {
-									g.transition_next_level();
-									_castle_finish_ui.visible = false;
-									_gameui.visible = true;
+				if (_fadeout_then_hide_castle_finish > 0) {
+					_fadeout_then_hide_castle_finish -= 0.1;
+					_castle_finish_ui.setAll("alpha", _fadeout_then_hide_castle_finish);
+					if (_fadeout_then_hide_castle_finish <= 0) {
+						_castle_finish_ui.visible = false;
+					}
+				} else {
+					if (_castle_finish_ui_alpha < 1) {
+						_castle_finish_ui_alpha += 0.1;
+						_castle_finish_ui.setAll("alpha", _castle_finish_ui_alpha);
+					}
+					if (_castle_finish_ui_alpha > 0.8) {
+						var prevf:Boolean = _castle_finish_text_scroll.finished();
+						_castle_finish_text_scroll._update();
+						if (_castle_finish_text_scroll.finished()) {
+							if (!prevf) {
+								_animct = 60;
+							} else {
+								_animct--;
+								if (_animct < 0) {
+									if (_castle_finish_ui_remaining_messages.length > 0) {
+										_castle_finish_text_scroll.load(_castle_finish_ui_remaining_messages.shift());
+									} else {
+										g.transition_next_level();
+										_fadeout_then_hide_castle_finish = 1;
+									}
 								}
 							}
 						}
 					}
-					
 				}
-
 				
 			} else if (_gameui.visible) {
-				_animct++;
+				_animct++;				
 				if (g._tilt_count >= g._tilt_count_max) {
 					if (_animct % 20 == 0) {
 						_tiltText.visible = !_tiltText.visible;
@@ -83,6 +90,8 @@ package
 					_tiltText.visible = false;
 				}
 				update_tiltbar(g._tilt_count / g._tilt_count_max);
+				_tiltBar.visible = g._player_balls.countLiving() > 0;
+				_tiltText.visible = _tiltText.visible && (g._player_balls.countLiving() > 0);
 			}
 		}
 		
@@ -94,6 +103,7 @@ package
 		
 		public function show_castle_finish_message(g:GameEngineState, msgs:Array):void {
 			_gameui.visible = false;
+			_fadeout_then_hide_castle_finish = 0;
 			_castle_finish_ui.visible = true;
 			_castle_finish_text_scroll.load(msgs.shift());
 			_castle_finish_ui.setAll("alpha", 0);
