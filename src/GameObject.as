@@ -9,7 +9,7 @@ package
 	public class GameObject extends FlxSprite
 	{	
 		public function game_update(g:GameEngineState):void {}
-		public function get_center():FlxPoint { return new FlxPoint(this.x, this.y); }
+		public function get_center():FlxPoint { return new FlxPoint(this.x+this.width/2, this.y+this.height/2); }
 		public function set_centered_position(x:Number, y:Number):GameObject {
 			var centre:FlxPoint = this.get_center();
 			var off:FlxPoint = new FlxPoint(centre.x - this.x, centre.y - this.y);
@@ -21,7 +21,7 @@ package
 		}
 		
 		public function should_remove(g:GameEngineState):Boolean { return false; }
-		public function do_remove(g:GameEngineState):void { }
+		public function do_remove(g:GameEngineState):void { this.kill();  }
 	}
 
 }

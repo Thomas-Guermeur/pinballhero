@@ -63,7 +63,7 @@ package
 			this.addAnimation("walk", [2, 3], 5);
 		}
 		
-		private var _healthbar:FlxBar;
+		public var _healthbar:FlxBar;
 		private function update_health_bar(g:GameEngineState):void {
 			if (this._hitpoints >= _max_hitpoints) return; 
 			if (_healthbar == null) {
@@ -88,11 +88,13 @@ package
 				.p_set_ctspeed(0.01);
 		}
 		
+		var _test = 0;
+		
 		public var _pause_time:int = 0;
 		public var _sign_time:int = 0;
 		private var _health_decr_ct:Number = 0;
+		public var _launched_ct:Number = 0;
 		public override function game_update(g:GameEngineState):void {
-			
 			_invuln_ct--;
 			this.update_health_bar(g);
 			
@@ -155,6 +157,7 @@ package
 				center.y += velocity.y;
 				velocity.y += 0.135;
 				this.set_centered_position(center.x, center.y);
+				_launched_ct++;
 			}
 		}
 		

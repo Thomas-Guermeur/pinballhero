@@ -18,6 +18,23 @@ package gameobjs {
 			return this; 
 		}
 		
+		public override function game_update(g:GameEngineState):void {
+			if (this == g._current_town) {
+				for (var i:int = 0; i < g._player_balls.length; i++) {
+					var itr_playerball:PlayerBall = g._player_balls.members[i];
+					if (itr_playerball.alive && itr_playerball._launched_ct > 50 && this.is_hit_game_object(itr_playerball)) {
+						itr_playerball.kill();
+						if (itr_playerball._healthbar != null) g._healthbars.remove(itr_playerball._healthbar);
+						itr_playerball._healthbar = null;
+						g.add_ball(itr_playerball.get_center().x,itr_playerball.get_center().y);
+						g._chatmanager.push_message("Hero has returned back to town.");
+					}
+				}
+			} else {
+				super.game_update(g);
+			}
+		}
+		
 		public override function get_center():FlxPoint {
 			return new FlxPoint(this.x + 49, this.y + 58);
 		}

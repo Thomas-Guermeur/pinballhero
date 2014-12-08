@@ -11,6 +11,7 @@ package gameobjs
 		
 		public var _visiting_player:PlayerBall = null;
 		public var _visiting_duration:Number = 0;
+		public var _respawn_duration:Number = 0;
 		
 		public function landmark_init():Landmark {
 			_visiting_player = null;
@@ -18,9 +19,17 @@ package gameobjs
 		}
 		
 		public override function game_update(g:GameEngineState):void {
-			if (this == g._current_town) return;
-			if (_visiting_player == null) {
-				for (var i:int = 0; i < g._player_balls.members.length; i++) {
+			this.scale.x = Util.drp(this.scale.x, 1, 6);
+			this.scale.y = Util.drp(this.scale.y, 1, 6);
+			
+			if (_respawn_duration > 0) {
+				this.alpha = 0.3;
+				this.set_scale(1-_respawn_duration / regen_duration());
+				_respawn_duration--;
+				return;
+				
+			} else if (_visiting_player == null) {
+				for (var i:int = 0; i < g._player_balls.length; i++) {
 					var itr_playerball:PlayerBall = g._player_balls.members[i];
 					if (!itr_playerball || !itr_playerball.alive || itr_playerball._battling_enemies.length > 0 || itr_playerball._visiting_landmark != null) {
 						continue;
@@ -35,6 +44,7 @@ package gameobjs
 					}
 				}
 			}
+			this.alpha = 1;
 					
 			if (_visiting_player != null) {				
 				_visiting_player.set_centered_position(
@@ -50,14 +60,18 @@ package gameobjs
 					}
 					_toggle++;
 				}
+				if (_visiting_duration < 0) {
+					this.visit_finished(g);
+				}
 			}
-			this.scale.x = Util.drp(this.scale.x, 1, 6);
-			this.scale.y = Util.drp(this.scale.y, 1, 6);
 		}
 		var _toggle:int = 0;
 		
-		public function player_visit_animation_update():void {
-			
+		public function visit_finished(g:GameEngineState):void {
+			_visiting_player._visiting_landmark = null;
+			_visiting_player = null;
+			_respawn_duration = regen_duration();
+			FlxG.shake(0.005, 0.1);	
 		}
 		public function visit_duration():Number {
 			return 80;

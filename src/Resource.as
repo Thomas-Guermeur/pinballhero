@@ -14,8 +14,11 @@ package
 		[Embed(source = "../resc/character/fox_small.png")] public static var ENEMY:Class;
 		[Embed(source = "../resc/character/bear_idle.png")] public static var BEAR:Class;
 		[Embed(source = "../resc/character/Hero1.png")] public static var PLAYER:Class;
+		[Embed(source = "../resc/character/princess.png")] public static var PRINCESS:Class;
+		
 		[Embed(source = "../resc/mapobj/town.png")] public static var TOWN:Class;
 		[Embed(source = "../resc/mapobj/castle.png")] public static var CASTLE:Class;
+		[Embed(source = "../resc/mapobj/princess_help.png")] public static var PRINCESS_HELP:Class;
 
 		[Embed(source = "../resc/ui/aimretic.png")] public static var AIMRETIC:Class;
 		[Embed(source = "../resc/ui/aimretic_empty.png")] public static var AIMRETIC_EMPTY:Class;

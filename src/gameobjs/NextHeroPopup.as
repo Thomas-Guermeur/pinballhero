@@ -54,15 +54,20 @@ package gameobjs
 			this.set_town_position(g._current_town.get_center().x -68, g._current_town.get_center().y - 110);
 			update_positions();
 			
-			theta += 0.02;
-			offset_y = Math.sin(theta) * 5;
+			theta++;
+			offset_y = Util.drp(offset_y, 0, 5);
+			if (theta > 40) {
+				offset_y = -10;
+				theta = 0;
+			}
+			
 			if (_bottomtext.text != g._gold_until_next_ball + "") {
 				_bottomtext.text = g._gold_until_next_ball + "";
 			}
 		}
 		
 		private var offset_y:Number = 0;
-		private var theta:Number = 0;
+		private var theta:Number = Util.float_random(5,30);
 		
 	}
 

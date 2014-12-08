@@ -113,13 +113,37 @@ package  {
 		private var _hold_mouse_ct:Number = 0;
 		private var _hold_mouse_ct_max:Number = 75;
 		
+		public var _camera_focus_events:Vector.<CameraFocusEvent> = new Vector.<CameraFocusEvent>();
+		
 		private function update_camera():void {
 			var tar_focus:FlxPoint = new FlxPoint(_current_focus.x, _current_focus.y);
 			var tar_zoom:Number = _current_zoom;
 			var drpf:Number = 10;
 			var magn:Number = Util.point_dist(Util.smouse_x(), Util.smouse_y(), 1000 / 2, 500 / 2);
 			var dir:Vector3D = Util.normalized(Util.smouse_x() - 1000 / 2, Util.smouse_y() - 500 / 2);
-			if (FlxG.mouse.pressed() && _player_balls_in_queue.countLiving() > 0) {
+			
+			var camera_focus_events_cutscene:Vector.<CameraFocusEvent> = new Vector.<CameraFocusEvent>();
+			var camera_focus_events_regular:Vector.<CameraFocusEvent> = new Vector.<CameraFocusEvent>();
+			for(var ci:int = _camera_focus_events.length - 1; ci >= 0; ci-- ) {
+				var c:CameraFocusEvent = _camera_focus_events[ci];
+				c._ct--;
+				if (c._ct <= 0) {
+					_camera_focus_events.splice(ci, 1);
+				} else if (c._priority == CameraFocusEvent.PRIORITY_GAMECUTSCENE) {
+					camera_focus_events_cutscene.push(c);
+				} else if (c._priority == CameraFocusEvent.PRIORITY_REGULAR) {
+					camera_focus_events_regular.push(c);
+				}
+			}
+			
+			if (camera_focus_events_cutscene.length > 0) {
+				var c:CameraFocusEvent = camera_focus_events_cutscene.shift();
+				_current_focus.x = c._position.x;
+				_current_focus.y = c._position.y;
+				tar_zoom = c._zoom_tar;
+				drpf = 30;
+				
+			} else if (FlxG.mouse.pressed() && _player_balls_in_queue.countLiving() > 0) {
 				_hold_mouse_ct = Math.min(_hold_mouse_ct+1,_hold_mouse_ct_max);
 				var scf:Number = _hold_mouse_ct / _hold_mouse_ct_max;
 				magn = (magn / 600) * (300 + scf*500);
@@ -127,6 +151,13 @@ package  {
 				tar_focus.x = _current_town.get_center().x + dir.x;
 				tar_focus.y = _current_town.get_center().y + dir.y;
 				tar_zoom = 1;
+				
+			} else if (camera_focus_events_regular.length > 0) {
+				var c:CameraFocusEvent = camera_focus_events_regular.shift();
+				_current_focus.x = c._position.x;
+				_current_focus.y = c._position.y;
+				tar_zoom = c._zoom_tar;
+				drpf = 30;
 				
 			} else if (_player_balls.countLiving() == 1) {
 				for (var i:Number = 0; i < _player_balls.length; i++) {
@@ -176,7 +207,7 @@ package  {
 				tar_zoom = 1;
 			}
 			_current_focus = Util.drp_pos(_current_focus, tar_focus, drpf);
-			_current_zoom = Util.drp(_current_zoom, tar_zoom, 20);
+			_current_zoom = Util.drp(_current_zoom, tar_zoom, 30);
 			
 			FlxG.camera.focusOn(_current_focus);
 			set_zoom(_current_zoom);
@@ -224,6 +255,7 @@ package  {
 			
 			if (FlxG.mouse.justReleased() && _player_balls_in_queue.countLiving() > 0) {
 				var neu_ball:PlayerBall = (cons(PlayerBall, _player_balls) as PlayerBall).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
+				neu_ball._launched_ct = 0;
 				var dir:Vector3D = Util.normalized(Util.wmouse_x() - _current_town.get_center().x, Util.wmouse_y() - _current_town.get_center().y);
 				var scf:Number = _hold_mouse_ct / _hold_mouse_ct_max;
 				dir.scaleBy(2 + 9 * scf);
@@ -241,16 +273,22 @@ package  {
 			}
 			
 			if (_gold_until_next_ball <= 0) {
-				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
+				add_ball(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
 				_max_gold_until_next_ball += 5;
 				_gold_until_next_ball = _max_gold_until_next_ball;
 				_chatmanager.push_message("A new hero has joined the battle!");
+				
+				_camera_focus_events.push(new CameraFocusEvent(_current_town.get_center().x, _current_town.get_center().y+40, 30, 1.1));
 			}
 			
 			update_tilt();
 		}
 		public var _gold_until_next_ball:Number;
 		public var _max_gold_until_next_ball:Number;
+		
+		public function add_ball(x:Number, y:Number):void {
+			(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(x,y);
+		}
 		
 		public var _tilt_count:Number = 100;
 		public var _tilt_count_max:Number = 100;
@@ -262,7 +300,7 @@ package  {
 			if ((tilt_down || tilt_left || tilt_right || tilt_up) && _tilt_count >= _tilt_count_max) {
 				for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 					var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
-					if (itr_playerball.alive && itr_playerball._battling_enemies.length == 0 ) {
+					if (itr_playerball.alive && itr_playerball._battling_enemies.length == 0 && itr_playerball._visiting_landmark == null) {
 						if (tilt_left) {
 							if (itr_playerball.velocity.x > 0) itr_playerball.velocity.x *= 0.5;
 							itr_playerball.velocity.x -= 7;
@@ -288,25 +326,26 @@ package  {
 		public function update_heroes_in_queue():void {
 			for each(var itr:PlayerBall in _player_balls_in_queue.members) {
 				var ct:Number = itr.is_nth_is_group(_player_balls_in_queue);
-				var tar_scale:Number = 0.2 + 0.8 * (1 / (ct + 1));
+				var theta:Number = Math.PI*0.2 * ct;
+				var dist:Number = Math.sqrt(ct) * 15 + 12;
 				if (Util.point_dist(
 					itr.get_center().x, 
 					itr.get_center().y, 
-					_current_town.get_center().x + Math.sin(theta) * dist, 
+					_current_town.get_center().x + Math.sin(theta)*dist, 
 					_current_town.get_center().y + Math.cos(theta)*dist) > 10) {
-					tar_scale = 1;
+					itr.set_scale(1);
+				} else {
+					var tar_scale:Number = 0.2 + 0.8 * (1 / (ct + 1));
+					itr.set_scale(Util.drp(itr.scale.x, tar_scale, 10));
 				}
-				itr.set_scale(Util.drp(itr.scale.x, tar_scale, 10));
+				
 				
 				if (ct == 0) {
 					itr.set_centered_position(
 						Util.drp(itr.get_center().x,_current_town.get_center().x, 15),
 						Util.drp(itr.get_center().y,_current_town.get_center().y, 15)
 					);
-				} else {
-					var theta:Number = Math.PI*0.2 * ct;
-					var dist:Number = Math.sqrt(ct) * 15 + 12;
-					
+				} else {					
 					itr.set_centered_position(
 						Util.drp(itr.get_center().x,_current_town.get_center().x + Math.sin(theta)*dist, 15),
 						Util.drp(itr.get_center().y,_current_town.get_center().y + Math.cos(theta)*dist, 15)
@@ -347,7 +386,7 @@ package  {
 					mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(objx,objy);
 					break;
 				case "coin":
-					mark = (cons(CastleLandmark, _game_objects) as CastleLandmark).init().set_centered_position(objx,objy);
+					mark = (cons(CastleLandmark, _game_objects) as CastleLandmark).init(this).set_centered_position(objx,objy);
 					break;
 					
 				/*	
