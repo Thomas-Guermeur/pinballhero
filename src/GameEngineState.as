@@ -98,8 +98,8 @@ package  {
 				_hud._gameui.visible = false;
 				
 				_hold_focus = 70;
-				_current_focus.x = -480;
-				_current_focus.y = -520;
+				_current_focus.x = _current_town.get_center().x - 1200;
+				_current_focus.y = _current_town.get_center().y;
 				_current_zoom = 0.8;
 				
 				_initialcover = new FlxSprite();
@@ -610,36 +610,21 @@ package  {
 					case "dogcape":
 						mark = (cons(KeyGameObject, _game_objects) as KeyGameObject).init().set_centered_position(objx, objy);
 						break;
-				/*	
-				case "sign": //make negative !!!!
-					mark = cons(SignLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
-					break;
-				case "rotatingsign":
-					mark = cons(RotatingSignLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y, obj.x2, obj.y2);
-					break;
-				case "tree":
-					mark = cons(TreeLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y);
-					break;
-				case "bear":
-					mark = (cons(BearEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
-					break;
-				case "patrollingenemy":
-					mark = (cons(PatrollingEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(obj.x, obj.y);
-					break;
-				case "aoeenemy":
-					mark = cons(BaseEnemyGameObject, _game_objects);
-					var bgo:BaseEnemyGameObject = mark as BaseEnemyGameObject;
-					bgo.init().set_centered_position(obj.x, obj.y);
-					bgo.setAOE(5);
-					break;
-				case "death":
-					mark = cons(DeathLandmark, _game_objects);
-					(mark as Landmark).setVector(obj.x, obj.y);
-					break;
-				*/
+					case "tutorial":
+						var cso:CutSceneObject = (GameEngineState.cons(CutSceneObject, _game_objects) as CutSceneObject).init();
+						cso.loadGraphic(Resource.TUTORIAL_LAUNCH);
+						cso.set_centered_position(objx, objy);
+						mark = cso;
+						break;
+					case "tutorialend":
+						var cso:CutSceneObject = (GameEngineState.cons(CutSceneObject, _game_objects) as CutSceneObject).init();
+						cso.loadGraphic(Resource.TUTORIAL_TILT);
+						cso.set_centered_position(objx, objy);
+						mark = cso;
+						break;
+					case "dogrocket":
+						mark = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(objx,objy) as TownLandmark);
+						break;
 				}
 				mark._level = _current_level;
 			}

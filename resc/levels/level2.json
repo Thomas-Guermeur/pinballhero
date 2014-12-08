@@ -4,15 +4,23 @@
         {"hei": 50, "y2": 555, "x1": 1161.7, "ndir": "left", "y1": 778.3, "type": "line", "ground": "open", "can_fall": true, "x2": 881.7},
         {"hei": 50, "y2": 661.6, "x1": 881.7, "ndir": "left", "y1": 555, "type": "line", "ground": "open", "can_fall": true, "x2": 465},
         {"hei": 50, "y2": 1146.7, "x1": 465, "ndir": "left", "y1": 661.6, "type": "line", "ground": "open", "can_fall": true, "x2": 538.4},
-        {"hei": 50, "y2": 1216.7, "x1": 538.4, "ndir": "left", "y1": 1146.7, "type": "line", "ground": "open", "can_fall": true, "x2": 933.4}
+        {"hei": 50, "y2": 1216.7, "x1": 538.4, "ndir": "left", "y1": 1146.7, "type": "line", "ground": "open", "can_fall": true, "x2": 933.4},
+        {"hei": 50, "y2": 1091.7, "x1": 1161.7, "ndir": "left", "y1": 915, "type": "line", "ground": "open", "can_fall": true, "x2": 1541.7},
+        {"hei": 50, "y2": 626.6, "x1": 1161.7, "ndir": "left", "y1": 778.3, "type": "line", "ground": "open", "can_fall": true, "x2": 1553.4},
+        {"hei": 50, "y2": 808.3, "x1": 1553.4, "ndir": "left", "y1": 626.6, "type": "line", "ground": "open", "can_fall": true, "x2": 1903.4},
+        {"hei": 50, "y2": 980, "x1": 1903.4, "ndir": "left", "y1": 808.3, "type": "line", "ground": "open", "can_fall": true, "x2": 1906.7},
+        {"hei": 50, "y2": 1091.7, "x1": 1906.7, "ndir": "left", "y1": 980, "type": "line", "ground": "open", "can_fall": true, "x2": 1541.7}
     ],
-    "connect_pts": {"y1": 661.6, "y2": 915, "x1": 465, "x2": 1161.7},
+    "connect_pts": {"y1": 661.6, "y2": 980, "x1": 465, "x2": 1906.7},
     "start_y": 0,
     "objects": [
         {"x": 896.7, "type": "1upobject", "label": "2", "y": 853.3},
         {"x": 1171.7, "type": "cannon", "label": "11", "dir": {"x": 0.02, "y": 1}, "y": 855},
-        {"x": 626.7, "type": "dogcape", "label": "12", "y": 850}
+        {"x": 626.7, "type": "dogcape", "label": "12", "y": 850},
+        {"x": 805, "type": "tutorial", "label": "13", "y": 688.3},
+        {"x": 788.4, "type": "tutorialend", "label": "14", "y": 1005},
+        {"x": 1605, "type": "dogrocket", "label": "16", "y": 716.6}
     ],
     "start_x": 0,
-    "assert_links": 4
+    "assert_links": 8
 }

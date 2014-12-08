@@ -29,6 +29,8 @@ package
 		
 		[Embed(source = "../resc/mapobj/gate.png")] public static var GATE:Class;
 		[Embed(source = "../resc/mapobj/key.png")] public static var KEY:Class;
+		[Embed(source = "../resc/mapobj/tutorial_launch.png")] public static var TUTORIAL_LAUNCH:Class;
+		[Embed(source = "../resc/mapobj/tutorial_tilt.png")] public static var TUTORIAL_TILT:Class;
 
 		[Embed(source = "../resc/ui/aimretic.png")] public static var AIMRETIC:Class;
 		[Embed(source = "../resc/ui/aimretic_empty.png")] public static var AIMRETIC_EMPTY:Class;

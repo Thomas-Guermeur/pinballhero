@@ -32,7 +32,13 @@ package gameobjs {
 					}
 				}
 			} else {
-				super.game_update(g);
+				for (var i:int = 0; i < g._player_balls.length; i++) {
+					var itr_playerball:PlayerBall = g._player_balls.members[i];
+					if (itr_playerball.alive && itr_playerball._launched_ct > 50 && this.is_hit_game_object(itr_playerball)) {
+						g._current_town = this;
+						g._chatmanager.push_message("Discovered a new town!");
+					}
+				}
 			}
 		}
 		
