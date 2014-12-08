@@ -23,6 +23,7 @@ package  {
 			_words = words;
 		}
 		
+		public var _chars_per_tick:Number = 5;
 		public function _update():void {
 			_ct++;
 			if (_ct >= _spd) {
@@ -31,7 +32,7 @@ package  {
 				while (_words.length > _buf.length) {
 					_buf += _words.charAt(_buf.length);
 					tmp++;
-					if (tmp >= 5) break;
+					if (tmp >= _chars_per_tick) break;
 				}
 				_text.text = _buf;
 			}

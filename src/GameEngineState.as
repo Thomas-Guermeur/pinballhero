@@ -37,8 +37,6 @@ package  {
 			super.update();
 			
 			this.add(_background_elements);
-			this.add(_aimretic_l);
-			this.add(_aimretic_r);
 			this.add(_mountains);
 			this.add(_game_objects);
 			this.add(_player_balls_in_queue);
@@ -46,17 +44,13 @@ package  {
 			this.add(_particles);
 
 			
-			this.add(_healthbars);
+			
 			
 			
 			FlxG.visualDebug = false;
 			
 			set_zoom(1);
 			_player_balls.cameras = _mountains.cameras = _aimretic_l.cameras = _aimretic_r.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
-			
-			_chatmanager = new ChatManager(this);
-			_chatmanager.push_message("And so our story begins...");
-			this.add(_chatmanager);
 			
 			var level:Object = Resource.LEVEL2_DATA_OBJECT;
 			parseLevel(level);
@@ -71,8 +65,17 @@ package  {
 			_hud = new GameEngineHUD(this);
 			this.add(_hud);
 			
+			_hud.add(_aimretic_l);
+			_hud.add(_aimretic_r);
+			
+			_hud.add(_healthbars);
+			
+			_chatmanager = new ChatManager(this);
+			_chatmanager.push_message("And so our story begins...");
+			_hud.add(_chatmanager);
+			
 			_next_hero_popup = new NextHeroPopup(this);
-			this.add(_next_hero_popup);
+			_hud.add(_next_hero_popup);
 			
 			set_zoom(1);
 			FlxG.camera.focusOn(new FlxPoint(_current_town.get_center().x, _current_town.get_center().y));

@@ -19,6 +19,7 @@ package  {
 			_text_scroll = new ScrollText(_text, "", 1);
 		}
 		
+		
 		var _messages:Vector.<String> = new Vector.<String>();
 		public function push_message(msg:String):void {
 			while (_messages.length > 3)_messages.shift();

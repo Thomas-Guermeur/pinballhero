@@ -77,7 +77,7 @@ package
 		}
 		
 		public function cons_tile(x:Number,  y:Number, g:GameEngineState):FlxSprite {
-			var tmp:FlxSprite = new FlxSprite(x, y, Resource.GROUNDTILE_1);
+			var tmp:FlxSprite = new FlxSprite(x, y, Resource.CHERCKERTILE);
 			tmp.cameras = [g._gamecamera];
 			this.add(tmp);
 			return tmp;

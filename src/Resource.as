@@ -11,10 +11,13 @@ package
 	public class Resource {
 		
 		[Embed(source = "../resc/background/groundtile_1.png")] public static var GROUNDTILE_1:Class;
+		[Embed(source = "../resc/background/checkertile.png")] public static var CHERCKERTILE:Class;
+		
 		[Embed(source = "../resc/character/fox_small.png")] public static var ENEMY:Class;
 		[Embed(source = "../resc/character/bear_idle.png")] public static var BEAR:Class;
 		[Embed(source = "../resc/character/Hero1.png")] public static var PLAYER:Class;
 		[Embed(source = "../resc/character/princess.png")] public static var PRINCESS:Class;
+		[Embed(source = "../resc/character/dog.png")] public static var DOG:Class;
 		
 		[Embed(source = "../resc/mapobj/town.png")] public static var TOWN:Class;
 		[Embed(source = "../resc/mapobj/castle.png")] public static var CASTLE:Class;
@@ -28,6 +31,7 @@ package
 		[Embed(source = "../resc/ui/hud_tiltbar_empty.png")] public static var HUD_TILTBAR_EMPTY:Class;
 		[Embed(source = "../resc/ui/nexthero_popup.png")] public static var NEXTHERO_POPUP:Class;
 		[Embed(source = "../resc/ui/chat_cover.png")] public static var CHAT_COVER:Class;
+		[Embed(source = "../resc/ui/castle_finish_cover.png")] public static var CASTLE_FINISH_COVER:Class;
 		
 		[Embed(source = "../resc/mapobj/Guild.png")] public static var PUB:Class;
 		[Embed(source = "../resc/mapobj/inn.png")] public static var INN:Class;

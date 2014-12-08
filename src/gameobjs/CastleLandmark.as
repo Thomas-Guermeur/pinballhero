@@ -58,10 +58,12 @@ package gameobjs {
 			_castle_finished = true;
 			
 			var hero:CutSceneObject = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_hero_anim().set_centered_position(this.get_center().x-27, this.get_center().y+25) as CutSceneObject;
-			hero.set_scale(0.6);
-			var princess:CutSceneObject = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_princess_anim().set_centered_position(this.get_center().x+27, this.get_center().y+20) as CutSceneObject;
-			princess.set_scale(0.6);
-			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y+40, Number.POSITIVE_INFINITY, 2, CameraFocusEvent.PRIORITY_GAMECUTSCENE));
+			hero.set_scale(1);
+			var princess:CutSceneObject = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_dog_anim().set_centered_position(this.get_center().x+27, this.get_center().y+20) as CutSceneObject;
+			princess.set_talk();
+			princess.set_scale(1);
+			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y + 40, Number.POSITIVE_INFINITY, 2, CameraFocusEvent.PRIORITY_GAMECUTSCENE));
+			g._hud.show_castle_finish_message(g,["Woof Woof!","(Thanks for saving me, but the princess is in another castle!)"]);
 		}
 		
 	}
