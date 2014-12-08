@@ -66,14 +66,35 @@ package gameobjs {
 			this.play("dead");
 			_castle_finished = true;
 			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y + 40, Number.POSITIVE_INFINITY, 2, CameraFocusEvent.PRIORITY_GAMECUTSCENE));
+			
 			var hero:CutSceneObject = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_hero_anim().set_centered_position(this.get_center().x-27, this.get_center().y+15) as CutSceneObject;
-			hero.set_scale(1);
 			var princess:CutSceneObject;
-			princess = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_dog_anim().set_centered_position(this.get_center().x + 27, this.get_center().y + 10) as CutSceneObject;
-			princess.set_talk();
-			princess.set_scale(1);
+			
+			var current_level:Number = g._current_level;
+			if (current_level == 0) {
+				princess = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_dog_anim().set_centered_position(this.get_center().x + 27, this.get_center().y + 10) as CutSceneObject;
+				g._hud.show_castle_finish_message(g, ["Woof Woof!", "(Wow such brave, but the princess is in another castle!)"]);
+				princess.set_talk();
+				
+			} else if (current_level == 1) {
+				princess = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_old_man_anim().set_centered_position(this.get_center().x + 27, this.get_center().y + 10) as CutSceneObject;
+				g._hud.show_castle_finish_message(g, ["It's dangerous to go alone, take this!", "(No princesses to see here!)"]);
+				princess.set_talk();
+				
+			} else if (current_level == 2) {
+				princess = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_bones_anim().set_centered_position(this.get_center().x + 27, this.get_center().y + 10) as CutSceneObject;
+				g._hud.show_castle_finish_message(g, [".....", "(I sure hope that wasn't a princess!)"]);
+				
+			} else {
+				princess = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_princess_anim().set_centered_position(this.get_center().x, this.get_center().y + 10) as CutSceneObject;
+				g._hud.show_castle_finish_message(g, ["Wow, you're cute!", "Thanks for saving us! The world is now at peace."]);
+				princess.set_talk();
+				hero.set_centered_position(this.get_center().x - 3, this.get_center().y + 70);
+				
+			}
+			
+			
 			g._game_objects.sort("y", FlxGroup.ASCENDING);
-			g._hud.show_castle_finish_message(g, ["Woof Woof!", "(Thanks for saving me, but the princess is in another castle!)"]);
 			g._current_mode = GameEngineState.MODE_CASTLE_FINISH_CUTSCENE;
 			g._hud._castle_transition_start = this.get_center();
 		}

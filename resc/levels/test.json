@@ -1,0 +1,13 @@
+{
+    "start_y": 3,
+    "assert_links": 4,
+    "islands": [
+        {"x2": 325, "type": "line", "hei": 50, "x1": 306, "ndir": "left", "y1": 540, "can_fall": true, "ground": "open", "y2": 176},
+        {"x2": 561, "type": "line", "hei": 50, "x1": 325, "ndir": "left", "y1": 176, "can_fall": true, "ground": "open", "y2": 179},
+        {"x2": 587, "type": "line", "hei": 50, "x1": 561, "ndir": "left", "y1": 179, "can_fall": true, "ground": "open", "y2": 517},
+        {"x2": 306, "type": "line", "hei": 50, "x1": 587, "ndir": "left", "y1": 517, "can_fall": true, "ground": "open", "y2": 540}
+    ],
+    "objects": [{"x": 447, "type": "townstart", "label": "0", "y": 235}, {"x": 447, "type": "castle", "label": "1", "y": 471}],
+    "connect_pts": {"x2": 587, "y1": 540, "x1": 306, "y2": 517},
+    "start_x": 3
+}

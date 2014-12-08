@@ -23,6 +23,8 @@ package
 		
 		[Embed(source = "../resc/character/Hero1.png")] public static var PLAYER:Class;
 		[Embed(source = "../resc/character/princess.png")] public static var PRINCESS:Class;
+		[Embed(source = "../resc/character/old_man.png")] public static var OLD_MAN:Class;
+		[Embed(source = "../resc/character/bones.png")] public static var BONES:Class;
 		[Embed(source = "../resc/character/dog.png")] public static var DOG:Class;
 		
 		[Embed(source = "../resc/character/airship.png")] public static var AIRSHIP:Class;
@@ -40,7 +42,6 @@ package
 		[Embed(source = "../resc/ui/aimretic.png")] public static var AIMRETIC:Class;
 		[Embed(source = "../resc/ui/aimretic_empty.png")] public static var AIMRETIC_EMPTY:Class;
 		[Embed(source = "../resc/ui/hud_tilttext.png")] public static var HUD_TILTTEXT:Class;
-		[Embed(source = "../resc/ui/hud_tiltcontrols.png")] public static var HUD_TILTCONTROLS:Class;
 		[Embed(source = "../resc/ui/hud_tiltbar.png")] public static var HUD_TILTBAR:Class;
 		[Embed(source = "../resc/ui/hud_tiltbar_empty.png")] public static var HUD_TILTBAR_EMPTY:Class;
 		[Embed(source = "../resc/ui/nexthero_popup.png")] public static var NEXTHERO_POPUP:Class;
@@ -77,6 +78,7 @@ package
 		[Embed( source = "../resc/levels/level2.json", mimeType="application/octet-stream")] public static var LEVEL2_DATA:Class;
 		[Embed( source = "../resc/levels/level3.json", mimeType="application/octet-stream")] public static var LEVEL3_DATA:Class;
 		[Embed( source = "../resc/levels/level4.json", mimeType="application/octet-stream")] public static var LEVEL4_DATA:Class;
+		[Embed( source = "../resc/levels/test.json", mimeType="application/octet-stream")] public static var LEVELTEST_DATA:Class;
 	}
 
 }

@@ -32,6 +32,16 @@ package gameobjs
 			return this;
 		}
 		
+		public function load_old_man_anim():CutSceneObject {
+			this.loadGraphic(Resource.OLD_MAN);
+			return this;
+		}
+		
+		public function load_bones_anim():CutSceneObject {
+			this.loadGraphic(Resource.BONES);
+			return this;
+		}
+		
 		private var _actual_pos:FlxPoint = new FlxPoint();
 		public var _is_talk:Boolean = false;
 		public function set_talk():CutSceneObject {

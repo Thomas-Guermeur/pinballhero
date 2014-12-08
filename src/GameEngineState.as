@@ -44,7 +44,8 @@ package  {
 		
 		public var _keys:Number = 0;
 		
-		static var LEVELS:Array = [Resource.LEVEL1_DATA, Resource.LEVEL2_DATA, Resource.LEVEL3_DATA, Resource.LEVEL4_DATA];
+		//static var LEVELS:Array = [Resource.LEVEL1_DATA, Resource.LEVEL2_DATA, Resource.LEVEL3_DATA, Resource.LEVEL4_DATA];
+		static var LEVELS:Array = [Resource.LEVELTEST_DATA, Resource.LEVEL2_DATA];
 		
 		public override function create():void {
 			super.update();
