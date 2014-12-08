@@ -44,7 +44,7 @@ package  {
 		
 		public var _keys:Number = 0;
 		
-		static var LOAD_LEVEL = Resource.LEVEL1_DATA;
+		static var LEVELS:Array = [Resource.LEVEL1_DATA, Resource.LEVEL2_DATA, Resource.LEVEL3_DATA, Resource.LEVEL4_DATA];
 		
 		public override function create():void {
 			super.update();
@@ -64,7 +64,8 @@ package  {
 			set_zoom(1);
 			_player_balls.cameras = _mountains.cameras = _aimretic_l.cameras = _aimretic_r.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
 			
-			parseLevel(LOAD_LEVEL, 0, 0);
+			_current_level = 0;
+			parseLevel(LEVELS[_current_level], 0, 0);
 			
 			_hud = new GameEngineHUD(this);
 			this.add(_hud);
@@ -148,12 +149,14 @@ package  {
 				
 		public override function update():void {
 			super.update();
-			//if playerball out of range, kill
 			/*
 			if (Util.is_key(Util.USE_SLOT4, true)) {
+				_hud._castle_transition_start.x = _current_town.get_center().x;
+				_hud._castle_transition_start.y = _current_town.get_center().y;
 				transition_next_level();
 			}
 			*/
+			
 			
 			if (_initialcover != null) {
 				_initialcover.alpha -= 0.1;
@@ -236,6 +239,7 @@ package  {
 							if (itr_gameobj.alive) itr_gameobj.kill();
 						}
 						for (var i_mtn:Number = _mountains.length - 1; i_mtn >= 0; i_mtn--) {
+							if (_mountains.members[i_mtn] == null) continue;
 							if (_mountains.members[i_mtn]._level == _current_level) continue;
 							_mountains.remove(_mountains.members[i_mtn]);
 						}
@@ -251,7 +255,7 @@ package  {
 		private var _level_offset:FlxPoint = new FlxPoint();
 		
 		public function transition_next_level():void {
-			_current_level++;
+			_current_level = (_current_level+1)%LEVELS.length;
 			_level_offset.x += 1500;
 			_level_offset.y += 1000 * (_current_level%2==0?-1:1);
 			_chatmanager.clear_messages();
@@ -289,7 +293,7 @@ package  {
 			this.add(_transition_airship);
 			
 			_transition_airship.set_position(_hud._castle_transition_start.x,_hud._castle_transition_start.y+30);
-			parseLevel(LOAD_LEVEL, _level_offset.x, _level_offset.y);
+			parseLevel(LEVELS[_current_level], _level_offset.x, _level_offset.y);
 			_current_mode = MODE_AIRSHIP_TRANSITION_TO_NEXT;
 		}
 		

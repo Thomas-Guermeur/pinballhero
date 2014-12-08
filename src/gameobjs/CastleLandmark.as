@@ -73,7 +73,7 @@ package gameobjs {
 			princess.set_talk();
 			princess.set_scale(1);
 			g._game_objects.sort("y", FlxGroup.ASCENDING);
-			g._hud.show_castle_finish_message(g, ["Woof Woof!"/*, "(Thanks for saving me, but the princess is in another castle!)"*/]);
+			g._hud.show_castle_finish_message(g, ["Woof Woof!", "(Thanks for saving me, but the princess is in another castle!)"]);
 			g._current_mode = GameEngineState.MODE_CASTLE_FINISH_CUTSCENE;
 			g._hud._castle_transition_start = this.get_center();
 		}
