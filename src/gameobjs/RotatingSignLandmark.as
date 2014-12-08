@@ -13,6 +13,11 @@ package gameobjs {
 			this.loadGraphic(Resource.SIGN);
 		}
 		
+		public function init():RotatingSignLandmark {
+			this.reset(0, 0);
+			return this;
+		}
+		
 		public override function game_update(g:GameEngineState):void {
 			super.game_update(g);
 			

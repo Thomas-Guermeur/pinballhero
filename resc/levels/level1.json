@@ -1,15 +1,5 @@
 {
     "connect_pts": {"y1": 520, "y2": 528.3, "x1": 431.7, "x2": 1226.7},
-    "start_y": 0,
-    "objects": [
-        {"x": 825, "type": "1upobject", "label": "0", "y": 451.6},
-        {"x": 665, "type": "birdflock", "label": "1", "y": 593.3},
-        {"x": 996.7, "type": "birdflock", "label": "2", "y": 591.7},
-        {"x": 605, "type": "birdflock", "label": "3", "y": 321.6},
-        {"x": 991.7, "type": "birdflock", "label": "4", "y": 315},
-        {"x": 820, "type": "birdflock", "label": "5", "y": 761.7}
-    ],
-    "start_x": 0,
     "islands": [
         {"hei": 50, "y2": 408.3, "x1": 666.7, "ndir": "left", "y1": 503.3, "type": "line", "ground": "open", "can_fall": true, "x2": 723.4},
         {"hei": 50, "y2": 376.6, "x1": 723.4, "ndir": "left", "y1": 408.3, "type": "line", "ground": "open", "can_fall": true, "x2": 820},
@@ -25,6 +15,16 @@
         {"hei": 50, "y2": 168.3, "x1": 1226.7, "ndir": "left", "y1": 528.3, "type": "line", "ground": "open", "can_fall": true, "x2": 1150},
         {"hei": 50, "y2": 80, "x1": 1150, "ndir": "left", "y1": 168.3, "type": "line", "ground": "open", "can_fall": true, "x2": 826.7},
         {"hei": 50, "y2": 351.6, "x1": 756.7, "ndir": "left", "y1": 346.6, "type": "line", "ground": "open", "can_fall": true, "x2": 895}
+    ],
+    "start_x": 0,
+    "start_y": 0,
+    "objects": [
+        {"x": 825, "type": "1upobject", "label": "0", "y": 451.6},
+        {"x": 665, "type": "birdflock", "label": "1", "y": 593.3},
+        {"x": 605, "type": "birdflock", "label": "3", "y": 321.6},
+        {"x": 991.7, "type": "birdflock", "label": "4", "y": 315},
+        {"x": 820, "type": "birdflock", "label": "5", "y": 761.7},
+        {"x": 992, "type": "coin", "label": "1", "y": 627}
     ],
     "assert_links": 11
 }

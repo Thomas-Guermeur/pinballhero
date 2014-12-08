@@ -9,7 +9,8 @@ package gameobjs
 	public class CutSceneObject extends GameObject
 	{
 		public function init():CutSceneObject {
-			this.pixels.fillRect(this.pixels.rect, 0);
+			this.reset(0,0);
+			//this.pixels.fillRect(this.pixels.rect, 0);
 			_is_talk = false;
 			return this;
 		}

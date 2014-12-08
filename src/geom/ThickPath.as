@@ -7,6 +7,7 @@ package geom {
 
 	public class ThickPath extends FlxPath {
 		public var thickness:Number;
+		public var _level:Number = 0;
 		
 		public function ThickPath(nodes:Array, Thickness:Number) {
 			super(nodes);

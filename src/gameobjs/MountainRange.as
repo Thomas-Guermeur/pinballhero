@@ -9,9 +9,12 @@ package gameobjs
 	 */
 	public class MountainRange extends FlxGroup {
 		
+		public var _level:Number = 0;
+		
 		private var mountains:ThickPath;
 		
 		public function init(Mountains:ThickPath):MountainRange {
+			this.revive();
 			mountains = Mountains;
 			mountains.createSprites(this);
 			return this;

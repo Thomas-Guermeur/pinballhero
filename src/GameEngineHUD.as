@@ -18,15 +18,19 @@ package
 			super.add(_castle_finish_ui);
 			
 			_tiltBar = new FlxSprite(963, 0, Resource.HUD_TILTBAR).set_cameras([g._hudcamera]);
+			_tiltBar.cameras = [g._hudcamera];
 			this.add(_tiltBar);
 			
 			_tiltText = new FlxSprite(966, 20, Resource.HUD_TILTTEXT).set_cameras([g._hudcamera]);
+			_tiltText.cameras  = [g._hudcamera];
 			this.add(_tiltText);
 			
 			_castle_finish_bar = new FlxSprite(0, 340, Resource.CASTLE_FINISH_COVER);
+			_castle_finish_bar.cameras  = [g._hudcamera];
 			_castle_finish_ui.add(_castle_finish_bar);
 			
 			_castle_finish_text = Util.cons_text(0, 355, "", 0xFFFFFF, 24, 1000);
+			_castle_finish_text.cameras = [g._hudcamera];
 			_castle_finish_text.alignment = "center";
 			_castle_finish_ui.add(_castle_finish_text);
 			
@@ -57,7 +61,9 @@ package
 								if (_castle_finish_ui_remaining_messages.length > 0) {
 									_castle_finish_text_scroll.load(_castle_finish_ui_remaining_messages.shift());
 								} else {
-									//trace("finish transition.....");
+									g.transition_next_level();
+									_castle_finish_ui.visible = false;
+									_gameui.visible = true;
 								}
 							}
 						}

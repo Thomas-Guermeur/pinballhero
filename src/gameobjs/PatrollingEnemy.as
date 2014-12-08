@@ -15,6 +15,11 @@ package gameobjs
 		private var outbound:Boolean = true;
 		private var start:FlxPoint, end:FlxPoint;
 		
+		public function init():PatrollingEnemy {
+			this.reset(0,0);
+			return this;
+		}
+		
 		public function patrolTo(px:Number, py:Number):void {
 			start.x = x;
 			start.y = y;

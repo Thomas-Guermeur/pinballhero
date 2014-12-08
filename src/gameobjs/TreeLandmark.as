@@ -13,6 +13,11 @@ package gameobjs {
 			this.loadGraphic(Resource.TREE);
 		}
 		
+		public function init():TreeLandmark {
+			this.reset(0, 0);
+			return this;
+		}
+		
 		public override function handleVisitor(visitor:PlayerBall, g:GameEngineState):void {
 			var speed:Number = getVisitorSpeed(visitor);
 			

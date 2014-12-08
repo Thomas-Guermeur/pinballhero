@@ -13,6 +13,11 @@ package gameobjs {
 			this.loadGraphic(Resource.INN);
 		}
 		
+		public function init():InnLandmark {
+			this.reset(0, 0);
+			return this;
+		}
+		
 		public override function handleVisitor(visitor:PlayerBall, g:GameEngineState):void {
 			visitor._hitpoints = visitor._max_hitpoints;
 		}

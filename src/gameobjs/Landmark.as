@@ -14,6 +14,7 @@ package gameobjs
 		public var _respawn_duration:Number = 0;
 		
 		public function landmark_init():Landmark {
+			this.reset(0,0);
 			_visiting_player = null;
 			return this;
 		}

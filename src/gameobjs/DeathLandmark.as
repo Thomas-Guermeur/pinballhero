@@ -15,6 +15,11 @@ package gameobjs {
 			this.loadGraphic(Resource.DEATH);
 		}
 		
+		public function init():DeathLandmark {
+			this.reset(0,0);
+			return this;
+		}
+		
 		public override function handleVisitor(visitor:PlayerBall, g:GameEngineState):void {
 			visitor.hurt(visitor._max_hitpoints);
 		}

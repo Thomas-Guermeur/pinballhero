@@ -17,6 +17,7 @@ package gameobjs
 		}
 		
 		public override function init():GameObject {
+			this.reset(0,0);
 			_hitpoints = _max_hitpoints;
 			_battling_heros.length = 0;
 			_aoe = 1;

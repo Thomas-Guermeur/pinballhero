@@ -15,6 +15,7 @@ package gameobjs
 		}
 		
 		public function init():PrincessHelpPopup {	
+			this.reset(0,0);
 			_kill = false;
 			this.play("play");
 			return this;

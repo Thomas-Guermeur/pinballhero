@@ -26,6 +26,13 @@ package  {
 			_messages.push(msg);
 		}
 		
+		public function clear_messages():void {
+			_messages.length = 0;
+			_text_scroll.clear();
+			_chat_cover.alpha = 0;
+			_text.alpha = 0;
+		}
+		
 		var _chat_cover_vis_mlt:Number = 1;
 		public var _spd:Number = 50;
 		var _ct:Number = 0;

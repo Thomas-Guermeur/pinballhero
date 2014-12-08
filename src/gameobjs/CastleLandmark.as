@@ -19,6 +19,7 @@ package gameobjs {
 		private var _castle_finished:Boolean = false;		
 		private var _princess_help:PrincessHelpPopup;
 		public function init(g:GameEngineState):CastleLandmark {
+			this.reset(0,0);
 			landmark_init();
 			_princess_help = (GameEngineState.cons(PrincessHelpPopup, g._game_objects) as PrincessHelpPopup).init();
 			_castle_finished = false;
@@ -59,11 +60,17 @@ package gameobjs {
 			
 			var hero:CutSceneObject = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_hero_anim().set_centered_position(this.get_center().x-27, this.get_center().y+25) as CutSceneObject;
 			hero.set_scale(1);
-			var princess:CutSceneObject = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_dog_anim().set_centered_position(this.get_center().x+27, this.get_center().y+20) as CutSceneObject;
+			var princess:CutSceneObject;
+			if (g._current_level > 0) {
+				princess = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_princess_anim().set_centered_position(this.get_center().x + 27, this.get_center().y + 20) as CutSceneObject;
+			} else {
+				princess = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_dog_anim().set_centered_position(this.get_center().x + 27, this.get_center().y + 20) as CutSceneObject;
+			}
 			princess.set_talk();
 			princess.set_scale(1);
 			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y + 40, Number.POSITIVE_INFINITY, 2, CameraFocusEvent.PRIORITY_GAMECUTSCENE));
-			g._hud.show_castle_finish_message(g,["Woof Woof!","(Thanks for saving me, but the princess is in another castle!)"]);
+			g._hud.show_castle_finish_message(g, ["Woof Woof!"/*, "(Thanks for saving me, but the princess is in another castle!)"*/]);
+			g._current_mode = GameEngineState.MODE_CASTLE_FINISH_CUTSCENE;
 		}
 		
 	}

@@ -14,6 +14,7 @@ package gameobjs {
 		}
 		
 		public function init():TownLandmark {
+			this.reset(0,0);
 			landmark_init();
 			return this; 
 		}

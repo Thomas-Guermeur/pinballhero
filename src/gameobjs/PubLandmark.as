@@ -13,8 +13,12 @@ package gameobjs {
 			this.loadGraphic(Resource.PUB, true, false, 86, 77);
 			this.addAnimation("on", [0], 8);
 			this.addAnimation("off", [1], 8);
-			
+		}
+		
+		public function init():PubLandmark {
+			this.reset(0, 0);
 			this.play("on");
+			return this;
 		}
 		
 		public override function handleVisitor(visitor:PlayerBall, g:GameEngineState):void {

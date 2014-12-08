@@ -42,6 +42,12 @@ package  {
 			return _buf.length == _words.length;
 		}
 		
+		public function clear():void {
+			_buf = "";
+			_words = "";
+			return;
+		}
+		
 	}
 
 }

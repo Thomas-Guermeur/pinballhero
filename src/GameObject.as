@@ -22,6 +22,7 @@ package
 		
 		public function should_remove(g:GameEngineState):Boolean { return false; }
 		public function do_remove(g:GameEngineState):void { this.kill();  }
+		public var _level:Number = 0;
 	}
 
 }

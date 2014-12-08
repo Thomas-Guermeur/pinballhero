@@ -33,47 +33,41 @@ package  {
 		
 		public var _walls:Array = new Array();
 		
+		public static var MODE_GAME:Number = 0;
+		public static var MODE_CASTLE_FINISH_CUTSCENE:Number = 1;
+		public static var MODE_AIRSHIP_TRANSITION_TO_NEXT:Number = 2;
+		public var _current_mode:Number = 0;
+		
 		public override function create():void {
 			super.update();
-			
+			_bgmgr = new BackgroundManager(this);
+			_background_elements.add(_bgmgr);
 			this.add(_background_elements);
+			
 			this.add(_mountains);
 			this.add(_game_objects);
 			this.add(_player_balls_in_queue);
 			this.add(_player_balls);
 			this.add(_particles);
-
-			
-			
-			
-			
 			FlxG.visualDebug = false;
 			
 			set_zoom(1);
 			_player_balls.cameras = _mountains.cameras = _aimretic_l.cameras = _aimretic_r.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
 			
 			var level:Object = Resource.LEVEL2_DATA_OBJECT;
-			parseLevel(level);
-			
-			_bgmgr = new BackgroundManager(this);
-			_background_elements.add(_bgmgr);
-			
-			for (var i:Number = 0; i < 3; i++) {
-				(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
-			}
+			parseLevel(level, 0, 0);
 			
 			_hud = new GameEngineHUD(this);
 			this.add(_hud);
 			
 			_hud.add(_aimretic_l);
 			_hud.add(_aimretic_r);
-			
 			_hud.add(_healthbars);
 			
 			_chatmanager = new ChatManager(this);
 			_chatmanager.push_message("And so our story begins...");
 			_hud.add(_chatmanager);
-			
+		
 			_next_hero_popup = new NextHeroPopup(this);
 			_hud.add(_next_hero_popup);
 			
@@ -81,12 +75,90 @@ package  {
 			FlxG.camera.focusOn(new FlxPoint(_current_town.get_center().x, _current_town.get_center().y));
 			_max_gold_until_next_ball = 15;
 			_gold_until_next_ball = _max_gold_until_next_ball;
+			
+			_current_mode = MODE_GAME;
+			set_starting_balls(3);
+		}
+		
+		public function set_starting_balls(n:Number):void {
+			for (var i:Number = 0; i < n; i++) {
+				add_ball(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
+			}
+		}
+				
+		public override function update():void {
+			super.update();
+			
+			if (_current_mode == MODE_GAME) {
+				_hud.game_update(this);
+				_next_hero_popup.game_update(this);
+				update_heroes_in_queue();
+				update_camera();
+				update_aimretic();
+				_chatmanager.game_update(this);
+				_bgmgr.game_update(this);
+				update_tilt();			
+				update_gameobjs();
+				update_particles();
+				update_shoot_ball();
+				update_bonus_balls();
+			
+			} else if (_current_mode == MODE_CASTLE_FINISH_CUTSCENE) {
+				_hud.game_update(this);
+				update_camera();
+				update_gameobjs();
+				
+			} else if (_current_mode == MODE_AIRSHIP_TRANSITION_TO_NEXT) {
+				
+			}
+		}
+		
+		private var _level_offset:FlxPoint = new FlxPoint();
+		public function transition_next_level():void {
+			_current_level++;
+			_level_offset.x += Util.float_random(300,500) * Util.sig_n(Util.float_random( -1, 1));
+			_level_offset.y += 300;
+			_chatmanager.clear_messages();
+			
+			for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
+				var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
+				if (itr_playerball._level == _current_level) continue;
+				if (itr_playerball.alive) itr_playerball.kill();
+			}
+			for (var i_gameobj:Number = _game_objects.length - 1; i_gameobj >= 0; i_gameobj--) {
+				var itr_gameobj:GameObject = _game_objects.members[i_gameobj];
+				if (itr_gameobj._level == _current_level) continue;
+				if (itr_gameobj.alive) itr_gameobj.kill();
+			}
+			for each(var itr:PlayerBall in _player_balls_in_queue.members) {
+				itr.kill();
+			}
+			for (var i_hp:Number = _healthbars.length - 1; i_hp >= 0; i_hp--) {
+				_healthbars.remove(_healthbars.members[i_hp]);
+			}
+			for (var i_particle:Number = _particles.length - 1; i_particle >= 0; i_particle--) {
+				var itr_particle:BaseParticle = _particles.members[i_particle];
+				if (itr_particle.alive) itr_particle.kill();
+			}
+			for (var i_wall:Number = _walls.length-1; i_wall >= 0; i_wall--) {
+				if (_walls[i_wall]._level == _current_level) continue;
+				_walls.splice(i_wall, 1);
+			}
+			for (var i_mtn:Number = _mountains.length - 1; i_mtn >= 0; i_mtn--) {
+				if (_mountains.members[i_mtn]._level == _current_level) continue;
+				_mountains.remove(_mountains.members[i_mtn]);
+			}
+			_hold_mouse_ct = 0;
+			_camera_focus_events.length = 0;
+			parseLevel(Resource.LEVEL2_DATA_OBJECT, _level_offset.x, _level_offset.y);
+			set_starting_balls(3);
+			//_current_mode = MODE_AIRSHIP_TRANSITION_TO_NEXT;
+			_current_mode = MODE_GAME;
 		}
 		
 		public static var ZOOM_CONST:Number = 0.3;
 		public var _gamecamera:FlxCamera = null;
 		public var _hudcamera:FlxCamera = null;
-		
 		public function set_zoom(zoom_scale:Number):void {
 			var neu_camera:FlxCamera;
 			if (_gamecamera == null) {
@@ -112,10 +184,8 @@ package  {
 		
 		private var _current_zoom:Number = 1;
 		private var _current_focus:FlxPoint = new FlxPoint();
-		
 		private var _hold_mouse_ct:Number = 0;
 		private var _hold_mouse_ct_max:Number = 75;
-		
 		public var _camera_focus_events:Vector.<CameraFocusEvent> = new Vector.<CameraFocusEvent>();
 		
 		private function update_camera():void {
@@ -216,17 +286,55 @@ package  {
 			set_zoom(_current_zoom);
 		}
 		
-		public override function update():void {
-			super.update();
-			
-			_hud.game_update(this);
-			_next_hero_popup.game_update(this);
-			update_heroes_in_queue();
-			update_camera();
-			update_aimretic();
-			_chatmanager.game_update(this);
-			_bgmgr.game_update(this);
-			
+		public var _gold_until_next_ball:Number;
+		public var _max_gold_until_next_ball:Number;
+		public function add_ball(x:Number, y:Number):void {
+			var pb:PlayerBall = (cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(x, y) as PlayerBall;
+			pb._level = _current_level;
+		}
+		
+		private function update_bonus_balls():void {
+			if (_gold_until_next_ball <= 0) {
+				add_ball(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
+				_max_gold_until_next_ball += 5;
+				_gold_until_next_ball = _max_gold_until_next_ball;
+				_chatmanager.push_message("A new hero has joined the battle!");
+				_camera_focus_events.push(new CameraFocusEvent(_current_town.get_center().x, _current_town.get_center().y+40, 30, 1.1));
+			}
+		}
+		
+		private function update_shoot_ball():void {
+			if (FlxG.mouse.justReleased() && _player_balls_in_queue.countLiving() > 0) {
+				var neu_ball:PlayerBall = (cons(PlayerBall, _player_balls) as PlayerBall).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
+				neu_ball._launched_ct = 0;
+				var dir:Vector3D = Util.normalized(Util.wmouse_x() - _current_town.get_center().x, Util.wmouse_y() - _current_town.get_center().y);
+				var scf:Number = _hold_mouse_ct / _hold_mouse_ct_max;
+				dir.scaleBy(2 + 9 * scf);
+				_hold_mouse_ct = 0;
+				neu_ball.velocity.x = dir.x;
+				neu_ball.velocity.y = dir.y;
+				
+				for (var i:Number = 0; i < _player_balls_in_queue.length; i++) {
+					if (_player_balls_in_queue.members[i].alive) {
+						_player_balls_in_queue.members[i].kill();
+						break;
+					}
+				}
+				_chatmanager.push_message("A hero sets out on his quest!");
+			}
+		}
+		
+		private function update_particles():void {
+			for (var i_particle:Number = _particles.length - 1; i_particle >= 0; i_particle--) {
+				var itr_particle:BaseParticle = _particles.members[i_particle];
+				if (itr_particle.alive) {
+					itr_particle.game_update(this)
+					if (itr_particle.should_remove(this)) itr_particle.do_remove(this);
+				}
+			}
+		}
+		
+		private function update_gameobjs():void {
 			for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 				var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
 				if (itr_playerball.alive) {
@@ -247,55 +355,11 @@ package  {
 					if (itr_gameobj.should_remove(this)) itr_gameobj.do_remove(this);
 				}
 			}
-			
-			for (var i_particle:Number = _particles.length - 1; i_particle >= 0; i_particle--) {
-				var itr_particle:BaseParticle = _particles.members[i_particle];
-				if (itr_particle.alive) {
-					itr_particle.game_update(this)
-					if (itr_particle.should_remove(this)) itr_particle.do_remove(this);
-				}
-			}
-			
-			if (FlxG.mouse.justReleased() && _player_balls_in_queue.countLiving() > 0) {
-				var neu_ball:PlayerBall = (cons(PlayerBall, _player_balls) as PlayerBall).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
-				neu_ball._launched_ct = 0;
-				var dir:Vector3D = Util.normalized(Util.wmouse_x() - _current_town.get_center().x, Util.wmouse_y() - _current_town.get_center().y);
-				var scf:Number = _hold_mouse_ct / _hold_mouse_ct_max;
-				dir.scaleBy(2 + 9 * scf);
-				_hold_mouse_ct = 0;
-				neu_ball.velocity.x = dir.x;
-				neu_ball.velocity.y = dir.y;
-				
-				for (var i:Number = 0; i < _player_balls_in_queue.length; i++) {
-					if (_player_balls_in_queue.members[i].alive) {
-						_player_balls_in_queue.members[i].kill();
-						break;
-					}
-				}
-				_chatmanager.push_message("A hero sets out on his quest!");
-			}
-			
-			if (_gold_until_next_ball <= 0) {
-				add_ball(_current_town.get_center().x + 400, _current_town.get_center().y + Util.float_random( -250, 250));
-				_max_gold_until_next_ball += 5;
-				_gold_until_next_ball = _max_gold_until_next_ball;
-				_chatmanager.push_message("A new hero has joined the battle!");
-				
-				_camera_focus_events.push(new CameraFocusEvent(_current_town.get_center().x, _current_town.get_center().y+40, 30, 1.1));
-			}
-			
-			update_tilt();
-		}
-		public var _gold_until_next_ball:Number;
-		public var _max_gold_until_next_ball:Number;
-		
-		public function add_ball(x:Number, y:Number):void {
-			(cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(x,y);
 		}
 		
 		public var _tilt_count:Number = 100;
 		public var _tilt_count_max:Number = 100;
-		public function update_tilt():void {
+		private function update_tilt():void {
 			var tilt_up:Boolean = Util.is_key(Util.MOVE_UP, true);
 			var tilt_down:Boolean = Util.is_key(Util.MOVE_DOWN, true);
 			var tilt_left :Boolean = Util.is_key(Util.MOVE_LEFT, true);
@@ -326,7 +390,7 @@ package  {
 			}
 		}
 		
-		public function update_heroes_in_queue():void {
+		private function update_heroes_in_queue():void {
 			for each(var itr:PlayerBall in _player_balls_in_queue.members) {
 				var ct:Number = itr.is_nth_is_group(_player_balls_in_queue);
 				var theta:Number = Math.PI*0.2 * ct;
@@ -357,40 +421,68 @@ package  {
 			}
 		}
 		
+			public function update_aimretic():void {
+			_aimretic_l.set_position(_current_town.get_center().x, _current_town.get_center().y - 150);
+			_aimretic_r.set_position(_current_town.get_center().x, _current_town.get_center().y - 150);
+						
+			var next_hero_popup_tar_alpha:Number = 1;
+			if (FlxG.mouse.pressed() && _player_balls_in_queue.countLiving() > 0) {
+				var pct:Number = _hold_mouse_ct / _hold_mouse_ct_max;
+
+				_aimretic_l.angle = Util.RAD_TO_DEG * Math.atan2(Util.wmouse_y() - _current_town.get_center().y, Util.wmouse_x() - _current_town.get_center().x) + 90 + 45 * (1-pct);
+				_aimretic_r.angle = Util.RAD_TO_DEG * Math.atan2(Util.wmouse_y() - _current_town.get_center().y, Util.wmouse_x() - _current_town.get_center().x) + 90 - 45 * (1-pct);
+				
+				_aimretic_l.alpha = pct*pct;
+				_aimretic_l.visible = true;
+				_aimretic_r.alpha = pct*pct;
+				_aimretic_r.visible = true;
+				_aimretic_l.set_scale( 1 + 0.75 * (1 - pct));
+				_aimretic_r.set_scale(1 + 0.75 * (1 - pct));
+				next_hero_popup_tar_alpha = 0;
+			} else {
+				_aimretic_l.visible = false;
+				_aimretic_r.visible = false;
+				next_hero_popup_tar_alpha = Util.pt_dist(Util.smouse_x(),Util.smouse_y(),500,250)/300 + 0;
+			}
+			_next_hero_popup.set_alpha(Util.drp(_next_hero_popup.get_alpha(),next_hero_popup_tar_alpha,10));
+		}
+		
 		public function pickup_gold():void {
 			_gold_until_next_ball--;
 		}
 		
-		public function parseLevel(level:Object):void {
+		public var _current_level:Number = 0;
+		public function parseLevel(level:Object, offsetx:Number, offsety:Number):void {
 			for each (var p:Object in level.islands) {
 				var tp:ThickPath = new ThickPath(new Array(
-					new FlxPoint(p.x1, -p.y1),
-					new FlxPoint(p.x2, -p.y2)
+					new FlxPoint(p.x1 + offsetx, -p.y1 + offsety),
+					new FlxPoint(p.x2 + offsetx, -p.y2 + offsety)
 				), 30);
-				
+				tp._level = _current_level;
 				_walls.push(tp);
 				// wrap mountains in FlxSprite
 				var tmp:MountainRange = new MountainRange();
 				tmp.cameras = _mountains.cameras;
 				tmp.init(tp);
+				tmp._level = _current_level;
 				_mountains.add(tmp);
 			}
 			
 			var mark:GameObject;
 			for each (var obj:Object in level.objects) {
-				var objx:Number = obj.x;
-				var objy:Number = -obj.y;
+				var objx:Number = obj.x + offsetx;
+				var objy:Number = -obj.y + offsety;
 				
 				switch (obj.type) {
-				case "1upobject":
-					mark = _current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(objx,objy) as TownLandmark);
-					break;
-				case "birdflock":
-					mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(objx,objy);
-					break;
-				case "coin":
-					mark = (cons(CastleLandmark, _game_objects) as CastleLandmark).init(this).set_centered_position(objx,objy);
-					break;
+					case "1upobject":
+						mark = _current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(objx,objy) as TownLandmark);
+						break;
+					case "birdflock":
+						mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(objx,objy);
+						break;
+					case "coin":
+						mark = (cons(CastleLandmark, _game_objects) as CastleLandmark).init(this).set_centered_position(objx,objy);
+						break;
 					
 				/*	
 				case "sign": //make negative !!!!
@@ -431,39 +523,10 @@ package  {
 					break;
 				*/
 				}
-				_game_objects.add(mark);
+				mark._level = _current_level;
 			}
 		}
 		
-		public function update_aimretic():void {
-			_aimretic_l.set_position(_current_town.get_center().x, _current_town.get_center().y - 150);
-			_aimretic_r.set_position(_current_town.get_center().x, _current_town.get_center().y - 150);
-						
-			var next_hero_popup_tar_alpha:Number = 1;
-			if (FlxG.mouse.pressed() && _player_balls_in_queue.countLiving() > 0) {
-				var pct:Number = _hold_mouse_ct / _hold_mouse_ct_max;
-
-				_aimretic_l.angle = Util.RAD_TO_DEG * Math.atan2(Util.wmouse_y() - _current_town.get_center().y, Util.wmouse_x() - _current_town.get_center().x) + 90 + 45 * (1-pct);
-				_aimretic_r.angle = Util.RAD_TO_DEG * Math.atan2(Util.wmouse_y() - _current_town.get_center().y, Util.wmouse_x() - _current_town.get_center().x) + 90 - 45 * (1-pct);
-				
-				_aimretic_l.alpha = pct*pct;
-				_aimretic_l.visible = true;
-				_aimretic_r.alpha = pct*pct;
-				_aimretic_r.visible = true;
-				_aimretic_l.set_scale( 1 + 0.75 * (1 - pct));
-				_aimretic_r.set_scale(1 + 0.75 * (1 - pct));
-				next_hero_popup_tar_alpha = 0;
-			} else {
-				_aimretic_l.visible = false;
-				_aimretic_r.visible = false;
-				next_hero_popup_tar_alpha = Util.pt_dist(Util.smouse_x(),Util.smouse_y(),500,250)/300 + 0;
-			}
-			_next_hero_popup.set_alpha(Util.drp(_next_hero_popup.get_alpha(),next_hero_popup_tar_alpha,10));
-		}
-		
-		/**
-		 * Pool together objects of the given class for reuse
-		 */
 		public static function cons(gameClass:Class, g:FlxGroup):GameObject {
 			var rtv:GameObject = g.getFirstAvailable(gameClass) as GameObject;
 			if (rtv == null) {

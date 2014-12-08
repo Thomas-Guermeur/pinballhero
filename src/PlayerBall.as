@@ -12,6 +12,9 @@ package
 	 */
 	public class PlayerBall extends GameObject
 	{
+		
+		public var tmp = 0;
+		
 		public static const CELEBRATORY_TIME:int = 60;
 		public static const SIGN_TIME:int = 40;
 		
@@ -23,18 +26,20 @@ package
 		public var _invuln_ct:Number = 0;
 		
 		public function init():GameObject {
+			this.reset(0, 0);
 			_hitpoints = _max_hitpoints;
 			_battling_enemies.length = 0;
 			_pause_time = 0;
 			_sign_time = 0;
 			_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 5, _attack_anim_ct_max + 5);
+			_battling_enemies.length = 0;
+			_visiting_landmark = null;
+			visible = true;
+			
 			
 			this.set_scale(1);
-			
-			this.reset(0, 0);
 			this.play("walk");
 			this.set_timestamp();
-			play("walk");
 			_invuln_ct = 0;
 			return this;
 		}

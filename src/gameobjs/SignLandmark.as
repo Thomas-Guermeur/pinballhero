@@ -15,6 +15,11 @@ package gameobjs {
 			this.loadGraphic(Resource.SIGN);
 		}
 		
+		public function init():SignLandmark {
+			this.reset(0, 0);
+			return this;
+		}
+		
 		public override function handleVisitor(visitor:PlayerBall, g:GameEngineState):void {
 			var speed:Number = getVisitorSpeed(visitor);
 			visitor.velocity.x = speed * Math.cos(radians);

@@ -19,6 +19,9 @@ package
 		[Embed(source = "../resc/character/princess.png")] public static var PRINCESS:Class;
 		[Embed(source = "../resc/character/dog.png")] public static var DOG:Class;
 		
+		[Embed(source = "../resc/character/airship.png")] public static var AIRSHIP:Class;
+		[Embed(source = "../resc/character/airship_shadow.png")] public static var AIRSHIP_SHADOW:Class;
+		
 		[Embed(source = "../resc/mapobj/town.png")] public static var TOWN:Class;
 		[Embed(source = "../resc/mapobj/castle.png")] public static var CASTLE:Class;
 		[Embed(source = "../resc/mapobj/princess_help.png")] public static var PRINCESS_HELP:Class;
