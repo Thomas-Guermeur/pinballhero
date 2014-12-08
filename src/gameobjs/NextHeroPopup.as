@@ -38,8 +38,8 @@ package gameobjs
 		
 		private function update_positions():void {
 			_bubble.set_position(_town_pos.x, _town_pos.y+offset_y);
-			_toptext.set_position(_town_pos.x+45, _town_pos.y+7+offset_y);
-			_bottomtext.set_position(_town_pos.x+50, _town_pos.y+25+offset_y);
+			_toptext.set_position(_town_pos.x+36, _town_pos.y+25+offset_y);
+			_bottomtext.set_position(_town_pos.x+55, _town_pos.y+45+offset_y);
 		}
 		public function set_alpha(n:Number):void {
 			_bubble.alpha = n;
@@ -51,7 +51,7 @@ package gameobjs
 		}
 		
 		public function game_update(g:GameEngineState) {
-			this.set_town_position(g._current_town.get_center().x -68, g._current_town.get_center().y - 110);
+			this.set_town_position(g._current_town.get_center().x -65, g._current_town.get_center().y - 135);
 			update_positions();
 			
 			theta++;

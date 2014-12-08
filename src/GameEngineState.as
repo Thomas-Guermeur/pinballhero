@@ -44,7 +44,7 @@ package  {
 		
 		public var _keys:Number = 0;
 		
-		static var LOAD_LEVEL = Resource.LEVEL2_DATA;
+		static var LOAD_LEVEL = Resource.LEVEL4_DATA;
 		
 		public override function create():void {
 			super.update();
@@ -94,7 +94,7 @@ package  {
 			_transition_airship.cameras = [_gamecamera];
 			this.add(_transition_airship);
 			
-			if (true) {
+			if (false) {
 				_transition_airship.set_position(_current_town.get_center().x - 2000, _current_town.get_center().y);
 				_transition_airship._transition_initial_pos.x = _transition_airship._pos.x;
 				_transition_airship._transition_initial_pos.y = _transition_airship._pos.y;
@@ -148,16 +148,12 @@ package  {
 				
 		public override function update():void {
 			super.update();
-			
-			//make level 2
-			//make level 3
-			//make level 4
-			
 			//if playerball out of range, kill
-			
+			/*
 			if (Util.is_key(Util.USE_SLOT4, true)) {
 				transition_next_level();
 			}
+			*/
 			
 			if (_initialcover != null) {
 				_initialcover.alpha -= 0.1;
@@ -421,8 +417,8 @@ package  {
 				tar_focus.y = cy;
 				var max_dist:Number = Math.max(Math.abs(maxy - miny), Math.abs(maxx - minx));
 				max_dist = Math.max(max_dist - 200, 0);
-				max_dist = Math.min(max_dist, 1200);
-				tar_zoom = 1 - max_dist / 1200 * 0.7;
+				max_dist = Math.min(max_dist, 1500);
+				tar_zoom = 1 - max_dist / 1500 * 0.85;
 				
 			} else {
 				magn = (magn / 600) * 300;
