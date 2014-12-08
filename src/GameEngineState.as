@@ -37,6 +37,7 @@ package  {
 		public static var MODE_GAME:Number = 0;
 		public static var MODE_CASTLE_FINISH_CUTSCENE:Number = 1;
 		public static var MODE_AIRSHIP_TRANSITION_TO_NEXT:Number = 2;
+		public static var MODE_GAME_OVER:Number = 3;
 		public var _current_mode:Number = 0;
 		
 		public override function create():void {
@@ -77,10 +78,10 @@ package  {
 			_max_gold_until_next_ball = 15;
 			_gold_until_next_ball = _max_gold_until_next_ball;
 			
-			var beach:FlxSprite = new FlxSprite(_current_town.get_center().x - 1500 -727, _current_town.get_center().y - 350, Resource.BEACH_ENTRY);
-			beach.cameras = [_gamecamera];
-			beach.set_scale(2);
-			this.add(beach);
+			_beach = new FlxSprite(_current_town.get_center().x - 1500 -727, _current_town.get_center().y - 350, Resource.BEACH_ENTRY);
+			_beach.cameras = [_gamecamera];
+			_beach.set_scale(2);
+			this.add(_beach);
 			
 			_transition_airship = new TransitionAirship(this);
 			this.add(_transition_airship);
@@ -98,7 +99,14 @@ package  {
 			_current_focus.x = -480;
 			_current_focus.y = -520;
 			_current_zoom = 0.8;
+			
+			_initialcover = new FlxSprite();
+			_initialcover.cameras = [_hudcamera];
+			_initialcover.makeGraphic(1000, 500, 0xAA000000);
+			this.add(_initialcover);
 		}
+		public var _beach:FlxSprite;
+		public var _initialcover:FlxSprite;
 		public var _hold_focus:Number = 0;
 		
 		public function set_starting_balls(n:Number):void {
@@ -109,8 +117,19 @@ package  {
 				
 		public override function update():void {
 			super.update();
+			if (_initialcover != null) {
+				_initialcover.alpha -= 0.1;
+				if (_initialcover.alpha <= 0) {
+					this.remove(_initialcover);
+					_initialcover = null;
+				}
+			}
 			
 			if (_current_mode == MODE_GAME) {
+				if (_beach != null) {
+					this.remove(_beach);
+					_beach = null;
+				}
 				_next_hero_popup.game_update(this);
 				update_heroes_in_queue();
 				update_camera();
@@ -123,7 +142,19 @@ package  {
 				update_shoot_ball();
 				update_bonus_balls();
 				_hud.game_update(this);
-			
+				
+				if (_player_balls.countLiving() == 0 && _player_balls_in_queue.countLiving() == 0) {
+					_current_mode = MODE_GAME_OVER;
+					_hud.game_over();
+				}
+			} else if (_current_mode == MODE_GAME_OVER) {
+				_hud.game_update(this);
+				update_gameobjs();
+				update_particles();
+				if (Util.is_key(Util.USE_SLOT1, true)) {
+					FlxG.switchState(new GameEngineState());
+				}
+				
 			} else if (_current_mode == MODE_CASTLE_FINISH_CUTSCENE) {
 				_hud.game_update(this);
 				update_camera();
@@ -168,6 +199,7 @@ package  {
 							if (_mountains.members[i_mtn]._level == _current_level) continue;
 							_mountains.remove(_mountains.members[i_mtn]);
 						}
+						if (_chatmanager._messages.length == 0) _chatmanager.push_message("And so the heroes arrived in a new region.");
 						set_starting_balls(3);
 						_hud._gameui.visible = true;
 					}

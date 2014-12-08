@@ -17,6 +17,7 @@ package
 		{
 			super.add(_gameui);
 			super.add(_castle_finish_ui);
+			super.add(_gameover_ui);
 			
 			_tiltBar = new FlxSprite(963, 0, Resource.HUD_TILTBAR).set_cameras([g._hudcamera]);
 			_tiltBar.cameras = [g._hudcamera];
@@ -40,6 +41,24 @@ package
 			
 			_gameui.visible = true;
 			_castle_finish_ui.visible = false;
+			_gameover_ui.visible = false;
+			
+			var gmov_cover:FlxSprite = new FlxSprite();
+			gmov_cover.cameras = [g._hudcamera];
+			gmov_cover.makeGraphic(1000, 500, 0xAA000000);
+			var gmov_header:FlxText = Util.cons_text(0, 140, "Game Over", 0xFFFFFF, 62);
+			gmov_header.alignment = "center";
+			var gmov_text1:FlxText = Util.cons_text(0, 230, "With all the heroes defeated, their quest was over.", 0xFFFFFF, 24);
+			gmov_text1.alignment = "center";
+			var gmov_text2:FlxText = Util.cons_text(0, 275, "(But there were more heros awaiting, to start right where they left off...)", 0xFFFFFF, 14);
+			gmov_text2.alignment = "center";
+			var gmov_text3:FlxText = Util.cons_text(0, 320, "Press SPACE to retry", 0xFFFFFF, 14);
+			gmov_text3.alignment = "center";
+			_gameover_ui.add(gmov_cover);
+			_gameover_ui.add(gmov_header);
+			_gameover_ui.add(gmov_text1);
+			_gameover_ui.add(gmov_text2);
+			_gameover_ui.add(gmov_text3);
 		}
 		
 		private var _animct:int = 0;
@@ -92,7 +111,23 @@ package
 				update_tiltbar(g._tilt_count / g._tilt_count_max);
 				_tiltBar.visible = g._player_balls.countLiving() > 0;
 				_tiltText.visible = _tiltText.visible && (g._player_balls.countLiving() > 0);
+				
+			} else if (_gameover_ui.visible) {
+				if (_gameover_ui_alpha < 1) {
+					_gameover_ui_alpha += 0.1;
+				}
+				_gameover_ui.setAll("alpha", _gameover_ui_alpha);
 			}
+		}
+		
+		
+		private var _gameover_ui_alpha:Number = 0;
+		public function game_over():void {
+			_gameui.visible = false;
+			_castle_finish_ui.visible = false;
+			_gameover_ui.visible = true;
+			_gameover_ui.setAll("alpha", 0);
+			_gameover_ui_alpha = 0;
 		}
 		
 		public var _castle_finish_bar:FlxSprite;
@@ -115,6 +150,7 @@ package
 		
 		public var _gameui:FlxGroup = new FlxGroup();
 		public var _castle_finish_ui:FlxGroup = new FlxGroup();
+		public var _gameover_ui:FlxGroup = new FlxGroup();
 		public override function add(Object:FlxBasic):FlxBasic
 		{
 			return _gameui.add(Object);
