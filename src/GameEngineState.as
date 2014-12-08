@@ -57,7 +57,7 @@ package  {
 			set_zoom(1);
 			_player_balls.cameras = _mountains.cameras = _aimretic_l.cameras = _aimretic_r.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
 			
-			parseLevel(Resource.LEVEL2_DATA_OBJECT, 0, 0);
+			parseLevel(Resource.LEVEL1_DATA_OBJECT, 0, 0);
 			
 			_hud = new GameEngineHUD(this);
 			this.add(_hud);
@@ -95,7 +95,7 @@ package  {
 			_current_mode = MODE_AIRSHIP_TRANSITION_TO_NEXT;
 			_hud._gameui.visible = false;
 			
-			_hold_focus = 35;
+			_hold_focus = 70;
 			_current_focus.x = -480;
 			_current_focus.y = -520;
 			_current_zoom = 0.8;
@@ -177,7 +177,7 @@ package  {
 						_transition_airship._transition_initial_pos.y = _transition_airship._pos.y;
 					}
 				} else if (_transition_airship._mode == 1) {
-					_transition_airship._transition_t += 0.01;
+					_transition_airship._transition_t += 0.005;
 					var neu_pos:FlxPoint =  Util.lerp_pos(_transition_airship._transition_initial_pos, _current_town.get_center(), _transition_airship._transition_t);
 					_transition_airship.set_position(neu_pos.x, neu_pos.y);
 					if (_transition_airship._transition_t >= 1) {
@@ -248,7 +248,7 @@ package  {
 			this.add(_transition_airship);
 			
 			_transition_airship.set_position(_hud._castle_transition_start.x,_hud._castle_transition_start.y+30);
-			parseLevel(Resource.LEVEL2_DATA_OBJECT, _level_offset.x, _level_offset.y);
+			parseLevel(Resource.LEVEL1_DATA_OBJECT, _level_offset.x, _level_offset.y);
 			_current_mode = MODE_AIRSHIP_TRANSITION_TO_NEXT;
 		}
 		

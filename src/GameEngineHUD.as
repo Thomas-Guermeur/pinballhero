@@ -43,6 +43,9 @@ package
 			_castle_finish_ui.visible = false;
 			_gameover_ui.visible = false;
 			
+			_tiltBar.visible = false;
+			_tiltText.visible = false;
+			
 			var gmov_cover:FlxSprite = new FlxSprite();
 			gmov_cover.cameras = [g._hudcamera];
 			gmov_cover.makeGraphic(1000, 500, 0xAA000000);
