@@ -31,7 +31,7 @@ package gameobjs {
 		
 		public override function game_update(g:GameEngineState):void {
 			if (!_has_loaded_camera_evt) {
-				g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y + 40, 140, 0.9, CameraFocusEvent.PRIORITY_REGULAR));
+				g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y - 80, 180, 0.9, CameraFocusEvent.PRIORITY_GAMECUTSCENE));
 				_has_loaded_camera_evt = true;
 			}
 			_princess_help.set_castle_pos(this.get_center().x, this.get_center().y);

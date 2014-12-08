@@ -16,6 +16,7 @@ package gameobjs
 		
 		var _available:Boolean = false;
 		public function init():KeyGameObject {
+			this.reset(0, 0);
 			_available = true;
 			return this;
 		}

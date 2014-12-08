@@ -53,6 +53,7 @@ package gameobjs {
 			var radians:Number = -velocityRad + 2 * collideRad;
 			itr_playerball.velocity.x = speed * Math.cos(radians);
 			itr_playerball.velocity.y = speed * Math.sin(radians);
+			itr_playerball._hitpoints--;
 		}
 	}
 

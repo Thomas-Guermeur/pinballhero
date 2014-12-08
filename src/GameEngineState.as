@@ -43,7 +43,7 @@ package  {
 		
 		public var _keys:Number = 0;
 		
-		static var LOAD_LEVEL = Resource.LEVEL2_DATA_OBJECT;
+		static var LOAD_LEVEL = Resource.LEVEL1_DATA_OBJECT;
 		
 		public override function create():void {
 			super.update();
@@ -148,7 +148,9 @@ package  {
 				update_tilt();			
 				update_gameobjs();
 				update_particles();
-				update_shoot_ball();
+				if (!_cutscene_camera_event) {
+					update_shoot_ball();
+				}
 				update_bonus_balls();
 				_hud.game_update(this);
 				
@@ -292,7 +294,7 @@ package  {
 		private var _hold_mouse_ct:Number = 0;
 		private var _hold_mouse_ct_max:Number = 75;
 		public var _camera_focus_events:Vector.<CameraFocusEvent> = new Vector.<CameraFocusEvent>();
-		
+		private var _cutscene_camera_event:Boolean = false;
 		private function update_camera():void {
 			var tar_focus:FlxPoint = new FlxPoint(_current_focus.x, _current_focus.y);
 			var tar_zoom:Number = _current_zoom;
@@ -313,6 +315,7 @@ package  {
 					camera_focus_events_regular.push(c);
 				}
 			}
+			_cutscene_camera_event = false;
 			if (_hold_focus > 0) {
 				_hold_focus--;
 				tar_zoom = _current_zoom;
@@ -329,6 +332,7 @@ package  {
 				tar_focus.y = c._position.y;
 				tar_zoom = c._zoom_tar;
 				drpf = 30;
+				_cutscene_camera_event = true;
 				
 			} else if (FlxG.mouse.pressed() && _player_balls_in_queue.countLiving() > 0) {
 				_hold_mouse_ct = Math.min(_hold_mouse_ct+1,_hold_mouse_ct_max);
@@ -605,7 +609,7 @@ package  {
 						break;
 					case "gate":
 						mark = (cons(GateLandmark, _game_objects) as GateLandmark).init().set_centered_position(objx, objy);
-						mark.angle = Util.RAD_TO_DEG * Math.atan2(obj.dir.y, obj.dir.x);
+						mark.angle = Util.RAD_TO_DEG * Math.atan2(-obj.dir.y, obj.dir.x);
 						break;
 					case "key":
 						mark = (cons(KeyGameObject, _game_objects) as KeyGameObject).init().set_centered_position(objx, objy);
