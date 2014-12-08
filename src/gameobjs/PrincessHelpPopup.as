@@ -31,7 +31,7 @@ package gameobjs
 				_yoff = -15;
 				_ct = 0;
 			}
-			this.set_centered_position(_castle_pos.x+40, _castle_pos.y-55+_yoff);
+			this.set_centered_position(_castle_pos.x+60, _castle_pos.y-75+_yoff);
 			this.alpha = Util.drp(this.alpha, _tar_alpha, 5);
 		}
 		

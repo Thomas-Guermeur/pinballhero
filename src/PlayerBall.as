@@ -6,6 +6,7 @@ package
 	import gameobjs.*;
 	import org.flixel.plugin.photonstorm.FlxBar;
 	import particles.RotateFadeParticle;
+	import enemy.*;
 	/**
 	 * ...
 	 * @author spotco

@@ -1,30 +1,30 @@
 {
-    "islands": [
-        {"hei": 50, "y2": 408.3, "x1": 666.7, "ndir": "left", "y1": 503.3, "type": "line", "ground": "open", "can_fall": true, "x2": 723.4},
-        {"hei": 50, "y2": 376.6, "x1": 723.4, "ndir": "left", "y1": 408.3, "type": "line", "ground": "open", "can_fall": true, "x2": 820},
-        {"hei": 50, "y2": 415, "x1": 820, "ndir": "left", "y1": 376.6, "type": "line", "ground": "open", "can_fall": true, "x2": 905},
-        {"hei": 50, "y2": 530, "x1": 905, "ndir": "left", "y1": 415, "type": "line", "ground": "open", "can_fall": true, "x2": 991.7},
-        {"hei": 50, "y2": 655, "x1": 741.7, "ndir": "left", "y1": 663.3, "type": "line", "ground": "open", "can_fall": true, "x2": 900},
-        {"hei": 50, "y2": 198.3, "x1": 826.7, "ndir": "left", "y1": 80, "type": "line", "ground": "open", "can_fall": true, "x2": 500},
-        {"hei": 50, "y2": 520, "x1": 500, "ndir": "left", "y1": 198.3, "type": "line", "ground": "open", "can_fall": true, "x2": 431.7},
-        {"hei": 50, "y2": 795, "x1": 431.7, "ndir": "left", "y1": 520, "type": "line", "ground": "open", "can_fall": true, "x2": 510},
-        {"hei": 50, "y2": 990, "x1": 510, "ndir": "left", "y1": 795, "type": "line", "ground": "open", "can_fall": true, "x2": 843},
-        {"hei": 50, "y2": 808.3, "x1": 843, "ndir": "left", "y1": 990, "type": "line", "ground": "open", "can_fall": true, "x2": 1110},
-        {"hei": 50, "y2": 528.3, "x1": 1110, "ndir": "left", "y1": 808.3, "type": "line", "ground": "open", "can_fall": true, "x2": 1226.7},
-        {"hei": 50, "y2": 168.3, "x1": 1226.7, "ndir": "left", "y1": 528.3, "type": "line", "ground": "open", "can_fall": true, "x2": 1150},
-        {"hei": 50, "y2": 80, "x1": 1150, "ndir": "left", "y1": 168.3, "type": "line", "ground": "open", "can_fall": true, "x2": 826.7},
-        {"hei": 50, "y2": 351.6, "x1": 756.7, "ndir": "left", "y1": 346.6, "type": "line", "ground": "open", "can_fall": true, "x2": 895}
-    ],
-    "start_x": 0,
-    "connect_pts": {"y1": 520, "y2": 528.3, "x1": 431.7, "x2": 1226.7},
-    "assert_links": 11,
     "start_y": 0,
+    "islands": [
+        {"x2": 172, "type": "line", "hei": 50, "x1": 332, "ndir": "left", "y1": 446, "can_fall": true, "ground": "open", "y2": 239},
+        {"x2": 262, "type": "line", "hei": 50, "x1": 172, "ndir": "left", "y1": 239, "can_fall": true, "ground": "open", "y2": 140},
+        {"x2": 414, "type": "line", "hei": 50, "x1": 262, "ndir": "left", "y1": 140, "can_fall": true, "ground": "open", "y2": 61},
+        {"x2": 773, "type": "line", "hei": 50, "x1": 414, "ndir": "left", "y1": 61, "can_fall": true, "ground": "open", "y2": 35},
+        {"x2": 876, "type": "line", "hei": 50, "x1": 773, "ndir": "left", "y1": 35, "can_fall": true, "ground": "open", "y2": 260},
+        {"x2": 817, "type": "line", "hei": 50, "x1": 876, "ndir": "left", "y1": 260, "can_fall": true, "ground": "open", "y2": 444},
+        {"x2": 639, "type": "line", "hei": 50, "x1": 817, "ndir": "left", "y1": 444, "can_fall": true, "ground": "open", "y2": 543},
+        {"x2": 332, "type": "line", "hei": 50, "x1": 639, "ndir": "left", "y1": 543, "can_fall": true, "ground": "open", "y2": 446}
+    ],
+    "assert_links": 8,
     "objects": [
-        {"x": 825, "type": "1upobject", "label": "0", "y": 451.6},
-        {"x": 665, "type": "birdflock", "label": "1", "y": 593.3},
-        {"x": 605, "type": "birdflock", "label": "3", "y": 321.6},
-        {"x": 991.7, "type": "birdflock", "label": "4", "y": 315},
-        {"x": 820, "type": "birdflock", "label": "5", "y": 761.7},
-        {"x": 840, "type": "coin", "label": "1", "y": 894}
-    ]
+        {"x": 320, "type": "townstart", "y": 254, "label": "0"},
+        {"x": 686, "type": "castle", "y": 320, "label": "1"},
+        {"x": 576, "type": "town", "y": 159, "label": "2"},
+        {"x": 408, "type": "tree", "y": 149, "label": "3"},
+        {"x": 372, "type": "town", "y": 405, "label": "4"},
+        {"x": 467, "type": "largeslime", "y": 453, "label": "5"},
+        {"x": 542, "type": "key", "y": 489, "label": "6"},
+        {"x": 632, "type": "inn", "y": 510, "label": "7"},
+        {"x": 705, "type": "fox", "y": 477, "label": "8"},
+        {"dir": {"x": -0.77, "y": 0.64}, "x": 793, "type": "gate", "y": 414, "label": "9"},
+        {"x": 831, "type": "dragon", "y": 336, "label": "10"},
+        {"x": 839, "type": "bear", "y": 240, "label": "11"}
+    ],
+    "connect_pts": {"x2": 876, "y1": 239, "x1": 172, "y2": 260},
+    "start_x": 0
 }

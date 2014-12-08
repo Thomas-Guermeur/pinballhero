@@ -6,6 +6,7 @@ package  {
 	import flash.geom.*;
 	import mx.core.FlexApplicationBootstrap;
 	import org.flixel.*;
+	import enemy.*;
 	
 	import gameobjs.*;
 	import geom.ThickPath;
@@ -42,6 +43,8 @@ package  {
 		
 		public var _keys:Number = 0;
 		
+		static var LOAD_LEVEL = Resource.LEVEL2_DATA_OBJECT;
+		
 		public override function create():void {
 			super.update();
 			inst = this;
@@ -59,7 +62,7 @@ package  {
 			set_zoom(1);
 			_player_balls.cameras = _mountains.cameras = _aimretic_l.cameras = _aimretic_r.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
 			
-			parseLevel(Resource.LEVEL2_DATA_OBJECT, 0, 0);
+			parseLevel(LOAD_LEVEL, 0, 0);
 			
 			_hud = new GameEngineHUD(this);
 			this.add(_hud);
@@ -254,7 +257,7 @@ package  {
 			this.add(_transition_airship);
 			
 			_transition_airship.set_position(_hud._castle_transition_start.x,_hud._castle_transition_start.y+30);
-			parseLevel(Resource.LEVEL1_DATA_OBJECT, _level_offset.x, _level_offset.y);
+			parseLevel(LOAD_LEVEL, _level_offset.x, _level_offset.y);
 			_current_mode = MODE_AIRSHIP_TRANSITION_TO_NEXT;
 		}
 		
@@ -585,48 +588,61 @@ package  {
 				var objy:Number = -obj.y + offsety;
 				
 				switch (obj.type) {
-					case "1upobject":
+					case "townstart":
 						mark = _current_town = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(objx,objy) as TownLandmark);
 						break;
-					case "birdflock":
-						mark = (cons(BaseEnemyGameObject, _game_objects) as BaseEnemyGameObject).init().set_centered_position(objx,objy);
-						break;
-					case "coin":
+					case "castle":
 						mark = (cons(CastleLandmark, _game_objects) as CastleLandmark).init(this).set_centered_position(objx,objy);
 						break;
-					case "copter":
+					case "inn":
 						mark = (cons(InnLandmark, _game_objects) as InnLandmark).init().set_centered_position(objx,objy);
 						break;
-					case "dogarmor":
+					case "pub":
 						mark = (cons(PubLandmark, _game_objects) as PubLandmark).init().set_centered_position(objx,objy);
 						break;
-					case "dogbone":
+					case "tree":
 						mark = (cons(TreeLandmark, _game_objects) as TreeLandmark).init().set_centered_position(objx,objy);
 						break;
-					case "cannon":
+					case "gate":
 						mark = (cons(GateLandmark, _game_objects) as GateLandmark).init().set_centered_position(objx, objy);
 						mark.angle = Util.RAD_TO_DEG * Math.atan2(obj.dir.y, obj.dir.x);
 						break;
-					case "dogcape":
+					case "key":
 						mark = (cons(KeyGameObject, _game_objects) as KeyGameObject).init().set_centered_position(objx, objy);
 						break;
-					case "tutorial":
+					case "tutorial_launch":
 						var cso:CutSceneObject = (GameEngineState.cons(CutSceneObject, _game_objects) as CutSceneObject).init();
 						cso.loadGraphic(Resource.TUTORIAL_LAUNCH);
 						cso.set_centered_position(objx, objy);
 						mark = cso;
 						break;
-					case "tutorialend":
+					case "tutorial_tilt":
 						var cso:CutSceneObject = (GameEngineState.cons(CutSceneObject, _game_objects) as CutSceneObject).init();
 						cso.loadGraphic(Resource.TUTORIAL_TILT);
 						cso.set_centered_position(objx, objy);
 						mark = cso;
 						break;
-					case "dogrocket":
+					case "town":
 						mark = ((cons(TownLandmark, _game_objects) as TownLandmark).init().set_centered_position(objx,objy) as TownLandmark);
 						break;
+						
+					case "smallslime":
+						mark = (cons(SmallSlimeEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(objx,objy);
+						break;
+					case "largeslime":
+						mark = (cons(LargeSlimeEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(objx,objy);
+						break;
+					case "fox":
+						mark = (cons(FoxEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(objx,objy);
+						break;
+					case "bear":
+						mark = (cons(BearEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(objx,objy);
+						break;
+					case "dragon":
+						mark = (cons(DragonEnemy, _game_objects) as BaseEnemyGameObject).init().set_centered_position(objx,objy);
+						break;
 				}
-				mark._level = _current_level;
+				if (mark != null) mark._level = _current_level;
 			}
 		}
 		

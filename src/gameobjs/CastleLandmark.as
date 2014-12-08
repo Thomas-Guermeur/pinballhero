@@ -11,7 +11,7 @@ package gameobjs {
 	public class CastleLandmark extends Landmark {
 		
 		public function CastleLandmark() {
-			this.loadGraphic(Resource.CASTLE, true, false, 131, 163);
+			this.loadGraphic(Resource.CASTLE, true, false, 198, 192);
 			this.addAnimation("alive", [0]);
 			this.addAnimation("dead", [1]);
 		}
@@ -28,10 +28,6 @@ package gameobjs {
 			return this;
 		}
 		private var _has_loaded_camera_evt:Boolean = false;
-		
-		public override function get_center():FlxPoint {
-			return new FlxPoint(this.x + 65.5, this.y + 81.5);
-		}
 		
 		public override function game_update(g:GameEngineState):void {
 			if (!_has_loaded_camera_evt) {
@@ -64,15 +60,15 @@ package gameobjs {
 			this.play("dead");
 			_castle_finished = true;
 			
-			var hero:CutSceneObject = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_hero_anim().set_centered_position(this.get_center().x-27, this.get_center().y+25) as CutSceneObject;
+			var hero:CutSceneObject = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_hero_anim().set_centered_position(this.get_center().x-27, this.get_center().y+15) as CutSceneObject;
 			hero.set_scale(1);
 			var princess:CutSceneObject;
-			princess = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_dog_anim().set_centered_position(this.get_center().x + 27, this.get_center().y + 20) as CutSceneObject;
+			princess = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_dog_anim().set_centered_position(this.get_center().x + 27, this.get_center().y + 10) as CutSceneObject;
 			princess.set_talk();
 			princess.set_scale(1);
 			g._game_objects.sort("y", FlxGroup.ASCENDING);
 			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y + 40, Number.POSITIVE_INFINITY, 2, CameraFocusEvent.PRIORITY_GAMECUTSCENE));
-			g._hud.show_castle_finish_message(g, ["Woof Woof!", "(Thanks for saving me, but the princess is in another castle!)"]);
+			g._hud.show_castle_finish_message(g, ["Woof Woof!"/*, "(Thanks for saving me, but the princess is in another castle!)"*/]);
 			g._current_mode = GameEngineState.MODE_CASTLE_FINISH_CUTSCENE;
 			g._hud._castle_transition_start = this.get_center();
 		}

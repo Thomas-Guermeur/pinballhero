@@ -14,8 +14,13 @@ package
 		[Embed(source = "../resc/background/checkertile.png")] public static var CHERCKERTILE:Class;
 		[Embed(source = "../resc/background/beach_entry.png")] public static var BEACH_ENTRY:Class;
 		
-		[Embed(source = "../resc/character/fox_small.png")] public static var ENEMY:Class;
-		[Embed(source = "../resc/character/bear_idle.png")] public static var BEAR:Class;
+		[Embed(source = "../resc/character/slime1.png")] public static var SLIME1:Class;
+		[Embed(source = "../resc/character/slime2.png")] public static var SLIME2:Class;
+		[Embed(source = "../resc/character/fox_small.png")] public static var FOX:Class;
+		[Embed(source = "../resc/character/bear.png")] public static var BEAR:Class;
+		[Embed(source = "../resc/character/dragon.png")] public static var DRAGON:Class;
+		
+		
 		[Embed(source = "../resc/character/Hero1.png")] public static var PLAYER:Class;
 		[Embed(source = "../resc/character/princess.png")] public static var PRINCESS:Class;
 		[Embed(source = "../resc/character/dog.png")] public static var DOG:Class;
