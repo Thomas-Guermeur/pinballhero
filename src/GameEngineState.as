@@ -150,13 +150,17 @@ package  {
 		public override function update():void {
 			super.update();
 			/*
+			if (Util.is_key(Util.USE_SLOT3, true)) {
+				for each(var itr:PlayerBall in _player_balls_in_queue.members) {
+					itr.kill();
+				}
+			}
 			if (Util.is_key(Util.USE_SLOT4, true)) {
 				_hud._castle_transition_start.x = _current_town.get_center().x;
 				_hud._castle_transition_start.y = _current_town.get_center().y;
 				transition_next_level();
 			}
 			*/
-			
 			
 			if (_initialcover != null) {
 				_initialcover.alpha -= 0.1;
@@ -185,8 +189,7 @@ package  {
 				}
 				update_bonus_balls();
 				_hud.game_update(this);
-				
-				if (_player_balls.countLiving() == 0 && _player_balls_in_queue.countLiving() == 0) {
+				if (_player_balls.countLiving() <= 0 && _player_balls_in_queue.countLiving() <= 0) {
 					_current_mode = MODE_GAME_OVER;
 					_hud.game_over();
 				}
@@ -609,6 +612,7 @@ package  {
 		public function parseLevel(level:Object, offsetx:Number, offsety:Number):void {
 			level = JSON.decode((new level as ByteArray).toString());
 			_max_gold_until_next_ball = level.start_x;
+			_gold_until_next_ball = _max_gold_until_next_ball;
 			_current_level_starting_balls = level.start_y;
 			for each (var p:Object in level.islands) {
 				var tp:ThickPath = new ThickPath(new Array(
