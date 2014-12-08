@@ -51,6 +51,11 @@ package gameobjs {
 			}
 		}
 		
+		public override function visit_begin(g:GameEngineState, itr_playerball:PlayerBall):void {
+			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y + 40, Number.POSITIVE_INFINITY, 1, CameraFocusEvent.PRIORITY_GAMECUTSCENE));
+			super.visit_begin(g, itr_playerball);
+		}
+		
 		public override function visit_finished(g:GameEngineState):void {
 			var i:int = 0;
 			for (i = 0; i < 30; i++) {
@@ -60,7 +65,7 @@ package gameobjs {
 			}
 			this.play("dead");
 			_castle_finished = true;
-			
+			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y + 40, Number.POSITIVE_INFINITY, 2, CameraFocusEvent.PRIORITY_GAMECUTSCENE));
 			var hero:CutSceneObject = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_hero_anim().set_centered_position(this.get_center().x-27, this.get_center().y+15) as CutSceneObject;
 			hero.set_scale(1);
 			var princess:CutSceneObject;
@@ -68,7 +73,6 @@ package gameobjs {
 			princess.set_talk();
 			princess.set_scale(1);
 			g._game_objects.sort("y", FlxGroup.ASCENDING);
-			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y + 40, Number.POSITIVE_INFINITY, 2, CameraFocusEvent.PRIORITY_GAMECUTSCENE));
 			g._hud.show_castle_finish_message(g, ["Woof Woof!"/*, "(Thanks for saving me, but the princess is in another castle!)"*/]);
 			g._current_mode = GameEngineState.MODE_CASTLE_FINISH_CUTSCENE;
 			g._hud._castle_transition_start = this.get_center();

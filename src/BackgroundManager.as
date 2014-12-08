@@ -53,9 +53,9 @@ package
 			
 		
 			var view_rect = {
-				x1: center_x - 1000,
+				x1: center_x - 1200,
 				y1: center_y - 1000,
-				x2: center_x + 1000,
+				x2: center_x + 1200,
 				y2: center_y + 1000
 			}
 			var rtv:Vector.<String> = new Vector.<String>();

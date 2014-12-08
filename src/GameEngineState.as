@@ -44,7 +44,7 @@ package  {
 		
 		public var _keys:Number = 0;
 		
-		static var LOAD_LEVEL = Resource.LEVEL4_DATA;
+		static var LOAD_LEVEL = Resource.LEVEL1_DATA;
 		
 		public override function create():void {
 			super.update();
@@ -94,7 +94,7 @@ package  {
 			_transition_airship.cameras = [_gamecamera];
 			this.add(_transition_airship);
 			
-			if (false) {
+			if (true) {
 				_transition_airship.set_position(_current_town.get_center().x - 2000, _current_town.get_center().y);
 				_transition_airship._transition_initial_pos.x = _transition_airship._pos.x;
 				_transition_airship._transition_initial_pos.y = _transition_airship._pos.y;
@@ -114,7 +114,7 @@ package  {
 				this.add(_initialcover);
 			} else {
 				_current_mode = MODE_GAME;
-				this.set_starting_balls(3);
+				this.set_starting_balls(_current_level_starting_balls);
 			}
 		}
 		public var _beach:FlxSprite;
@@ -240,7 +240,7 @@ package  {
 							_mountains.remove(_mountains.members[i_mtn]);
 						}
 						if (_chatmanager._messages.length == 0) _chatmanager.push_message("And so the heroes arrived in a new region.");
-						set_starting_balls(3);
+						set_starting_balls(_current_level_starting_balls);
 						_hud._gameui.visible = true;
 					}
 				}
@@ -418,7 +418,7 @@ package  {
 				var max_dist:Number = Math.max(Math.abs(maxy - miny), Math.abs(maxx - minx));
 				max_dist = Math.max(max_dist - 200, 0);
 				max_dist = Math.min(max_dist, 1500);
-				tar_zoom = 1 - max_dist / 1500 * 0.85;
+				tar_zoom = 1 - max_dist / 1500 * 0.6;
 				
 			} else {
 				magn = (magn / 600) * 300;
@@ -514,7 +514,9 @@ package  {
 			if ((tilt_down || tilt_left || tilt_right || tilt_up) && _tilt_count >= _tilt_count_max) {
 				for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 					var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
-					if (itr_playerball.alive && itr_playerball._battling_enemies.length == 0 && itr_playerball._visiting_landmark == null) {
+					if (!itr_playerball.alive) continue;
+					itr_playerball._pause_time = 0;
+					if (itr_playerball._battling_enemies.length == 0 && itr_playerball._visiting_landmark == null) {
 						if (tilt_left) {
 							if (itr_playerball.velocity.x > 0) itr_playerball.velocity.x *= 0.5;
 							itr_playerball.velocity.x -= 7;
@@ -599,8 +601,11 @@ package  {
 		}
 		
 		public var _current_level:Number = 0;
+		public var _current_level_starting_balls:Number = 3;
 		public function parseLevel(level:Object, offsetx:Number, offsety:Number):void {
 			level = JSON.decode((new level as ByteArray).toString());
+			_max_gold_until_next_ball = level.start_x;
+			_current_level_starting_balls = level.start_y;
 			for each (var p:Object in level.islands) {
 				var tp:ThickPath = new ThickPath(new Array(
 					new FlxPoint(p.x1 + offsetx, -p.y1 + offsety),

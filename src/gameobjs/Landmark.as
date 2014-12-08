@@ -37,11 +37,8 @@ package gameobjs
 					}
 					
 					if (this.is_hit_game_object(itr_playerball)) {
-						_visiting_player = itr_playerball;
-						itr_playerball._visiting_landmark = this;
-						if (g._player_balls.countLiving() == 1) FlxG.shake(0.001, 0.1);
-						this.scale.x = 1.75;
-						_visiting_duration = visit_duration();
+						visit_begin(g,itr_playerball);
+						break;
 					}
 				}
 			}
@@ -67,6 +64,14 @@ package gameobjs
 			}
 		}
 		var _toggle:int = 0;
+		
+		public function visit_begin(g:GameEngineState, itr_playerball:PlayerBall):void {
+			_visiting_player = itr_playerball;
+			itr_playerball._visiting_landmark = this;
+			if (g._player_balls.countLiving() == 1) FlxG.shake(0.001, 0.1);
+			this.scale.x = 1.75;
+			_visiting_duration = visit_duration();
+		}
 		
 		public function visit_finished(g:GameEngineState):void {
 			_visiting_player._visiting_landmark = null;

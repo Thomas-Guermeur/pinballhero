@@ -1,6 +1,6 @@
 {
     "assert_links": 36,
-    "start_y": 0,
+    "start_y": 3,
     "islands": [
         {"x2": 346.7, "type": "line", "hei": 50, "x1": 325, "ndir": "left", "y1": 1348.3, "can_fall": true, "ground": "open", "y2": 980},
         {"x2": 382.9, "type": "line", "hei": 50, "x1": 346.7, "ndir": "left", "y1": 980, "can_fall": true, "ground": "open", "y2": 902.9},
@@ -88,5 +88,5 @@
         {"x": 1010, "type": "inn", "y": 1066.6, "label": "59"}
     ],
     "connect_pts": {"x2": 1783.4, "y1": 1348.3, "x1": 325, "y2": 1291.6},
-    "start_x": 0
+    "start_x": 5
 }

@@ -1,5 +1,5 @@
 {
-    "start_y": 0,
+    "start_y": 3,
     "assert_links": 43,
     "islands": [
         {"x2": 556, "type": "line", "hei": 50, "x1": 514.3, "ndir": "left", "y1": 1391.4, "can_fall": true, "ground": "open", "y2": 1274},
@@ -87,7 +87,6 @@
         {"x": 1641.5, "type": "tree", "y": 908.6, "label": "55"},
         {"x": 1557.2, "type": "smallslime", "y": 984.3, "label": "56"},
         {"x": 1747.2, "type": "smallslime", "y": 1151.4, "label": "57"},
-        {"x": 1704.3, "type": "largeslime", "y": 1255.7, "label": "69"},
         {"x": 1317.2, "type": "largeslime", "y": 1257.1, "label": "70"},
         {"x": 1507.2, "type": "inn", "y": 1082.9, "label": "72"},
         {"x": 1461.5, "type": "fox", "y": 817.1, "label": "73"},
@@ -97,7 +96,9 @@
         {"x": 1814.3, "type": "town", "y": 872.9, "label": "78"},
         {"x": 1047.2, "type": "town", "y": 357.1, "label": "80"},
         {"x": 645.7, "type": "townstart", "y": 1372.9, "label": "81"},
-        {"x": 928.6, "type": "inn", "y": 1714.3, "label": "82"}
+        {"x": 928.6, "type": "inn", "y": 1714.3, "label": "82"},
+        {"x": 1674, "type": "bear", "y": 1268, "label": "0"},
+        {"x": 1722, "type": "largeslime", "y": 1397, "label": "1"}
     ],
-    "start_x": 0
+    "start_x": 5
 }
