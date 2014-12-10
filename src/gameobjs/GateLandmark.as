@@ -44,6 +44,7 @@ package gameobjs
 						.p_set_color(STAR_COLORS[Math.floor(Math.random()*STAR_COLORS.length)]);
 				}
 				if (g._player_balls.countLiving() == 1) FlxG.shake(0.01, 0.1);
+				FlxG.play(Resource.SFX_POWERUP);
 				
 			} else {
 				super.hit_player(g,itr_playerball);

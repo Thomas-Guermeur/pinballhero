@@ -48,6 +48,7 @@ package gameobjs {
 							if (!_picked_up) {
 								_picked_up =  true;
 								g.pickup_gold();
+								FlxG.play(Resource.SFX_COLLECT_1);
 							}
 							break;
 						} else if (dist < 50) {

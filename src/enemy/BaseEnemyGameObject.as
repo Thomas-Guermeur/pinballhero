@@ -45,12 +45,18 @@ package enemy
 			if (_healthbar != null) g._healthbars.remove(_healthbar);
 			_healthbar = null;
 			this.kill();
-			
+			if (this.get_max_hitpoints()>10)FlxG.play(Resource.SFX_BOSS_ENTER );
 			g._chatmanager.push_message("Monster has been slain!");
 			
 			for (var i:Number = 0; i < get_gold_drop(); i++) {
 				(GameEngineState.cons(GoldPickup, g._game_objects) as GoldPickup).init(this.get_center().x + Util.float_random(-10,10), this.get_center().y + Util.float_random(-10,10));
 			}
+			for (i = 0; i < 10; i++) {
+				(GameEngineState.particle_cons(RotateFadeParticle,g._particles) as RotateFadeParticle)
+					.init(this.get_center().x + Util.float_random( -this.width/2, this.width/2), this.get_center().y +  Util.float_random( -this.height/2, this.height/2))
+					.p_set_scale(Util.float_random(1.2, 1.8)).p_set_delay(Util.float_random(0,20));
+			}
+			FlxG.play(Resource.SFX_EXPLOSION);
 		}
 		
 		private var _healthbar:FlxBar;

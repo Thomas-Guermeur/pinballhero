@@ -171,7 +171,7 @@ package  {
 			}
 		}
 		
-		private static var _mute:Boolean = false;
+		private static var _mute:Boolean = true;
 		public static function mute_toggle():void {
 			_mute = !_mute;
 			FlxG.mute = _mute;

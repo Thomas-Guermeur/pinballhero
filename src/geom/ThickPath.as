@@ -14,7 +14,7 @@ package geom {
 			thickness = Thickness;
 		}
 		
-		public function bounceCollision(particle:FlxObject, g:GameEngineState):void {
+		public function bounceCollision(particle:FlxObject, g:GameEngineState):Boolean {
 			var cx:Number = particle.x + particle.width / 2;
 			var cy:Number = particle.y + particle.height / 2;
 			var nextParticle:FlxPoint = new FlxPoint(
@@ -44,6 +44,7 @@ package geom {
 					collisions.push(collide);
 					collideLines.push(wallLine);
 				}
+				/*
 				collide = Line.getIntersection(extLine, playerPath)
 				if (collide) {
 					collisions.push(collide);
@@ -59,6 +60,7 @@ package geom {
 					collisions.push(collide);
 					collideLines.push(sideLine2);
 				}
+				*/
 			}
 			// find closest collision to player
 			var closest:Number = Number.POSITIVE_INFINITY;
@@ -76,7 +78,7 @@ package geom {
 				var vely:int = particle.velocity.y < 0 ? -1 : 1;
 				var velx:int = particle.velocity.x < 0 ? -1 : 1;
 				
-				if (dist < closest && Math.sqrt(dist) <= particle.width) {
+				if (dist < closest/* && Math.sqrt(dist) <= particle.width*/) {
 					closest = dist;
 					collisionLine = collideLines[c];
 					collisionPt = collisions[c];
@@ -102,16 +104,16 @@ package geom {
 					}
 					player.velocity.x *= 0.8;
 					player.velocity.y *= 0.8;
+					FlxG.play(Resource.SFX_JUMP);
 				}
 				
-				//trace(collisionPt.x, collisionPt.y);
 				for (i = 0; i < _imgs_group.length; i++) {
 					var mtn:Mountain = _imgs_group.members[i];
 					mtn.hit(collisionPt.x, collisionPt.y);
 				}
+				return true;
 			}
-			
-			// TODO: maybe return something fancy to render game feel
+			return false;
 		}
 		
 		private var _imgs_group:FlxGroup;

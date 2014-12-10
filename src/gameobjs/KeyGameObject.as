@@ -2,6 +2,7 @@
 package gameobjs 
 {
 	import particles.*;
+	import org.flixel.*;
 	/**
 	 * ...
 	 * @author spotco
@@ -28,7 +29,7 @@ package gameobjs
 				if (itr_playerball.alive && _available && this.is_hit_game_object(itr_playerball)) {
 					_available = false;
 					g._keys++;
-					
+					FlxG.play(Resource.SFX_POWERUP);
 					(GameEngineState.particle_cons(RotateFadeParticle, g._particles) as RotateFadeParticle)
 						.init(get_center().x, get_center().y, Resource.KEY)
 						.p_set_vr(Util.float_random( -30, 30))

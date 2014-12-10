@@ -31,7 +31,7 @@ package gameobjs {
 				if (!_cooldown[itr_playerball._timestamp + ""]) {
 					_cooldown[itr_playerball._timestamp + ""] = 0;
 				}
-				if (this.is_hit_game_object(itr_playerball) && _cooldown[itr_playerball._timestamp+""] <= 0) {
+				if (itr_playerball._invuln_ct <= 0 && itr_playerball._pause_time <= 0 && this.is_hit_game_object(itr_playerball) && _cooldown[itr_playerball._timestamp+""] <= 0) {
 					
 					hit_player(g, itr_playerball);
 					
@@ -41,7 +41,7 @@ package gameobjs {
 		}
 		
 		public function hit_player(g:GameEngineState, itr_playerball:PlayerBall):void {
-			_cooldown[itr_playerball._timestamp] = 10;
+			_cooldown[itr_playerball._timestamp] = 20;
 			this.set_scale(1.7);
 			if (g._player_balls.countLiving() == 1) FlxG.shake(0.001, 0.1);
 			
@@ -54,6 +54,8 @@ package gameobjs {
 			itr_playerball.velocity.x = speed * Math.cos(radians);
 			itr_playerball.velocity.y = speed * Math.sin(radians);
 			itr_playerball._hitpoints--;
+			
+			FlxG.play(Resource.SFX_JUMP);
 		}
 	}
 

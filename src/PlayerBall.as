@@ -28,6 +28,7 @@ package
 		
 		public function init():PlayerBall {
 			this.reset(0, 0);
+			_healthbar = null;
 			_hitpoints = _max_hitpoints;
 			_battling_enemies.length = 0;
 			_pause_time = 0;
@@ -64,6 +65,7 @@ package
 			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y, 50, 1.1));
 			
 			g._chatmanager.push_message("A hero has fallen!");
+			FlxG.play(Resource.SFX_GAMEOVER);
 		}
 		
 		public function PlayerBall() {
@@ -147,6 +149,7 @@ package
 				var attack_this_frame:Boolean = attack_animation_update();
 				play("attack");
 				if (attack_this_frame) {
+					FlxG.play(Resource.SFX_HIT);
 					for (i = _battling_enemies.length-1; i >= 0; i--) {
 						_battling_enemies[i]._hitpoints -= 1;
 						var hfp:Vector3D = new Vector3D(
@@ -169,17 +172,27 @@ package
 				_attack_anim_ct = 0;
 				//this.angle = Util.RAD_TO_DEG * Math.atan2(velocity.y, velocity.x) + 90;
 				var center:FlxPoint = this.get_center();
+				
+				if (Util.point_dist(velocity.x, velocity.y, 0, 0) > 30) {
+					var max:Vector3D = Util.normalized(velocity.x, velocity.y);
+					max.scaleBy(30);
+					velocity.x = max.x;
+					velocity.y = max.y;
+				}
+				
 				center.x += velocity.x;
 				center.y += velocity.y;
 				velocity.y += 0.135;
 				this.set_centered_position(center.x, center.y);
 				_launched_ct++;
 				
+				/*
 				_health_decr_ct--;
 				if (_health_decr_ct <= 0) {
 					_health_decr_ct = 400;
 					_hitpoints--;
 				}
+				*/
 			}
 		}
 		

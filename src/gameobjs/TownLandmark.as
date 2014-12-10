@@ -37,6 +37,7 @@ package gameobjs {
 					if (itr_playerball.alive && itr_playerball._launched_ct > 50 && this.is_hit_game_object(itr_playerball)) {
 						g._current_town = this;
 						g._chatmanager.push_message("Discovered a new town!");
+						FlxG.play(Resource.SFX_POWERUP);
 					}
 				}
 			}

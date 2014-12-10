@@ -6,6 +6,7 @@ package  {
 	import gameobjs.TownLandmark;
 	import flash.geom.*;
 	import mx.core.FlexApplicationBootstrap;
+	import mx.core.FlexSprite;
 	import org.flixel.*;
 	import enemy.*;
 	import com.adobe.serialization.json.*;
@@ -44,12 +45,12 @@ package  {
 		
 		public var _keys:Number = 0;
 		
-		//static var LEVELS:Array = [Resource.LEVEL1_DATA, Resource.LEVEL2_DATA, Resource.LEVEL3_DATA, Resource.LEVEL4_DATA];
-		static var LEVELS:Array = [Resource.LEVELTEST_DATA, Resource.LEVEL2_DATA];
+		static var LEVELS:Array = [Resource.LEVEL1_DATA, Resource.LEVEL2_DATA, Resource.LEVEL3_DATA, Resource.LEVEL4_DATA];
+		//static var LEVELS:Array = [Resource.LEVEL2_DATA, Resource.LEVEL2_DATA];
 		
 		public override function create():void {
 			super.update();
-			
+			Util.play_bgm(Resource.BGM_WORLD);
 			inst = this;
 			_bgmgr = new BackgroundManager(this);
 			_background_elements.add(_bgmgr);
@@ -65,7 +66,6 @@ package  {
 			set_zoom(1);
 			_player_balls.cameras = _mountains.cameras = _aimretic_l.cameras = _aimretic_r.cameras = _game_objects.cameras = _player_balls_in_queue.cameras = _player_balls.cameras = _particles.cameras = _healthbars.cameras = [_gamecamera];
 			
-			_current_level = 0;
 			parseLevel(LEVELS[_current_level], 0, 0);
 			
 			_hud = new GameEngineHUD(this);
@@ -96,7 +96,7 @@ package  {
 			_transition_airship.cameras = [_gamecamera];
 			this.add(_transition_airship);
 			
-			if (true) {
+			if (false) {
 				_transition_airship.set_position(_current_town.get_center().x - 2000, _current_town.get_center().y);
 				_transition_airship._transition_initial_pos.x = _transition_airship._pos.x;
 				_transition_airship._transition_initial_pos.y = _transition_airship._pos.y;
@@ -119,6 +119,18 @@ package  {
 				this.set_starting_balls(_current_level_starting_balls);
 			}
 		}
+		
+		var _fadeout_cover:FlxSprite;
+		var _fadeout_cb:Function;
+		public function make_fadeout_cover(cb:Function):void {
+			_fadeout_cover = new FlxSprite();
+			_fadeout_cover.cameras = [_hudcamera];
+			_fadeout_cover.makeGraphic(1000, 500, 0xFF000000);
+			_fadeout_cover.alpha = 0;
+			_fadeout_cb = cb;
+			this.add(_fadeout_cover);
+		}
+		
 		public var _beach:FlxSprite;
 		public var _initialcover:FlxSprite;
 		public var _hold_focus:Number = 0;
@@ -147,6 +159,8 @@ package  {
 			maxy += 1000;
 			return (x > minx) && (x < maxx) && (y > miny) && (y < maxy);
 		}
+		
+		var _last_keys_any =true;
 				
 		public override function update():void {
 			super.update();
@@ -163,11 +177,18 @@ package  {
 			}
 			*/
 			
+			
 			if (_initialcover != null) {
 				_initialcover.alpha -= 0.1;
 				if (_initialcover.alpha <= 0) {
 					this.remove(_initialcover);
 					_initialcover = null;
+				}
+			}
+			if (_fadeout_cover != null) {
+				_fadeout_cover.alpha += 0.025;
+				if (_fadeout_cover.alpha >= 1) {
+					_fadeout_cb();
 				}
 			}
 			
@@ -183,7 +204,6 @@ package  {
 				_chatmanager.game_update(this);
 				_bgmgr.game_update(this);
 				update_tilt();			
-				update_gameobjs();
 				update_particles();
 				if (!_cutscene_camera_event) {
 					update_shoot_ball();
@@ -194,13 +214,17 @@ package  {
 					_current_mode = MODE_GAME_OVER;
 					_hud.game_over();
 				}
+				update_gameobjs();
+				
 			} else if (_current_mode == MODE_GAME_OVER) {
 				_hud.game_update(this);
 				update_gameobjs();
 				update_particles();
-				if (Util.is_key(Util.USE_SLOT1, true)) {
+				if ((FlxG.keys.any() && !_last_keys_any) || FlxG.mouse.justReleased()) {
 					FlxG.switchState(new GameEngineState());
+					FlxG.play(Resource.SFX_POWERUP);
 				}
+				_last_keys_any = FlxG.keys.any();
 				
 			} else if (_current_mode == MODE_CASTLE_FINISH_CUTSCENE) {
 				_hud.game_update(this);
@@ -250,6 +274,7 @@ package  {
 						if (_chatmanager._messages.length == 0) _chatmanager.push_message("And so the heroes arrived in a new region.");
 						set_starting_balls(_current_level_starting_balls);
 						_hud._gameui.visible = true;
+						FlxG.play(Resource.SFX_POWERUP);
 					}
 				}
 			}
@@ -259,7 +284,14 @@ package  {
 		private var _level_offset:FlxPoint = new FlxPoint();
 		
 		public function transition_next_level():void {
-			_current_level = (_current_level+1)%LEVELS.length;
+			_current_level = (_current_level + 1) % LEVELS.length;
+			if (_current_level == 0) {
+				make_fadeout_cover(function() {
+					FlxG.switchState(new GameEndState());
+				});
+				return;
+			}
+			FlxG.play(Resource.SFX_POWERUP);
 			_level_offset.x += 1500;
 			_level_offset.y += 1000 * (_current_level%2==0?-1:1);
 			_chatmanager.clear_messages();
@@ -455,6 +487,7 @@ package  {
 				_max_gold_until_next_ball += 5;
 				_gold_until_next_ball = _max_gold_until_next_ball;
 				_chatmanager.push_message("A new hero has joined the battle!");
+				FlxG.play(Resource.SFX_POWERUP);
 			}
 		}
 		
@@ -476,6 +509,7 @@ package  {
 					}
 				}
 				_chatmanager.push_message("A hero sets out on his quest!");
+				FlxG.play(Resource.SFX_BULLET4);
 			}
 		}
 		
@@ -490,24 +524,34 @@ package  {
 		}
 		
 		private function update_gameobjs():void {
-			for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
-				var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
-				if (itr_playerball.alive) {
-					itr_playerball.game_update(this);
-					if (itr_playerball._battling_enemies.length == 0 && itr_playerball._pause_time <= 0) {
-						for each (var wall:ThickPath in _walls) {
-							wall.bounceCollision(itr_playerball,this);
-						}
-					}
-					if (itr_playerball.should_remove(this)) itr_playerball.do_remove(this);
-				}
-			}
-			
 			for (var i_gameobj:Number = _game_objects.length - 1; i_gameobj >= 0; i_gameobj--) {
 				var itr_gameobj:GameObject = _game_objects.members[i_gameobj];
 				if (itr_gameobj.alive) {
 					itr_gameobj.game_update(this);
 					if (itr_gameobj.should_remove(this)) itr_gameobj.do_remove(this);
+				}
+			}
+			for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
+				var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
+				if (itr_playerball.alive) {
+					if (itr_playerball._battling_enemies.length == 0 && itr_playerball._pause_time <= 0) {
+						var bounce:Boolean = false;
+						for each (var wall:ThickPath in _walls) {
+							bounce = bounce || wall.bounceCollision(itr_playerball,this);
+						}
+						if (bounce) {
+							bounce = false;
+							for each (var wall:ThickPath in _walls) {
+								bounce = bounce || wall.bounceCollision(itr_playerball,this);
+							}
+							if (bounce) {
+								itr_playerball.velocity.x = 0;
+								itr_playerball.velocity.y = 0;
+							}
+						}
+					}
+					itr_playerball.game_update(this);
+					if (itr_playerball.should_remove(this)) itr_playerball.do_remove(this);
 				}
 			}
 		}
@@ -520,6 +564,9 @@ package  {
 			var tilt_left :Boolean = Util.is_key(Util.MOVE_LEFT, true);
 			var tilt_right:Boolean = Util.is_key(Util.MOVE_RIGHT, true);
 			if ((tilt_down || tilt_left || tilt_right || tilt_up) && _tilt_count >= _tilt_count_max) {
+				
+				FlxG.play(Resource.SFX_ROCKBREAK);
+				
 				for (var i_playerball:Number = _player_balls.length - 1; i_playerball >= 0; i_playerball--) {
 					var itr_playerball:PlayerBall = _player_balls.members[i_playerball];
 					if (!itr_playerball.alive) continue;
@@ -602,13 +649,16 @@ package  {
 				next_hero_popup_tar_alpha = Util.pt_dist(Util.smouse_x(),Util.smouse_y(),500,250)/300 + 0;
 			}
 			_next_hero_popup.set_alpha(Util.drp(_next_hero_popup.get_alpha(),next_hero_popup_tar_alpha,10));
+			if (_aimretic_l.visible && !_last_aimretic_visible) FlxG.play(Resource.SFX_SPIN);
+			_last_aimretic_visible = _aimretic_l.visible;
 		}
+		var _last_aimretic_visible = true;
 		
 		public function pickup_gold():void {
 			_gold_until_next_ball--;
 		}
 		
-		public var _current_level:Number = 0;
+		public static var _current_level:Number = 0;
 		public var _current_level_starting_balls:Number = 3;
 		public function parseLevel(level:Object, offsetx:Number, offsety:Number):void {
 			level = JSON.decode((new level as ByteArray).toString());
@@ -706,7 +756,7 @@ package  {
 				g.add(rtv);
 			}
 			rtv.cameras = g.cameras;
-			rtv._level = inst._current_level;
+			rtv._level = _current_level;
 			return rtv;
 		}
 		public static function particle_cons(gameClass:Class, g:FlxGroup):BaseParticle {

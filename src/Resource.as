@@ -1,7 +1,7 @@
 package  
 {
 	import flash.utils.ByteArray;
-	
+	import flash.media.Sound;
 	import com.adobe.serialization.json.*;
 	
 	/**
@@ -69,9 +69,9 @@ package
 		
 		[Embed(source = "../resc/mapobj/gold.png")] public static var GOLD:Class;
 		
-		/*[Embed( source = "../resc/sound/punch.mp3" )] public static var SFX_PUNCH:Class;
-		[Embed( source = "../resc/sound/pop.mp3" )] public static var SFX_POP:Class;
-		[Embed( source = "../resc/sound/slap.mp3" )] public static var SFX_SLAP:Class;*/
+		[Embed(source = "../resc/ui/title_screen.png")] public static var TITLE_SCREEN:Class;
+		[Embed(source = "../resc/ui/title_text.png")] public static var TITLE_TEXT:Class;
+		[Embed(source = "../resc/ui/gameover_screen.png")] public static var GAMEOVER_SCREEN:Class;
 		
 		
 		[Embed( source = "../resc/levels/level1.json", mimeType="application/octet-stream")] public static var LEVEL1_DATA:Class;
@@ -79,6 +79,24 @@ package
 		[Embed( source = "../resc/levels/level3.json", mimeType="application/octet-stream")] public static var LEVEL3_DATA:Class;
 		[Embed( source = "../resc/levels/level4.json", mimeType="application/octet-stream")] public static var LEVEL4_DATA:Class;
 		[Embed( source = "../resc/levels/test.json", mimeType="application/octet-stream")] public static var LEVELTEST_DATA:Class;
+	
+		[Embed( source = "../resc/sound/world_bgm.mp3" )] private static var IMPORT_BGM_WORLD:Class;
+		public static var BGM_WORLD:Sound = new IMPORT_BGM_WORLD as Sound;
+		[Embed( source = "../resc/sound/menu_bgm.mp3" )] private static var IMPORT_BGM_MENU:Class;
+		public static var BGM_MENU:Sound = new IMPORT_BGM_MENU as Sound;
+		
+		[Embed( source = "../resc/sound/gameover.mp3" )] public static var SFX_GAMEOVER:Class; 
+		[Embed( source = "../resc/sound/powerup.mp3" )] public static var SFX_POWERUP:Class; 
+		[Embed( source = "../resc/sound/sfx_bone_1.mp3" )] public static var SFX_COLLECT_1:Class; 
+		[Embed( source = "../resc/sound/sfx_explosion.mp3" )] public static var SFX_EXPLOSION:Class; 
+		[Embed( source = "../resc/sound/sfx_hit.mp3" )] public static var SFX_HIT:Class;
+		[Embed( source = "../resc/sound/sfx_rockbreak.mp3" )] public static var SFX_ROCKBREAK:Class; 
+		[Embed( source = "../resc/sound/sfx_spin.mp3" )] public static var SFX_SPIN:Class; 
+		[Embed( source = "../resc/sound/shoot_orca.mp3" )] public static var SFX_BULLET2:Class;
+		[Embed( source = "../resc/sound/shoot1.mp3" )] public static var SFX_BULLET3:Class;
+		[Embed( source = "../resc/sound/shoot2.mp3" )] public static var SFX_BULLET4:Class;
+		[Embed( source = "../resc/sound/sfx_boss_enter.mp3" )] public static var SFX_BOSS_ENTER:Class;
+		[Embed( source = "../resc/sound/sfx_jump.mp3" )] public static var SFX_JUMP:Class;
 	}
 
 }

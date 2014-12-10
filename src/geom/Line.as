@@ -67,10 +67,10 @@ package geom {
 		}
 		
 		public function inBoundingBox(point:FlxPoint):Boolean {
-			var minX:Number = Math.min(start.x, end.x) - 1;
-			var minY:Number = Math.min(start.y, end.y) - 1;
-			var maxX:Number = Math.max(start.x, end.x) + 1;
-			var maxY:Number = Math.max(start.y, end.y) + 1;
+			var minX:Number = Math.min(start.x, end.x) - 0.01;
+			var minY:Number = Math.min(start.y, end.y) - 0.01;
+			var maxX:Number = Math.max(start.x, end.x) + 0.01;
+			var maxY:Number = Math.max(start.y, end.y) + 0.01;
 			
 			return (
 				minX <= point.x && point.x <= maxX &&

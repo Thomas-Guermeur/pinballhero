@@ -31,7 +31,7 @@ package gameobjs {
 		private var _has_loaded_camera_evt:Boolean = false;
 		
 		public override function game_update(g:GameEngineState):void {
-			if (!_has_loaded_camera_evt) {
+			if (!_has_loaded_camera_evt && g._current_mode == GameEngineState.MODE_GAME) {
 				g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y - 80, 180, 0.9, CameraFocusEvent.PRIORITY_GAMECUTSCENE));
 				_has_loaded_camera_evt = true;
 			}
@@ -57,6 +57,7 @@ package gameobjs {
 		}
 		
 		public override function visit_finished(g:GameEngineState):void {
+			FlxG.play(Resource.SFX_EXPLOSION);
 			var i:int = 0;
 			for (i = 0; i < 30; i++) {
 				(GameEngineState.particle_cons(RotateFadeParticle,g._particles) as RotateFadeParticle)
@@ -70,7 +71,7 @@ package gameobjs {
 			var hero:CutSceneObject = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_hero_anim().set_centered_position(this.get_center().x-27, this.get_center().y+15) as CutSceneObject;
 			var princess:CutSceneObject;
 			
-			var current_level:Number = g._current_level;
+			var current_level:Number = GameEngineState._current_level;
 			if (current_level == 0) {
 				princess = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_dog_anim().set_centered_position(this.get_center().x + 27, this.get_center().y + 10) as CutSceneObject;
 				g._hud.show_castle_finish_message(g, ["Woof Woof!", "(Wow such brave, but the princess is in another castle!)"]);

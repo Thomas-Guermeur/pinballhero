@@ -53,8 +53,10 @@ package gameobjs
 				if (_visiting_duration % 15 == 0) {
 					if (_toggle % 2 == 0) {
 						this.scale.y = 1.75;
+						FlxG.play(Resource.SFX_HIT);
 					} else {
 						this.scale.x = 1.75;
+						FlxG.play(Resource.SFX_HIT);
 					}
 					_toggle++;
 				}
@@ -66,6 +68,7 @@ package gameobjs
 		var _toggle:int = 0;
 		
 		public function visit_begin(g:GameEngineState, itr_playerball:PlayerBall):void {
+			FlxG.play(Resource.SFX_SPIN);
 			_visiting_player = itr_playerball;
 			itr_playerball._visiting_landmark = this;
 			if (g._player_balls.countLiving() == 1) FlxG.shake(0.001, 0.1);
@@ -74,6 +77,7 @@ package gameobjs
 		}
 		
 		public function visit_finished(g:GameEngineState):void {
+			FlxG.play(Resource.SFX_POWERUP);
 			_visiting_player._visiting_landmark = null;
 			_visiting_player = null;
 			_respawn_duration = regen_duration();

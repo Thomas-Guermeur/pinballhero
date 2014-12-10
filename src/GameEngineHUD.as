@@ -1,5 +1,6 @@
 package  
 {
+	import mx.core.FlexSprite;
 	import org.flixel.*;
 	import flash.geom.*;
 	/**
@@ -53,6 +54,7 @@ package
 			_tiltBar.visible = false;
 			_tiltText.visible = false;
 			
+			/*
 			var gmov_cover:FlxSprite = new FlxSprite();
 			gmov_cover.cameras = [g._hudcamera];
 			gmov_cover.makeGraphic(1000, 500, 0xAA000000);
@@ -68,7 +70,8 @@ package
 			_gameover_ui.add(gmov_header);
 			_gameover_ui.add(gmov_text1);
 			_gameover_ui.add(gmov_text2);
-			_gameover_ui.add(gmov_text3);
+			_gameover_ui.add(gmov_text3);*/
+			_gameover_ui.add(new FlxSprite(0, 0, Resource.GAMEOVER_SCREEN));
 		}
 		
 		private var _animct:int = 0;
