@@ -46,7 +46,7 @@ package  {
 		public var _keys:Number = 0;
 		
 		static var LEVELS:Array = [Resource.LEVEL1_DATA, Resource.LEVEL2_DATA, Resource.LEVEL3_DATA, Resource.LEVEL4_DATA];
-		//static var LEVELS:Array = [Resource.LEVEL2_DATA, Resource.LEVEL2_DATA];
+		//static var LEVELS:Array = [Resource.LEVELTEST_DATA, Resource.LEVEL2_DATA];
 		
 		public override function create():void {
 			super.update();
@@ -455,7 +455,7 @@ package  {
 				cy /= ct;
 				tar_focus.x = cx;
 				tar_focus.y = cy;
-				var max_dist:Number = Math.max(Math.abs(maxy - miny), Math.abs(maxx - minx));
+				var max_dist:Number = Math.max(maxx - minx, (maxy-miny) * 2);
 				max_dist = Math.max(max_dist - 200, 0);
 				max_dist = Math.min(max_dist, 1500);
 				tar_zoom = 1 - max_dist / 1500 * 0.6;
@@ -704,8 +704,26 @@ package  {
 						mark = (cons(TreeLandmark, _game_objects) as TreeLandmark).init().set_centered_position(objx,objy);
 						break;
 					case "gate":
-						mark = (cons(GateLandmark, _game_objects) as GateLandmark).init().set_centered_position(objx, objy);
+						/*mark = (cons(GateLandmark, _game_objects) as GateLandmark).init().set_centered_position(objx, objy);
+						mark.angle = Util.RAD_TO_DEG * Math.atan2( -obj.dir.y, obj.dir.x);*/
+						
+						var dirby:FlxPoint = new FlxPoint(obj.dir.x, -obj.dir.y);
+						dirby.x *= 100;
+						dirby.y *= 100;
+						
+						var pt1:FlxPoint = new FlxPoint(objx+dirby.x, objy+dirby.y);
+						var pt2:FlxPoint = new FlxPoint(objx-dirby.x, objy-dirby.y);
+						
+						var tp:ThickPath = new ThickPath(new Array(
+							pt1,
+							pt2
+						), 30);
+						tp._level = _current_level;
+						_walls.push(tp);
+						
+						mark = (cons(GateLandmark, _game_objects) as GateLandmark).init(tp).set_centered_position(objx, objy);
 						mark.angle = Util.RAD_TO_DEG * Math.atan2( -obj.dir.y, obj.dir.x);
+						
 						break;
 					case "key":
 						mark = (cons(KeyGameObject, _game_objects) as KeyGameObject).init().set_centered_position(objx, objy);

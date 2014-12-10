@@ -15,6 +15,7 @@ package
 			this.add(img);
 			this.add(_text);
 			Util.play_bgm(Resource.BGM_MENU);
+			
 		}
 		var _text:FlxSprite = new FlxSprite(750, 250, Resource.TITLE_TEXT);
 		var _ct:Number = 0;

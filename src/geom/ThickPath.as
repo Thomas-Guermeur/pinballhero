@@ -12,9 +12,11 @@ package geom {
 		public function ThickPath(nodes:Array, Thickness:Number) {
 			super(nodes);
 			thickness = Thickness;
+			_active = true;
 		}
 		
 		public function bounceCollision(particle:FlxObject, g:GameEngineState):Boolean {
+			if (!_active) return false;
 			var cx:Number = particle.x + particle.width / 2;
 			var cy:Number = particle.y + particle.height / 2;
 			var nextParticle:FlxPoint = new FlxPoint(
@@ -87,7 +89,10 @@ package geom {
 			
 			if (collisionLine) {
 				// bounce player
-				
+				if (_on_trigger != null) {
+					var rtv:Boolean = _on_trigger._on_trigger(g);
+					if (rtv) return false;
+				}
 				var rad:Number = -playerPath.getRadians() + 2 * collisionLine.getRadians();
 				var d:Number = Util.point_dist(0, 0, particle.velocity.x, particle.velocity.y);
 				particle.velocity.x = d * Math.cos(rad);
@@ -107,14 +112,19 @@ package geom {
 					FlxG.play(Resource.SFX_JUMP);
 				}
 				
-				for (i = 0; i < _imgs_group.length; i++) {
-					var mtn:Mountain = _imgs_group.members[i];
-					mtn.hit(collisionPt.x, collisionPt.y);
+				if (_imgs_group != null) {
+					for (i = 0; i < _imgs_group.length; i++) {
+						var mtn:Mountain = _imgs_group.members[i];
+						mtn.hit(collisionPt.x, collisionPt.y);
+					}
 				}
 				return true;
 			}
 			return false;
 		}
+		
+		public var _on_trigger = null;
+		public var _active:Boolean = true;
 		
 		private var _imgs_group:FlxGroup;
 		

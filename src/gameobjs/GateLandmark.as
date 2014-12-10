@@ -1,13 +1,14 @@
 
 package gameobjs 
 {
+	import geom.ThickPath;
 	import particles.*;
 	import org.flixel.*;
 	/**
 	 * ...
 	 * @author spotco
 	 */
-	public class GateLandmark extends TreeLandmark
+	public class GateLandmark extends GameObject
 	{
 		
 		public function GateLandmark() 
@@ -16,22 +17,19 @@ package gameobjs
 		}
 		
 		var _active:Boolean = true;
-		public override function init():TreeLandmark {
+		var _path:ThickPath = null;
+		public function init(path:ThickPath):GateLandmark {
+			this.reset(0, 0);
 			_active = true;
-			return super.init();
-		}
-			
-		public override function game_update(g:GameEngineState):void {
-			this.visible = _active;
-			if (_active) {
-				super.game_update(g);
-			}
+			_path = path;
+			_path._on_trigger = this;
+			return this;
 		}
 		
-		private static var STAR_COLORS:Array = [0x80D5D5, 0xBFEAEA, 0xFFFFFF, 0x71DD55, 0xA6EA95, 0x9FDFDF, 0xF1F163];
-		public override function hit_player(g:GameEngineState, itr_playerball:PlayerBall):void {
+		public function _on_trigger(g:GameEngineState):Boolean {
 			if (g._keys > 0) {
 				g._keys--;
+				_path._active = false;
 				_active = false;
 				for (var j:Number = 0; j < 40; j++) {
 					(GameEngineState.particle_cons(RotateFadeParticle, g._particles) as RotateFadeParticle)
@@ -45,11 +43,19 @@ package gameobjs
 				}
 				if (g._player_balls.countLiving() == 1) FlxG.shake(0.01, 0.1);
 				FlxG.play(Resource.SFX_POWERUP);
-				
+				return true;
 			} else {
-				super.hit_player(g,itr_playerball);
+				this.set_scale(1.6);
+				return false;
 			}
 		}
+			
+		public override function game_update(g:GameEngineState):void {
+			this.visible = _active;
+			this.set_scale(Util.drp(this.scale.x, 1, 7));
+		}
+		
+		private static var STAR_COLORS:Array = [0x80D5D5, 0xBFEAEA, 0xFFFFFF, 0x71DD55, 0xA6EA95, 0x9FDFDF, 0xF1F163];
 	}
 
 }

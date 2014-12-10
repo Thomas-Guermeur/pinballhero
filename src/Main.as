@@ -21,6 +21,7 @@ package
 		{	
 			super(1000, 500, GameEngineState);
 			//super(1000, 500, MainMenuState);
+			this.useSoundHotKeys = false;
 		}
 		
 	}
