@@ -629,6 +629,26 @@ package org.flixel
 			_animations.push(new FlxAnim(Name,Frames,FrameRate,Looped));
 		}
 		
+		public function destroyAnims() {
+			if(_animations != null)
+			{
+				var a:FlxAnim;
+				var i:uint = 0;
+				var l:uint = _animations.length;
+				while(i < l)
+				{
+					a = _animations[i++];
+					if(a != null)
+						a.destroy();
+				}
+				_animations = null;
+			}
+			_animations = new Array();
+			_curFrame = 0;
+			_curAnim = null;
+			
+		}
+		
 		/**
 		 * Pass in a function to be called whenever this sprite's animation changes.
 		 * 

@@ -22,6 +22,9 @@ package
 		
 		
 		[Embed(source = "../resc/character/Hero1.png")] public static var PLAYER:Class;
+		[Embed(source = "../resc/character/archer.png")] public static var PLAYER_ARCHER:Class;
+		[Embed(source = "../resc/character/knight.png")] public static var PLAYER_KNIGHT:Class;
+		[Embed(source = "../resc/character/wizard.png")] public static var PLAYER_WIZARD:Class;
 		[Embed(source = "../resc/character/princess.png")] public static var PRINCESS:Class;
 		[Embed(source = "../resc/character/old_man.png")] public static var OLD_MAN:Class;
 		[Embed(source = "../resc/character/bones.png")] public static var BONES:Class;
@@ -59,7 +62,7 @@ package
 
 		[Embed(source = "../resc/effects/question.png")] public static var QUESTION:Class;
 		[Embed(source = "../resc/effects/explosion.png")] public static var EXPLOSION:Class;
-		[Embed(source = "../resc/effects/heroghost.png")] public static var HEROGHOST:Class;
+		[Embed(source = "../resc/character/ghost.png")] public static var HEROGHOST:Class;
 		[Embed(source = "../resc/effects/star.png")] public static var SPARKLE:Class;
 		[Embed(source = "../resc/effects/hp_spark.png")] public static var HP_SPARK:Class;
 		

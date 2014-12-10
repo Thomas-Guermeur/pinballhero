@@ -21,7 +21,9 @@ package gameobjs {
 		
 		public function init(x:Number, y:Number, scf:Number = 1):GoldPickup {
 			this.reset(0,0);
-			this.loadGraphic(Resource.GOLD);
+			this.loadGraphic(Resource.GOLD, true, false, 19, 18);
+			this.addAnimation("play", [0, 1, 2, 3], 5);
+			this.play("play");
 			_fadeout_speed = 0.001;
 			this.reset(x, y);
 			

@@ -26,8 +26,36 @@ package
 		public var _max_hitpoints:Number = 20;
 		public var _invuln_ct:Number = 0;
 		
-		public function init():PlayerBall {
+		public static var SPAWN_CT:Number = 0;
+		public var _spawn_ct:Number = 0;
+		public function init(spawn_ct:Number = -1):PlayerBall {
 			this.reset(0, 0);
+			if (spawn_ct == -1) {
+				_spawn_ct = SPAWN_CT;
+				SPAWN_CT = (SPAWN_CT+1)%4;
+			} else {
+				_spawn_ct = spawn_ct;
+			}
+			this.destroyAnims();
+			if (_spawn_ct == 0) {
+				this.loadGraphic(Resource.PLAYER, true, false, 45, 52);
+				this.addAnimation("attack", [0, 1], 5);
+				this.addAnimation("walk", [2, 3], 5);
+			} else if (_spawn_ct == 1) {
+				this.loadGraphic(Resource.PLAYER_WIZARD, true, false, 46, 48);
+				this.addAnimation("attack", [2, 3], 5);
+				this.addAnimation("walk", [0, 1], 5);
+			} else if (_spawn_ct == 2) {
+				this.loadGraphic(Resource.PLAYER_ARCHER, true, false, 46, 73);
+				this.addAnimation("attack", [2, 3], 5);
+				this.addAnimation("walk", [0, 1], 5);
+			} else {
+				this.loadGraphic(Resource.PLAYER_KNIGHT, true, false, 46, 68);
+				this.addAnimation("attack", [2, 3], 5);
+				this.addAnimation("walk", [0, 1], 5);
+			}
+			
+			
 			_healthbar = null;
 			_hitpoints = _max_hitpoints;
 			_battling_enemies.length = 0;
@@ -60,7 +88,7 @@ package
 			.init(this.get_center().x - 14, this.get_center().y - 22, Resource.HEROGHOST)
 			.p_set_ctspeed(0.005)
 			.p_set_alpha(1, 0)
-			.p_set_velocity(0, Util.float_random( -0.1, -0.6));
+			.p_set_velocity(0, Util.float_random( -0.1, -0.6)).ghost_anim();
 			
 			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y, 50, 1.1));
 			
@@ -68,11 +96,10 @@ package
 			FlxG.play(Resource.SFX_GAMEOVER);
 		}
 		
+		/*
 		public function PlayerBall() {
-			this.loadGraphic(Resource.PLAYER, true, false, 45, 52);
-			this.addAnimation("attack", [0, 1], 5);
-			this.addAnimation("walk", [2, 3], 5);
 		}
+		*/
 		
 		public var _healthbar:FlxBar;
 		private function update_health_bar(g:GameEngineState):void {

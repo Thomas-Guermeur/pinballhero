@@ -96,7 +96,7 @@ package  {
 			_transition_airship.cameras = [_gamecamera];
 			this.add(_transition_airship);
 			
-			if (false) {
+			if (true) {
 				_transition_airship.set_position(_current_town.get_center().x - 2000, _current_town.get_center().y);
 				_transition_airship._transition_initial_pos.x = _transition_airship._pos.x;
 				_transition_airship._transition_initial_pos.y = _transition_airship._pos.y;
@@ -476,8 +476,8 @@ package  {
 		
 		public var _gold_until_next_ball:Number;
 		public var _max_gold_until_next_ball:Number;
-		public function add_ball(x:Number, y:Number):void {
-			var pb:PlayerBall = (cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init().set_centered_position(x, y) as PlayerBall;
+		public function add_ball(x:Number, y:Number, spawn_ct:Number = -1):void {
+			var pb:PlayerBall = (cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init(spawn_ct).set_centered_position(x, y) as PlayerBall;
 			pb._level = _current_level;
 		}
 		
@@ -493,7 +493,16 @@ package  {
 		
 		private function update_shoot_ball():void {
 			if (FlxG.mouse.justReleased() && _player_balls_in_queue.countLiving() > 0) {
-				var neu_ball:PlayerBall = (cons(PlayerBall, _player_balls) as PlayerBall).init().set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
+				var hb:Number = 0;
+				for (var i:Number = 0; i < _player_balls_in_queue.length; i++) {
+					if (_player_balls_in_queue.members[i].alive && (_player_balls_in_queue.members[i] as PlayerBall).is_nth_is_group(_player_balls_in_queue) == 0) {
+						hb = (_player_balls_in_queue.members[i] as PlayerBall)._spawn_ct;
+						_player_balls_in_queue.members[i].kill();
+						break;
+					}
+				}
+				
+				var neu_ball:PlayerBall = (cons(PlayerBall, _player_balls) as PlayerBall).init(hb).set_centered_position(_current_town.get_center().x, _current_town.get_center().y) as PlayerBall;
 				neu_ball._launched_ct = 0;
 				var dir:Vector3D = Util.normalized(Util.wmouse_x() - _current_town.get_center().x, Util.wmouse_y() - _current_town.get_center().y);
 				var scf:Number = _hold_mouse_ct / _hold_mouse_ct_max;
@@ -502,12 +511,6 @@ package  {
 				neu_ball.velocity.x = dir.x;
 				neu_ball.velocity.y = dir.y;
 				
-				for (var i:Number = 0; i < _player_balls_in_queue.length; i++) {
-					if (_player_balls_in_queue.members[i].alive) {
-						_player_balls_in_queue.members[i].kill();
-						break;
-					}
-				}
 				_chatmanager.push_message("A hero sets out on his quest!");
 				FlxG.play(Resource.SFX_BULLET4);
 			}
@@ -703,13 +706,10 @@ package  {
 					case "tree":
 						mark = (cons(TreeLandmark, _game_objects) as TreeLandmark).init().set_centered_position(objx,objy);
 						break;
-					case "gate":
-						/*mark = (cons(GateLandmark, _game_objects) as GateLandmark).init().set_centered_position(objx, objy);
-						mark.angle = Util.RAD_TO_DEG * Math.atan2( -obj.dir.y, obj.dir.x);*/
-						
+					case "gate":						
 						var dirby:FlxPoint = new FlxPoint(obj.dir.x, -obj.dir.y);
-						dirby.x *= 100;
-						dirby.y *= 100;
+						dirby.x *= 120;
+						dirby.y *= 120;
 						
 						var pt1:FlxPoint = new FlxPoint(objx+dirby.x, objy+dirby.y);
 						var pt2:FlxPoint = new FlxPoint(objx-dirby.x, objy-dirby.y);

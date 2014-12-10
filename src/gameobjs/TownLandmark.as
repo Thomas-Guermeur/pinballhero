@@ -27,7 +27,7 @@ package gameobjs {
 						itr_playerball.kill();
 						if (itr_playerball._healthbar != null) g._healthbars.remove(itr_playerball._healthbar);
 						itr_playerball._healthbar = null;
-						g.add_ball(itr_playerball.get_center().x,itr_playerball.get_center().y);
+						g.add_ball(itr_playerball.get_center().x,itr_playerball.get_center().y,itr_playerball._spawn_ct);
 						g._chatmanager.push_message("Hero has returned back to town.");
 					}
 				}

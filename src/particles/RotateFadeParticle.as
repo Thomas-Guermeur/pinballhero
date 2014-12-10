@@ -20,13 +20,22 @@ package particles {
 
 		private var _loaded_resc:Class = null;
 		public function init(x:Number, y:Number, graphic:Class = null):RotateFadeParticle {
-			if (graphic == null) {
+			if (graphic == Resource.HEROGHOST) {
+				this.loadGraphic(Resource.HEROGHOST, true, false, 26, 40);
+				this.addAnimation("play", [0, 1, 2, 3], 7);
+				this.play("play");
+				_loaded_resc = Resource.HEROGHOST;
+			} else if (graphic == null) {
 				graphic = Resource.EXPLOSION;
+				this.frame = this.frame;
+			} else {
+				this.frame = this.frame;
 			}
 			if (_loaded_resc != graphic) {
 				this.framePixels.fillRect(this.framePixels.rect, 0);
 				this.loadGraphic(graphic);
 			}
+			
 			this.reset(x, y);
 			_ct = 0;
 			this.alpha = 1;
@@ -40,6 +49,11 @@ package particles {
 			this._vr = 0;
 			this.color = 0xFFFFFF;
 			this.angle = 0;
+			return this;
+		}
+		
+		public function ghost_anim():RotateFadeParticle {
+
 			return this;
 		}
 		

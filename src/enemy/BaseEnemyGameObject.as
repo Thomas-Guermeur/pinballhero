@@ -107,7 +107,9 @@ package enemy
 						}
 					}
 				}
+				this.play("attack");
 			} else {
+				this.play("stand");
 				_attack_anim_ct = Util.float_random(_attack_anim_ct_max - 4, _attack_anim_ct_max + 4);
 				_first_battle_tick = false;
 				_attack_anim_ct = 0;

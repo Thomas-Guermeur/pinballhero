@@ -20,9 +20,21 @@ package gameobjs
 			return this;
 		}
 		
-		public function load_hero_anim():CutSceneObject {
-			this.loadGraphic(Resource.PLAYER, true, false, 45, 52);
-			this.addAnimation("walk", [2, 3], 5);
+		public function load_hero_anim(spawn_ct:Number):CutSceneObject {
+			this.destroyAnims();
+			if (spawn_ct == 0) {
+				this.loadGraphic(Resource.PLAYER, true, false, 45, 52);
+				this.addAnimation("walk", [2, 3], 5);
+			} else if (spawn_ct == 1) {
+				this.loadGraphic(Resource.PLAYER_WIZARD, true, false, 46, 48);
+				this.addAnimation("walk", [0, 1], 5);
+			} else if (spawn_ct == 2) {
+				this.loadGraphic(Resource.PLAYER_ARCHER, true, false, 46, 73);
+				this.addAnimation("walk", [0, 1], 5);
+			} else {
+				this.loadGraphic(Resource.PLAYER_KNIGHT, true, false, 46, 68);
+				this.addAnimation("walk", [0, 1], 5);
+			}
 			this.play("walk");
 			return this;
 		}

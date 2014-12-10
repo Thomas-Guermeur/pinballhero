@@ -68,7 +68,8 @@ package gameobjs {
 			_castle_finished = true;
 			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y + 40, Number.POSITIVE_INFINITY, 2, CameraFocusEvent.PRIORITY_GAMECUTSCENE));
 			
-			var hero:CutSceneObject = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_hero_anim().set_centered_position(this.get_center().x-27, this.get_center().y+15) as CutSceneObject;
+			var off:Number = (_visiting_player._spawn_ct == 1 ? -10 : (_visiting_player._spawn_ct==3?-4:0));
+			var hero:CutSceneObject = (GameEngineState.cons(CutSceneObject, g._game_objects) as CutSceneObject).init().load_hero_anim(_visiting_player._spawn_ct).set_centered_position(this.get_center().x-27, this.get_center().y+15+off) as CutSceneObject;
 			var princess:CutSceneObject;
 			
 			var current_level:Number = GameEngineState._current_level;

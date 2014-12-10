@@ -19,8 +19,8 @@ package
 		
 		public function Main():void 
 		{	
-			super(1000, 500, GameEngineState);
-			//super(1000, 500, MainMenuState);
+			//super(1000, 500, GameEngineState);
+			super(1000, 500, MainMenuState);
 			this.useSoundHotKeys = false;
 		}
 		
