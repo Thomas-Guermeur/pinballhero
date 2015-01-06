@@ -20,6 +20,7 @@ package gameobjs {
 		}
 		
 		public override function visit_finished(g:GameEngineState):void {
+			g._chatmanager.push_message(_visiting_player.get_name()+" rested up at an inn!");
 			for (var j:Number = 0; j < 10; j++) {
 				(GameEngineState.particle_cons(RotateFadeParticle, g._particles) as RotateFadeParticle)
 					.init(_visiting_player.get_center().x + Util.float_random(-50,10), _visiting_player.get_center().y + Util.float_random(-10,10), Resource.HP_SPARK)

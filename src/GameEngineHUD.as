@@ -179,10 +179,17 @@ package
 		
 		private static var TILT_BAR:FlxSprite = new FlxSprite(0, 0, Resource.HUD_TILTBAR);
 		private static var TILT_BAR_EMPTY:FlxSprite = new FlxSprite(0, 0, Resource.HUD_TILTBAR_EMPTY);
+		private static var TILT_BAR_FULL:FlxSprite = new FlxSprite(0, 0, Resource.HUD_TILTBAR_FULL);
 		private var _tilt_bar_pct:Number = 0;
 		public function update_tiltbar(pct:Number):void {
 			if (pct != _tilt_bar_pct) {
-				var tar:FlxSprite = TILT_BAR;
+				var tar:FlxSprite
+				if (pct >= 1.0) {
+					tar = TILT_BAR_FULL;
+				} else {
+					tar = TILT_BAR;
+				}
+				
 				_tiltBar.framePixels.copyPixels(
 					tar.framePixels,
 					new Rectangle(0, 0, tar.width, tar.height),

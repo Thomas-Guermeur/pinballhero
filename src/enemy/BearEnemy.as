@@ -11,6 +11,9 @@ package enemy
 			this.addAnimation("attack", [4, 5, 6, 7, 8],5);
 			this.play("stand");
 		}
+		public override function get_name():String {
+			return "Big Bad Bear";
+		}
 		public override function get_max_hitpoints():Number { return 12; }
 		public override function get_gold_drop():Number { return 10; }
 		public override function get_damage():Number { return 2; }

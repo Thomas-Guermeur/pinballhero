@@ -41,12 +41,16 @@ package enemy
 			return this._hitpoints <= 0;
 		}
 		
+		public function get_name():String {
+			return "Monster";
+		}
+		
 		public override function do_remove(g:GameEngineState):void {
 			if (_healthbar != null) g._healthbars.remove(_healthbar);
 			_healthbar = null;
 			this.kill();
 			if (this.get_max_hitpoints()>10)FlxG.play(Resource.SFX_BOSS_ENTER );
-			g._chatmanager.push_message("Monster has been slain!");
+			g._chatmanager.push_message(this.get_name() +" has been slain!");
 			
 			for (var i:Number = 0; i < get_gold_drop(); i++) {
 				(GameEngineState.cons(GoldPickup, g._game_objects) as GoldPickup).init(this.get_center().x + Util.float_random(-10,10), this.get_center().y + Util.float_random(-10,10));
@@ -96,6 +100,9 @@ package enemy
 						_battling_heros[i]._hitpoints-=get_damage();
 						var hfp:Vector3D = new Vector3D(_battling_heros[i].get_center().x - this.get_center().x, _battling_heros[i].get_center().y - this.get_center().y);
 						hfp.scaleBy(0.75);
+						if (_battling_heros[i]._hitpoints <= 0) {
+							_battling_heros[i]._death_cause = this.get_name() + " has defeated " + _battling_heros[i].get_name() + ".";
+						}
 						
 						(GameEngineState.particle_cons(RotateFadeParticle,g._particles) as RotateFadeParticle)
 						.init(this.get_center().x + hfp.x + Util.float_random( -3, 3), this.get_center().y + hfp.y + Util.float_random( -3, 3))

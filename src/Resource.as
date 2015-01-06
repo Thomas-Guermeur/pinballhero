@@ -47,6 +47,7 @@ package
 		[Embed(source = "../resc/ui/hud_tilttext.png")] public static var HUD_TILTTEXT:Class;
 		[Embed(source = "../resc/ui/hud_tiltbar.png")] public static var HUD_TILTBAR:Class;
 		[Embed(source = "../resc/ui/hud_tiltbar_empty.png")] public static var HUD_TILTBAR_EMPTY:Class;
+		[Embed(source = "../resc/ui/hud_tiltbar_full.png")] public static var HUD_TILTBAR_FULL:Class;
 		[Embed(source = "../resc/ui/nexthero_popup.png")] public static var NEXTHERO_POPUP:Class;
 		[Embed(source = "../resc/ui/chat_cover.png")] public static var CHAT_COVER:Class;
 		[Embed(source = "../resc/ui/castle_finish_cover.png")] public static var CASTLE_FINISH_COVER:Class;

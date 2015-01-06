@@ -46,7 +46,7 @@ package  {
 		public var _keys:Number = 0;
 		
 		static var LEVELS:Array = [Resource.LEVEL1_DATA, Resource.LEVEL2_DATA, Resource.LEVEL3_DATA, Resource.LEVEL4_DATA];
-		//static var LEVELS:Array = [Resource.LEVELTEST_DATA, Resource.LEVEL2_DATA];
+		//static var LEVELS:Array = [Resource.LEVEL3_DATA, Resource.LEVEL2_DATA];
 		
 		public override function create():void {
 			super.update();
@@ -476,23 +476,24 @@ package  {
 		
 		public var _gold_until_next_ball:Number;
 		public var _max_gold_until_next_ball:Number;
-		public function add_ball(x:Number, y:Number, spawn_ct:Number = -1):void {
+		public function add_ball(x:Number, y:Number, spawn_ct:Number = -1):String {
 			var pb:PlayerBall = (cons(PlayerBall, _player_balls_in_queue) as PlayerBall).init(spawn_ct).set_centered_position(x, y) as PlayerBall;
 			pb._level = _current_level;
+			return pb.get_name();
 		}
 		
 		private function update_bonus_balls():void {
 			if (_gold_until_next_ball <= 0) {
-				add_ball(_current_town.get_center().x + Util.float_random(-100,100), _current_town.get_center().y + Util.float_random( -100, 100));
+				var nbname:String = add_ball(_current_town.get_center().x + Util.float_random(-100,100), _current_town.get_center().y + Util.float_random( -100, 100));
 				_max_gold_until_next_ball += 5;
 				_gold_until_next_ball = _max_gold_until_next_ball;
-				_chatmanager.push_message("A new hero has joined the battle!");
+				_chatmanager.push_message("A "+nbname+" has joined your party!");
 				FlxG.play(Resource.SFX_POWERUP);
 			}
 		}
 		
 		private function update_shoot_ball():void {
-			if (FlxG.mouse.justReleased() && _player_balls_in_queue.countLiving() > 0) {
+			if (FlxG.mouse.justReleased() && _player_balls_in_queue.countLiving() > 0 && _hold_mouse_ct > 20) {
 				var hb:Number = 0;
 				for (var i:Number = 0; i < _player_balls_in_queue.length; i++) {
 					if (_player_balls_in_queue.members[i].alive && (_player_balls_in_queue.members[i] as PlayerBall).is_nth_is_group(_player_balls_in_queue) == 0) {
@@ -511,7 +512,7 @@ package  {
 				neu_ball.velocity.x = dir.x;
 				neu_ball.velocity.y = dir.y;
 				
-				_chatmanager.push_message("A hero sets out on his quest!");
+				_chatmanager.push_message(neu_ball.get_name()+" sets out for adventure!");
 				FlxG.play(Resource.SFX_BULLET4);
 			}
 		}
@@ -576,21 +577,29 @@ package  {
 					itr_playerball._pause_time = 0;
 					if (itr_playerball._battling_enemies.length == 0 && itr_playerball._visiting_landmark == null) {
 						if (tilt_left) {
-							if (itr_playerball.velocity.x > 0) itr_playerball.velocity.x *= 0.5;
-							itr_playerball.velocity.x -= 7;
+							itr_playerball.velocity.x = Math.min(itr_playerball.velocity.x,-7);
+							itr_playerball.velocity.y *= 0.3;
 						} else if (tilt_right) {
-							if (itr_playerball.velocity.x < 0) itr_playerball.velocity.x *= 0.5;
-							itr_playerball.velocity.x += 7;
+							itr_playerball.velocity.x = Math.max(itr_playerball.velocity.x,7);
+							itr_playerball.velocity.y *= 0.3;
 						} else if (tilt_up) {
-							if (itr_playerball.velocity.y > 0) itr_playerball.velocity.y *= 0.5;
-							itr_playerball.velocity.y -= 10;
+							itr_playerball.velocity.y = Math.min(itr_playerball.velocity.y,-10);
+							itr_playerball.velocity.x *= 0.3;
 						} else if (tilt_down) {
-							if (itr_playerball.velocity.y < 0) itr_playerball.velocity.y *= 0.5;
-							itr_playerball.velocity.y += 7;
+							itr_playerball.velocity.y = Math.max(itr_playerball.velocity.y,7);
+							itr_playerball.velocity.x *= 0.3;
 						}
 					}
 				}
-				FlxG.shake(0.01, 0.2);
+				if (tilt_left) {
+					FlxG.shake(0.01, 0.2, null,true,FlxCamera.SHAKE_HORIZONTAL_ONLY);
+				} else if (tilt_right) {
+					FlxG.shake(0.01, 0.2, null,true,FlxCamera.SHAKE_HORIZONTAL_ONLY);
+				} else if (tilt_up) {
+					FlxG.shake(0.01, 0.2, null,true,FlxCamera.SHAKE_VERTICAL_ONLY);
+				} else if (tilt_down) {
+					FlxG.shake(0.01, 0.2, null,true,FlxCamera.SHAKE_VERTICAL_ONLY);
+				}
 				_tilt_count = 0;
 			} else if (_tilt_count < _tilt_count_max) {
 				_tilt_count++;

@@ -22,7 +22,7 @@ package  {
 		
 		public var _messages:Vector.<String> = new Vector.<String>();
 		public function push_message(msg:String):void {
-			while (_messages.length > 3)_messages.shift();
+			while (_messages.length > 4)_messages.shift();
 			_messages.push(msg);
 		}
 		
@@ -37,8 +37,8 @@ package  {
 		public var _spd:Number = 50;
 		var _ct:Number = 0;
 		public function game_update(g:GameEngineState):void {
-			if (_ct <= 0 && _messages.length > 0) {
-				_text_scroll.load(_messages.pop());
+			if (_ct <= 0 && _messages.length > 0 && _text_scroll.finished()) {
+				_text_scroll.load(_messages.shift());
 				
 			} else if (_text_scroll.finished()) {
 				_ct--;

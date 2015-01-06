@@ -13,6 +13,9 @@ package enemy
 			this.addAnimation("attack", [0, 1, 2, 1], 15);
 			this.play("stand");
 		}
+		public override function get_name():String {
+			return "Oversized Angry Slime";
+		}
 		public override function get_max_hitpoints():Number { return 15; }
 		public override function get_gold_drop():Number { 
 			return 10; 

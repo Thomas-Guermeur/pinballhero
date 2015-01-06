@@ -13,9 +13,36 @@ package gameobjs {
 			this.loadGraphic(Resource.TOWN);
 		}
 		
+		private static var NAMES = [
+			"Townsend",
+			"Bloomingdale",
+			"Medina",
+			"Cornelia",
+			"Midgard",
+			"Balamb",
+			"Zanarkand",
+			"Nibelheim",
+			"Besaid",
+			"Gaia",
+			"Tokyo-3",
+			"Nalbina",
+			"Narche",
+			"Rabanastre",
+			"Lindblum",
+			"Eruyt",
+			"Lunatic Pandora",
+			"Alexandria",
+			"Baron",
+			"Sacae",
+			"Cyrodil",
+			"Figaro"
+		];
+		
+		private var name:String = "";
 		public function init():TownLandmark {
 			this.reset(0,0);
 			landmark_init();
+			name = NAMES[Math.floor(Util.float_random(0, NAMES.length - 1))];
 			return this; 
 		}
 		
@@ -28,7 +55,7 @@ package gameobjs {
 						if (itr_playerball._healthbar != null) g._healthbars.remove(itr_playerball._healthbar);
 						itr_playerball._healthbar = null;
 						g.add_ball(itr_playerball.get_center().x,itr_playerball.get_center().y,itr_playerball._spawn_ct);
-						g._chatmanager.push_message("Hero has returned back to town.");
+						g._chatmanager.push_message(itr_playerball.get_name() + " has returned back to the town of "+name+".");
 					}
 				}
 			} else {
@@ -36,7 +63,7 @@ package gameobjs {
 					var itr_playerball:PlayerBall = g._player_balls.members[i];
 					if (itr_playerball.alive && itr_playerball._launched_ct > 50 && this.is_hit_game_object(itr_playerball)) {
 						g._current_town = this;
-						g._chatmanager.push_message("Discovered a new town!");
+						g._chatmanager.push_message("Discovered the town of "+name+"!");
 						FlxG.play(Resource.SFX_POWERUP);
 					}
 				}

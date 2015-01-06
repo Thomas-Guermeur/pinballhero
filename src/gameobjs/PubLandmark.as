@@ -21,6 +21,7 @@ package gameobjs {
 		
 		private static var STAR_COLORS:Array = [0x80D5D5, 0xBFEAEA, 0xFFFFFF, 0x71DD55, 0xA6EA95, 0x9FDFDF, 0xF1F163];
 		public override function visit_finished(g:GameEngineState):void {
+			g._chatmanager.push_message(_visiting_player.get_name()+" recruited a friend at the tavern!");
 			for (var j:Number = 0; j < 20; j++) {
 				(GameEngineState.particle_cons(RotateFadeParticle, g._particles) as RotateFadeParticle)
 					.init(_visiting_player.get_center().x + Util.float_random(-80,30), _visiting_player.get_center().y + Util.float_random(-50,30), Resource.SPARKLE)

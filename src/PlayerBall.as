@@ -41,20 +41,24 @@ package
 				this.loadGraphic(Resource.PLAYER, true, false, 45, 52);
 				this.addAnimation("attack", [0, 1], 5);
 				this.addAnimation("walk", [2, 3], 5);
+				name = "Fighter";
 			} else if (_spawn_ct == 1) {
 				this.loadGraphic(Resource.PLAYER_WIZARD, true, false, 46, 48);
 				this.addAnimation("attack", [2, 3], 5);
 				this.addAnimation("walk", [0, 1], 5);
+				name = "Mage";
 			} else if (_spawn_ct == 2) {
 				this.loadGraphic(Resource.PLAYER_ARCHER, true, false, 46, 73);
 				this.addAnimation("attack", [2, 3], 5);
 				this.addAnimation("walk", [0, 1], 5);
+				name = "Archer";
 			} else {
 				this.loadGraphic(Resource.PLAYER_KNIGHT, true, false, 46, 68);
 				this.addAnimation("attack", [2, 3], 5);
 				this.addAnimation("walk", [0, 1], 5);
+				name = "Knight";
 			}
-			
+			_death_cause = "";
 			
 			_healthbar = null;
 			_hitpoints = _max_hitpoints;
@@ -75,10 +79,16 @@ package
 			return this;
 		}
 		
+		private var name:String = "Adventurer";
+		public function get_name():String {
+			return name;
+		}
+		
 		public override function should_remove(g:GameEngineState):Boolean {
 			return this._hitpoints <= 0;
 		}
 		
+		public var _death_cause:String = "";
 		public override function do_remove(g:GameEngineState):void {
 			if (_healthbar != null) g._healthbars.remove(_healthbar);
 			_healthbar = null;
@@ -92,7 +102,7 @@ package
 			
 			g._camera_focus_events.push(new CameraFocusEvent(this.get_center().x, this.get_center().y, 50, 1.1));
 			
-			g._chatmanager.push_message("A hero has fallen!");
+			g._chatmanager.push_message(_death_cause.length==0?(this.get_name()+" has fallen from fatigue!"):_death_cause);
 			FlxG.play(Resource.SFX_GAMEOVER);
 		}
 		

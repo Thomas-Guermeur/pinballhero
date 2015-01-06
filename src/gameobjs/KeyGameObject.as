@@ -29,6 +29,7 @@ package gameobjs
 				if (itr_playerball.alive && _available && this.is_hit_game_object(itr_playerball)) {
 					_available = false;
 					g._keys++;
+					g._chatmanager.push_message(itr_playerball.get_name()+" has found a key!");
 					FlxG.play(Resource.SFX_POWERUP);
 					(GameEngineState.particle_cons(RotateFadeParticle, g._particles) as RotateFadeParticle)
 						.init(get_center().x, get_center().y, Resource.KEY)
