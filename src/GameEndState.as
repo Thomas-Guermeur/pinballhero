@@ -14,11 +14,11 @@ package
 			var img:FlxSprite = new FlxSprite();
 			img.makeGraphic(1000, 500, 0xFF000000);
 			this.add(img);
-			var text:FlxText = Util.cons_text(0, 200, "The End", 0xFFFFFF, 64, 1000);
+			var text:FlxText = Util.cons_text(0, 200, "Fin", 0xFFFFFF, 64, 1000);
 			text.alignment = "center"
 			this.add(text);
 			
-			var text2:FlxText = Util.cons_text(0, 300, "Thanks for playing!", 0xFFFFFF, 32, 1000);
+			var text2:FlxText = Util.cons_text(0, 300, "Merci d'avoir joué !", 0xFFFFFF, 32, 1000);
 			text2.alignment = "center"
 			this.add(text2);
 			Util.play_bgm(Resource.BGM_MENU);
