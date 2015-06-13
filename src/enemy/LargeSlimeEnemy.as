@@ -14,7 +14,7 @@ package enemy
 			this.play("stand");
 		}
 		public override function get_name():String {
-			return "Oversized Angry Slime";
+			return "Un grobaveux furieux";
 		}
 		public override function get_max_hitpoints():Number { return 15; }
 		public override function get_gold_drop():Number { 
