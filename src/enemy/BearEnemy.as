@@ -12,7 +12,7 @@ package enemy
 			this.play("stand");
 		}
 		public override function get_name():String {
-			return "Big Bad Bear";
+			return "Un grand méchant ours";
 		}
 		public override function get_max_hitpoints():Number { return 12; }
 		public override function get_gold_drop():Number { return 10; }
