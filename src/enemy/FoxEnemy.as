@@ -13,7 +13,7 @@ package enemy
 			this.play("stand");
 		}
 		public override function get_name():String {
-			return "Foolish Fox";
+			return "Un goupil débile";
 		}
 		public override function get_max_hitpoints():Number { return 5; }
 		public override function get_gold_drop():Number { return 5; }
