@@ -13,7 +13,7 @@ package enemy
 			this.play("stand");
 		}
 		public override function get_name():String {
-			return "Generic Slime";
+			return "Un baveux commun";
 		}
 		public override function get_max_hitpoints():Number { return 4; }
 		public override function get_gold_drop():Number { return 3; }
