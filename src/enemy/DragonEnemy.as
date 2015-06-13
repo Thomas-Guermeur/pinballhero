@@ -13,7 +13,7 @@ package enemy
 			this.play("stand");
 		}
 		public override function get_name():String {
-			return "Super Final Boss Dragon";
+			return "Le Super Boss Final Dragon";
 		}
 		public override function get_max_hitpoints():Number { return 30; }
 		public override function get_gold_drop():Number { return 15; }
