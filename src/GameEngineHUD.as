@@ -60,11 +60,11 @@ package
 			gmov_cover.makeGraphic(1000, 500, 0xAA000000);
 			var gmov_header:FlxText = Util.cons_text(0, 140, "Game Over", 0xFFFFFF, 62);
 			gmov_header.alignment = "center";
-			var gmov_text1:FlxText = Util.cons_text(0, 230, "With all the heroes defeated, their quest was over.", 0xFFFFFF, 24);
+			var gmov_text1:FlxText = Util.cons_text(0, 230, "Votre quête touche à sa fin car tous vos héros sont morts.", 0xFFFFFF, 24);
 			gmov_text1.alignment = "center";
-			var gmov_text2:FlxText = Util.cons_text(0, 275, "(But there were more heros awaiting, to start right where they left off...)", 0xFFFFFF, 14);
+			var gmov_text2:FlxText = Util.cons_text(0, 275, "(Mais il y restait encore d'autres héros, prêts à reprendre le flambeau...)", 0xFFFFFF, 14);
 			gmov_text2.alignment = "center";
-			var gmov_text3:FlxText = Util.cons_text(0, 320, "Press SPACE to retry", 0xFFFFFF, 14);
+			var gmov_text3:FlxText = Util.cons_text(0, 320, "Appuyez sur ESPACE pour recommencer", 0xFFFFFF, 14);
 			gmov_text3.alignment = "center";
 			_gameover_ui.add(gmov_cover);
 			_gameover_ui.add(gmov_header);
